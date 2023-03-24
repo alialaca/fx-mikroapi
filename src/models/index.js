@@ -1,0 +1,5 @@
+module.exports.Cari = require('./cari.model')
+module.exports.Temsilci = require('./temsilci.model')
+module.exports.CariHareket = require('./cari_hareket.model')
+module.exports.Depo = require('./depo.model')
+module.exports.Siparis = require('./siparis.model')

@@ -1,0 +1,159 @@
+ model SiparisOzet {
+   tarih         DateTime? @db.DateTime
+   evrak_seri    String
+   evrak_sira    Int
+   satir_sayisi  Int
+   depo_kod      Int
+   cari_kod      String
+   temsilci_kod  String
+   miktar        Float
+   miktar_teslim Float
+   miktar_kalan  Float
+   tutar         Float
+   tutar_net     Float
+   onay          String
+   durum         String
+
+   cari     Cari     @relation(fields: [cari_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+   temsilci Temsilci @relation(fields: [temsilci_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+   depo     Depo     @relation(fields: [depo_kod], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+   @@unique([evrak_seri, evrak_sira])
+   @@map("CRM_SIPARISLER_OZET")
+ }
+
+ model OdemePlan {
+   id   Int    @id @map("odp_no")
+   isim String @map("odp_adi")
+
+   @@map("ODEME_PLANLARI")
+   @@ignore
+ }
+
+model Siparis {
+  id                String   @id @map("sip_Guid")
+  tarih             DateTime @map("sip_belge_tarih") @db.DateTime
+  evrak_seri        String   @default("") @map("sip_evrakno_seri")
+  evrak_sira        Int      @map("sip_evrakno_sira")
+  satirno           Int      @map("sip_satirno")
+  olusturan_kod     Int      @map("sip_create_user")
+  temsilci_kod      String   @map("sip_satici_kod")
+  cari_kod          String   @map("sip_musteri_kod")
+  stok_kod          String   @map("sip_stok_kod")
+  birim_fiyat       Float    @map("sip_b_fiyat")
+  miktar            Float    @default(1.0) @map("sip_miktar")
+  miktar_tamamlanan Float    @default(0) @map("sip_teslim_miktar")
+  tutar             Float    @map("sip_tutar")
+  iskonto           Float    @map("sip_iskonto_1")
+  vergi             Float    @map("sip_vergi")
+  odeme_plan_kod    Int      @map("sip_opno")
+  aciklama          String   @default("") @map("sip_aciklama")
+  depo_kod          Int      @map("sip_depono")
+  onaylayan_kod     Int      @default(0) @map("sip_OnaylayanKulNo")
+  durum             Int      @map("sip_durumu")
+  sip_lastup_user     Int
+  sip_tarih           DateTime @db.DateTime
+  sip_teslim_tarih    DateTime @db.DateTime
+  sip_doviz_cinsi     Int
+  sip_doviz_kuru      Float
+  sip_alt_doviz_kuru  Float
+  sip_cagrilabilir_fl Int      @default(1)
+  sip_projekodu       String      @default("1")
+  sip_SpecRECno                Int      @default(0) @ignore
+  sip_iptal                    Int      @default(0) @ignore
+  sip_fileid                   Int      @default(0) @ignore
+  sip_hidden                   Int      @default(0) @ignore
+  sip_kilitli                  Int      @default(0) @ignore
+  sip_degisti                  Int      @default(0) @ignore
+  sip_checksum                 Int      @default(0) @ignore
+  sip_lastup_date              DateTime @default(now()) @ignore @db.DateTime
+  sip_special1                 String   @default("") @ignore
+  sip_special2                 String   @default("") @ignore
+  sip_special3                 String   @default("") @ignore
+  sip_firmano                  Int      @default(0) @ignore
+  sip_subeno                   Int      @default(0) @ignore
+  sip_tip                      Int      @default(0) @ignore
+  sip_cins                     Int      @default(0) @ignore
+  sip_belgeno                  String   @default("") @ignore
+  sip_birim_pntr               Int      @default(1) @ignore
+  sip_iskonto_2                Float    @default(0) @ignore
+  sip_iskonto_3                Float    @default(0) @ignore
+  sip_iskonto_4                Float    @default(0) @ignore
+  sip_iskonto_5                Float    @default(0) @ignore
+  sip_iskonto_6                Float    @default(0) @ignore
+  sip_masraf_1                 Float    @default(0) @ignore
+  sip_masraf_2                 Float    @default(0) @ignore
+  sip_masraf_3                 Float    @default(0) @ignore
+  sip_masraf_4                 Float    @default(0) @ignore
+  sip_vergi_pntr               Int      @default(4) @ignore
+  sip_masvergi_pntr            Int      @default(0) @ignore
+  sip_masvergi                 Float    @default(0) @ignore
+  sip_aciklama2                String   @default("") @ignore
+  sip_vergisiz_fl              Int      @default(0) @ignore
+  sip_kapat_fl                 Int      @default(0) @ignore
+  sip_promosyon_fl             Int      @default(0) @ignore
+  sip_cari_sormerk             String   @default("") @ignore
+  sip_stok_sormerk             String   @default("") @ignore
+  sip_cari_grupno              Int      @default(0) @ignore
+  sip_adresno                  Int      @default(0) @ignore
+  sip_teslimturu               String   @default("") @ignore
+  sip_prosip_uid               String   @default("00000000-0000-0000-0000-000000000000") @ignore
+  sip_iskonto1                 Int      @default(0) @ignore
+  sip_iskonto2                 Int      @default(1) @ignore
+  sip_iskonto3                 Int      @default(1) @ignore
+  sip_iskonto4                 Int      @default(1) @ignore
+  sip_iskonto5                 Int      @default(1) @ignore
+  sip_iskonto6                 Int      @default(1) @ignore
+  sip_masraf1                  Int      @default(1) @ignore
+  sip_masraf2                  Int      @default(1) @ignore
+  sip_masraf3                  Int      @default(1) @ignore
+  sip_masraf4                  Int      @default(1) @ignore
+  sip_isk1                     Int      @default(0) @ignore
+  sip_isk2                     Int      @default(0) @ignore
+  sip_isk3                     Int      @default(0) @ignore
+  sip_isk4                     Int      @default(0) @ignore
+  sip_isk5                     Int      @default(0) @ignore
+  sip_isk6                     Int      @default(0) @ignore
+  sip_mas1                     Int      @default(0) @ignore
+  sip_mas2                     Int      @default(0) @ignore
+  sip_mas3                     Int      @default(0) @ignore
+  sip_mas4                     Int      @default(0) @ignore
+  sip_Exp_Imp_Kodu             String   @default("") @ignore
+  sip_kar_orani                Float    @default(0) @ignore
+  sip_stal_uid                 String   @default("00000000-0000-0000-0000-000000000000") @ignore
+  sip_planlananmiktar          Float    @default(0) @ignore
+  sip_teklif_uid               String   @default("00000000-0000-0000-0000-000000000000") @ignore
+  sip_parti_kodu               String   @default("") @ignore
+  sip_lot_no                   Int      @default(0) @ignore
+  sip_fiyat_liste_no           Int      @default(0) @ignore
+  sip_Otv_Pntr                 Int      @default(0) @ignore
+  sip_Otv_Vergi                Float    @default(0) @ignore
+  sip_otvtutari                Float    @default(0) @ignore
+  sip_OtvVergisiz_Fl           Int      @default(0) @ignore
+  sip_paket_kod                String   @default("") @ignore
+  sip_Rez_uid                  String   @default("00000000-0000-0000-0000-000000000000") @ignore
+  sip_harekettipi              Int      @default(0) @ignore
+  sip_yetkili_uid              String   @default("00000000-0000-0000-0000-000000000000") @ignore
+  sip_kapatmanedenkod          String   @default("") @ignore
+  sip_gecerlilik_tarihi        DateTime @default("1899-12-30T00:00:00.00Z") @ignore @db.DateTime
+  sip_onodeme_evrak_tip        Int      @default(0) @ignore
+  sip_onodeme_evrak_seri       String   @default("") @ignore
+  sip_onodeme_evrak_sira       Int      @default(0) @ignore
+  sip_rezervasyon_miktari      Float    @default(0) @ignore
+  sip_rezerveden_teslim_edilen Float    @default(0) @ignore
+  sip_HareketGrupKodu1         String   @default("") @ignore
+  sip_HareketGrupKodu2         String   @default("") @ignore
+  sip_HareketGrupKodu3         String   @default("") @ignore
+  sip_Olcu1                    Float    @default(0) @ignore
+  sip_Olcu2                    Float    @default(0) @ignore
+  sip_Olcu3                    Float    @default(0) @ignore
+  sip_Olcu4                    Float    @default(0) @ignore
+  sip_Olcu5                    Float    @default(0) @ignore
+  sip_FormulMiktarNo           Int      @default(0) @ignore
+  sip_FormulMiktar             Float    @default(0) @ignore
+  sip_satis_fiyat_doviz_cinsi  Int      @default(0) @ignore
+  sip_satis_fiyat_doviz_kuru   Float    @default(0) @ignore
+  sip_eticaret_kanal_kodu      String   @default("") @ignore
+
+  @@map("SIPARISLER")
+}
