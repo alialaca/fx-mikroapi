@@ -20,6 +20,7 @@ app.use('/cari', routes.cariRoute);
 app.use('/temsilci', routes.temsilciRoute)
 app.use('/depo', routes.depoRoute)
 app.use('/siparis', routes.siparisRoute)
+app.use('/odeme-plan', routes.odemePlanRoute)
 
 // app.use(Pagination.endPaginate)
 
