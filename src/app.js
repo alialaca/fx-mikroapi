@@ -17,6 +17,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(Pagination.initPaginate)
 
 app.use('/cari', routes.cariRoute);
+app.use('/stok', routes.stokRoute);
 app.use('/temsilci', routes.temsilciRoute)
 app.use('/depo', routes.depoRoute)
 app.use('/siparis', routes.siparisRoute)

@@ -23,9 +23,16 @@ model Cari {
 }
 
 model Stok {
-  kod     String    @id @map("sto_kod")
-  isim    String    @map("sto_isim")
-  Siparis Siparis[]
+  kod       String  @id @map("sto_kod")
+  isim      String  @map("sto_isim")
+  birim     String? @map("sto_birim1_ad")
+  marka_kod String? @map("sto_marka_kodu")
+  kdv       String? @map("sto_muhgrup_kodu")
+
+  marka   Marka?       @relation(fields: [marka_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+  miktar  StokMiktar   @relation(fields: [kod], references: [stok_kod], onDelete: NoAction, onUpdate: NoAction)
+  siparis Siparis[]
+  fiyat   FiyatListe[]
 
   @@map("STOKLAR")
 }
