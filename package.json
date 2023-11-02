@@ -5,7 +5,6 @@
   "scripts": {
     "start": "set NODE_ENV=development && nodemon ./bin/www",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
-    "gen:schema": "cd ./prisma && del schema.prisma && type nul > schema.prisma && type .\\schemas\\*.prisma >> .\\schema.prisma && npx prisma format",
     "prisma:format": "npx prisma format",
     "prisma:generate": "npx prisma generate"
   },
