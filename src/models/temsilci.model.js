@@ -6,7 +6,14 @@ class TemsilciModel {
     }
 
     list(){
-        return this.db['temsilci'].findMany()
+        return this.db['temsilci'].findMany({
+            where: {
+                tip: 0
+            },
+            orderBy: {
+                ad: 'asc'
+            }
+        })
     }
 }
 

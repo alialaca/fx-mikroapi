@@ -1,9 +1,5 @@
 const { Temsilci } = require('../models')
 class TemsilciService {
-    constructor() {
-
-    }
-
     list(){
         return Temsilci.list()
     }

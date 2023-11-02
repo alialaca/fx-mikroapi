@@ -1,64 +1,68 @@
- model SiparisOzet {
-   tarih         DateTime? @db.DateTime
-   evrak_seri    String
-   evrak_sira    Int
-   satir_sayisi  Int
-   depo_kod      Int
-   cari_kod      String
-   temsilci_kod  String
-   miktar        Float
-   miktar_teslim Float
-   miktar_kalan  Float
-   tutar         Float
-   tutar_net     Float
-   onay          String
-   durum         String
+model SiparisOzet {
+  tarih          DateTime @db.DateTime
+  evrak_seri     String
+  evrak_sira     Int
+  satir_sayisi   Int
+  depo_kod       Int
+  cari_kod       String
+  temsilci_kod   String
+  odeme_plan_kod Int
+  miktar         Float
+  miktar_teslim  Float
+  miktar_kalan   Float
+  tutar          Float
+  tutar_net      Float
+  onay           String
+  durum          String
 
-   cari     Cari     @relation(fields: [cari_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
-   temsilci Temsilci @relation(fields: [temsilci_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
-   depo     Depo     @relation(fields: [depo_kod], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cari       Cari      @relation(fields: [cari_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+  temsilci   Temsilci  @relation(fields: [temsilci_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+  depo       Depo      @relation(fields: [depo_kod], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  odeme_plan OdemePlan @relation(fields: [odeme_plan_kod], references: [id])
+  stoklar    Siparis[]
 
-   @@unique([evrak_seri, evrak_sira])
-   @@map("CRM_SIPARISLER_OZET")
- }
+  @@id([evrak_seri, evrak_sira, tarih])
+  @@unique([evrak_seri, evrak_sira, tarih])
+  @@map("CRM_SIPARISLER_OZET")
+}
 
- model OdemePlan {
-   id   Int    @id @map("odp_no")
-   isim String @map("odp_adi")
+model OdemePlan {
+  id          Int           @id @map("odp_no")
+  isim        String        @map("odp_adi")
+  SiparisOzet SiparisOzet[]
 
-   @@map("ODEME_PLANLARI")
-   @@ignore
- }
+  @@map("ODEME_PLANLARI")
+}
 
 model Siparis {
-  id                String   @id @map("sip_Guid")
-  tarih             DateTime @map("sip_belge_tarih") @db.DateTime
-  evrak_seri        String   @default("") @map("sip_evrakno_seri")
-  evrak_sira        Int      @map("sip_evrakno_sira")
-  satirno           Int      @map("sip_satirno")
-  olusturan_kod     Int      @map("sip_create_user")
-  temsilci_kod      String   @map("sip_satici_kod")
-  cari_kod          String   @map("sip_musteri_kod")
-  stok_kod          String   @map("sip_stok_kod")
-  birim_fiyat       Float    @map("sip_b_fiyat")
-  miktar            Float    @default(1.0) @map("sip_miktar")
-  miktar_tamamlanan Float    @default(0) @map("sip_teslim_miktar")
-  tutar             Float    @map("sip_tutar")
-  iskonto           Float    @map("sip_iskonto_1")
-  vergi             Float    @map("sip_vergi")
-  odeme_plan_kod    Int      @map("sip_opno")
-  aciklama          String   @default("") @map("sip_aciklama")
-  depo_kod          Int      @map("sip_depono")
-  onaylayan_kod     Int      @default(0) @map("sip_OnaylayanKulNo")
-  durum             Int      @map("sip_durumu")
-  sip_lastup_user     Int
-  sip_tarih           DateTime @db.DateTime
-  sip_teslim_tarih    DateTime @db.DateTime
-  sip_doviz_cinsi     Int
-  sip_doviz_kuru      Float
-  sip_alt_doviz_kuru  Float
-  sip_cagrilabilir_fl Int      @default(1)
-  sip_projekodu       String      @default("1")
+  id                           String   @id @map("sip_Guid")
+  tarih                        DateTime @map("sip_belge_tarih") @db.DateTime
+  evrak_seri                   String   @default("") @map("sip_evrakno_seri")
+  evrak_sira                   Int      @map("sip_evrakno_sira")
+  satirno                      Int      @map("sip_satirno")
+  olusturan_kod                Int      @map("sip_create_user")
+  temsilci_kod                 String   @map("sip_satici_kod")
+  cari_kod                     String   @map("sip_musteri_kod")
+  stok_kod                     String   @map("sip_stok_kod")
+  birim_fiyat                  Float    @map("sip_b_fiyat")
+  miktar                       Float    @default(1.0) @map("sip_miktar")
+  miktar_tamamlanan            Float    @default(0) @map("sip_teslim_miktar")
+  tutar                        Float    @map("sip_tutar")
+  iskonto                      Float    @default(0) @map("sip_iskonto_1")
+  vergi                        Float    @map("sip_vergi")
+  odeme_plan_kod               Int      @map("sip_opno")
+  aciklama                     String   @default("") @map("sip_aciklama")
+  depo_kod                     Int      @map("sip_depono")
+  onaylayan_kod                Int      @default(0) @map("sip_OnaylayanKulNo")
+  durum                        Int      @map("sip_durumu")
+  sip_lastup_user              Int
+  sip_tarih                    DateTime @db.DateTime
+  sip_teslim_tarih             DateTime @db.DateTime
+  doviz_cinsi                  Int      @default(0) @map("sip_doviz_cinsi")
+  doviz_kuru                   Float    @default(1) @map("sip_doviz_kuru")
+  alternatif_doviz_kuru        Float    @map("sip_alt_doviz_kuru")
+  sip_cagrilabilir_fl          Int      @default(1)
+  proje_kod                    String   @default("1") @map("sip_projekodu")
   sip_SpecRECno                Int      @default(0) @ignore
   sip_iptal                    Int      @default(0) @ignore
   sip_fileid                   Int      @default(0) @ignore
@@ -154,6 +158,9 @@ model Siparis {
   sip_satis_fiyat_doviz_cinsi  Int      @default(0) @ignore
   sip_satis_fiyat_doviz_kuru   Float    @default(0) @ignore
   sip_eticaret_kanal_kodu      String   @default("") @ignore
+
+  stok    Stok        @relation(fields: [stok_kod], references: [kod])
+  siparis SiparisOzet @relation(fields: [evrak_seri, evrak_sira, tarih], references: [evrak_seri, evrak_sira, tarih])
 
   @@map("SIPARISLER")
 }

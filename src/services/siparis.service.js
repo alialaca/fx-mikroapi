@@ -1,23 +1,36 @@
 const dayjs = require('dayjs')
-const { Siparis } = require('../models')
+const { Siparis, Cari} = require('../models')
 class SiparisService {
     constructor() {
 
     }
 
-    list({cari, temsilci, firstDate, lastDate}, {page, limit}){
+    async list({cari, temsilci, firstDate, lastDate}, {page, limit, search}){
 
-        const filter = {
+        const params = {
+            search,
             cari,
             temsilci,
-            firstDate: dayjs(firstDate).toISOString(),
-            lastDate: dayjs(lastDate).toISOString()
+            firstDate: dayjs(firstDate).add(3, 'hour').toISOString(),
+            lastDate: dayjs(lastDate).add(3, 'hour').toISOString(),
+            fields: ['depo', 'cari', 'temsilci', 'odeme_plan']
         }
-        return Siparis.list(filter, {page, limit})
+
+        const data = await Siparis.list({...params}, {page, limit})
+        const count = await Siparis.listCount({...params})
+        return Promise.resolve({data, count})
     }
 
     find(filter){
         return Siparis.find(filter)
+    }
+
+    last(serino){
+        return Siparis.lastItem({serino})
+    }
+
+    create(data){
+        return Siparis.createMany(data)
     }
 }
 

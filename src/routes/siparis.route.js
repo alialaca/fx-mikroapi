@@ -6,7 +6,8 @@ const router = require('express').Router()
 
 router
     .get('/', validate(SiparisValidation.filter), Siparis.list)
-    .get('/:seri-:sira', validate(SiparisValidation.detail), Siparis.detay)
-    .get('/-:sira', validate(SiparisValidation.detail), Siparis.detay)
+    .post('/', validate(SiparisValidation.create), Siparis.create)
+    .get('/:seri-:sira', validate(SiparisValidation.detail), Siparis.find)
+    .get('/-:sira', validate(SiparisValidation.detail), Siparis.find)
 
 module.exports = router;
