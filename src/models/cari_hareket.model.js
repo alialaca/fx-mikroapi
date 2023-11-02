@@ -12,6 +12,9 @@ class CariHareketModel {
                 evrak_seri: {
                     not: 'X'
                 }
+            },
+            orderBy: {
+                tarih: 'desc'
             }
         })
     }

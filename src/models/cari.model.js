@@ -5,23 +5,30 @@ class CariModel {
         this.db = new PrismaClient()
     }
 
-    list(temsilci, {page, limit}){
-        const where = !temsilci ? {} : {
-            temsilci_kod: {
-                in: temsilci
-            }
+    list(temsilci, {page, limit, search}){
+        const where = {
+            kod: {startsWith: '120.'},
+            OR: [
+                { kod: {contains: search} },
+                { kod: {equals: search} },
+                { unvan: {contains: search} },
+                { unvan: {equals: search} }
+            ]
         }
 
-        console.log({temsilci, where})
+        if (temsilci) where.temsilci_kod = {
+            in: temsilci
+        }
 
         return this.db['cari'].findMany({
-            skip: ((page - 1) * limit) + 1,
+            skip: (page - 1) * limit,
             take: limit,
             where,
             select: {
                 kod: true,
                 unvan: true,
                 bakiye: true,
+                sektor: true,
                 temsilci: {
                     select: {
                         kod: true,
@@ -29,8 +36,41 @@ class CariModel {
                         soyad: true
                     }
                 }
+            },
+            orderBy: {
+                bakiye: 'desc'
             }
         })
+    }
+
+    listCount(temsilci, search){
+        const where = {
+            AND: [
+                {
+                    kod: {startsWith: '120.'},
+                },
+                {
+                    OR: [
+                        { kod: {contains: search} },
+                        { kod: {equals: search} },
+                        { unvan: {contains: search} },
+                        { unvan: {equals: search} }
+                    ]
+                }
+            ]
+        }
+
+        if (temsilci) where.temsilci_kod = {
+            in: temsilci
+        }
+
+        return this.db['cari'].count({
+            where
+        })
+    }
+
+    find(kod) {
+        return this.db['cari'].findFirst({where: {kod}})
     }
 }
 
