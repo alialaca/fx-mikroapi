@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const {pagination, dbConnectionChecker, timeout, errorHandler} = require('./middlewares')
 
 const routes = require('./routes')
 const Pagination = require('./middlewares/pagination')
@@ -14,7 +15,20 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(Pagination.initPaginate)
+app.use((req, res, next) => {
+    if(req.headers['authorization'] === `Bearer ${process.env.ACCESS_TOKEN}`){
+        next()
+    }else {
+        res.status(401).json({
+            status: false,
+            message: "Erişim yetkiniz bulunmmaktadır."
+        })
+    }
+})
+
+app.use(timeout)
+// app.use(dbConnectionChecker)
+app.use(pagination.initPaginate)
 
 app.use('/cari', routes.cariRoute);
 app.use('/stok', routes.stokRoute);

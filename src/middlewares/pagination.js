@@ -2,14 +2,9 @@ const initPaginate = (req, res, next) => {
 
     const page = req?.query?.page || 1
     const limit = req?.query?.limit || 20
+    const search = req?.query.search || ''
 
-    console.log({
-        location: 'initPagination',
-        query: req.query,
-        paginationOptions: { page : parseInt(page), limit: parseInt(limit) }
-    })
-
-    req.paginationOptions = { page : parseInt(page), limit: parseInt(limit) }
+    req.paginationOptions = { page : parseInt(page), limit: parseInt(limit), search }
     next()
 }
 
