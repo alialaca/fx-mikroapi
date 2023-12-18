@@ -38,7 +38,8 @@ const create = {
             iskonto: Joi.number().min(0).default(0),
             vergi: Joi.number(),
             aciklama: Joi.string().empty(['', null]).default("")
-        }).required()
+        }).required(),
+        notlar: Joi.array().max(10).items(Joi.string().max(120))
     })
 }
 

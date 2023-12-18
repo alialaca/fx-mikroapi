@@ -129,15 +129,18 @@ model SiparisOzet {
   onay             String
   durum            String
   olusturma_tarihi DateTime @db.DateTime
+  fileId           Int      @default(21)
 
   cari       Cari       @relation(fields: [cari_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
   temsilci   Temsilci   @relation(fields: [temsilci_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
   depo       Depo       @relation(fields: [depo_kod], references: [id], onDelete: NoAction, onUpdate: NoAction)
   odeme_plan OdemePlan? @relation(fields: [odeme_plan_kod], references: [id])
   stoklar    Siparis[]
+  aciklama   Aciklama?
 
   @@id([evrak_seri, evrak_sira, tarih])
   @@unique([evrak_seri, evrak_sira, tarih])
+  @@unique([evrak_seri, evrak_sira, fileId])
   @@map("CRM_SIPARISLER_OZET")
 }
 
@@ -292,4 +295,51 @@ model Siparis {
   siparis SiparisOzet @relation(fields: [evrak_seri, evrak_sira, tarih], references: [evrak_seri, evrak_sira, tarih])
 
   @@map("SIPARISLER")
+}
+
+model Aciklama {
+  id                       String   @id @map("egk_Guid")
+  olusturan_kod            Int      @map("egk_create_user")
+  lastup_user              Int      @map("egk_lastup_user")
+  evrak_seri               String   @map("egk_evr_seri")
+  evrak_sira               Int      @map("egk_evr_sira")
+  satir1                   String   @default("") @map("egk_evracik1")
+  satir2                   String   @default("") @map("egk_evracik2")
+  satir3                   String   @default("") @map("egk_evracik3")
+  satir4                   String   @default("") @map("egk_evracik4")
+  satir5                   String   @default("") @map("egk_evracik5")
+  satir6                   String   @default("") @map("egk_evracik6")
+  satir7                   String   @default("") @map("egk_evracik7")
+  satir8                   String   @default("") @map("egk_evracik8")
+  satir9                   String   @default("") @map("egk_evracik9")
+  satir10                  String   @default("") @map("egk_evracik10")
+  egk_SpecRECno            Int      @default(0)
+  egk_iptal                Int      @default(0)
+  egk_fileid               Int      @default(66)
+  egk_hidden               Int      @default(0)
+  egk_kilitli              Int      @default(0)
+  egk_degisti              Int      @default(0)
+  egk_checksum             Int      @default(0)
+  egk_lastup_date          DateTime @default(now()) @db.DateTime
+  egk_special1             String   @default("")
+  egk_special2             String   @default("")
+  egk_special3             String   @default("")
+  egk_dosyano              Int      @default(21)
+  egk_hareket_tip          Int      @default(0)
+  egk_evr_tip              Int      @default(0)
+  egk_evr_ustkod           String   @default("")
+  egk_evr_doksayisi        Int      @default(0)
+  egk_sipgenkarorani       Int      @default(0)
+  egk_kargokodu            String   @default("")
+  egk_kargono              String   @default("")
+  egk_tesaltarihi          DateTime @default("1899-12-30T00:00:00.00Z") @db.DateTime
+  egk_tesalkisi            String   @default("")
+  egk_prevwiewsayisi       Int      @default(0)
+  egk_emailsayisi          Int      @default(0)
+  egk_Evrakopno_verildi_fl Int      @default(0)
+
+  evrak SiparisOzet @relation(fields: [evrak_seri, evrak_sira, egk_dosyano], references: [evrak_seri, evrak_sira, fileId])
+
+  @@unique([evrak_seri, evrak_sira, egk_dosyano])
+  @@map("EVRAK_ACIKLAMALARI")
 }

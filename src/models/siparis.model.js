@@ -133,6 +133,20 @@ class SiparisModel {
                             }
                         }
                     }
+                },
+                aciklama: {
+                    select: {
+                        satir1: true,
+                        satir2: true,
+                        satir3: true,
+                        satir4: true,
+                        satir5: true,
+                        satir6: true,
+                        satir7: true,
+                        satir8: true,
+                        satir9: true,
+                        satir10: true,
+                    }
                 }
             }
         })

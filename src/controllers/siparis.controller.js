@@ -1,6 +1,6 @@
 const statusCodes = require('http-status-codes')
 const {uuid} = require('uuidv4')
-const { Siparis } = require('../services')
+const { Siparis, Aciklama} = require('../services')
 
 const dayjs = require('dayjs')
 // const timezone = require('dayjs/plugin/timezone')
@@ -93,8 +93,20 @@ const create = async (req, res) => {
             sip_vergi_pntr: vergiOran === 0.1 ? 7 : 8
         }
     })
+    await Siparis.create(data)
 
-    const createdData = await Siparis.create(data)
+    if (req.body.notlar) {
+        const noteData = {
+            id: uuid().toUpperCase(),
+            olusturan_kod: req.body.olusturan,
+            lastup_user: req.body.olusturan,
+            evrak_seri: req.body.evrak_seri,
+            evrak_sira: req.body.evrak_sira,
+        }
+        req.body.notlar.forEach((not, index) => noteData[`satir${index + 1}`] = not)
+
+        await Aciklama.create(noteData)
+    }
 
     const result = await Siparis.find({
             serino: serino,
