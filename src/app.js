@@ -1,5 +1,4 @@
 const express = require('express');
-const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const {pagination, dbConnectionChecker, timeout, errorHandler} = require('./middlewares')
@@ -13,7 +12,6 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
     if(req.headers['authorization'] === `Bearer ${process.env.ACCESS_TOKEN}`){
