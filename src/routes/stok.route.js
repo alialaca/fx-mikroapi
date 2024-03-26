@@ -1,5 +1,5 @@
-const { Stok } = require('../controllers')
-const {filter} = require('../validations').Stok
+const { Stok,  Maliyet } = require('../controllers')
+const {filter, maliyet} = require('../validations').Stok
 const validate = require('../middlewares/validate')
 
 const router = require('express').Router()

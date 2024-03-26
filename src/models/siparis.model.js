@@ -113,7 +113,9 @@ class SiparisModel {
                     select: {
                         kod: true,
                         ad: true,
-                        soyad: true
+                        soyad: true,
+                        tel: true,
+                        eposta: true
                     }
                 },
                 stoklar: {
@@ -129,7 +131,19 @@ class SiparisModel {
                         stok: {
                             select: {
                                 kod: true,
-                                isim: true
+                                isim: true,
+                                marka: true,
+                                bedenHareket: {
+                                    where: {
+                                        evrak_seri: serino,
+                                        evrak_sira: sirano
+                                    },
+                                    select: {
+                                        beden: true,
+                                        renk: true,
+                                        miktar: true
+                                    }
+                                }
                             }
                         }
                     }

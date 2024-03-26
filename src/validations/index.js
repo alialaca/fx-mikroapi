@@ -1,2 +1,5 @@
 module.exports.Siparis = require('./siparis.validation')
 module.exports.Stok = require('./stok.validation')
+module.exports.Satis = require('./satis.validation')
+module.exports.Aykur = require('./aykur.validation')
+module.exports.Maliyet = require('./maliyet.validation')

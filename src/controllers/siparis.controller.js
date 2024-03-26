@@ -56,13 +56,17 @@ const create = async (req, res) => {
         const vergiOran = item.vergi === (item.miktar * item.birim_fiyat * 0.1) ? 0.1 : 0.2
 
         // İskonto oran küsürat kontrolü
-        const iskontoOran = parseFloat((item.iskonto / (item.birim_fiyat * item.miktar)).toFixed(0))
+        // const iskontoOran = parseFloat((item.iskonto / (item.birim_fiyat * item.miktar)).toFixed(0))
 
         // // Servis siparişleri için iskonto sıfır olarak işlem yapma
         if (req.body.proje === '1') {
             const netFiyat = (item.birim_fiyat * item.miktar) - item.iskonto
-            item.birim_fiyat = netFiyat / item.miktar
-            item.iskonto = 0
+            if (netFiyat === 0){
+                item.iskonto = item.birim_fiyat * item.miktar
+            } else {
+                item.birim_fiyat = netFiyat / item.miktar
+                item.iskonto = 0
+            }
         }
 
         return {
@@ -78,7 +82,7 @@ const create = async (req, res) => {
             birim_fiyat: item.birim_fiyat,
             miktar: item.miktar,
             tutar: item.miktar * item.birim_fiyat,
-            iskonto: iskontoOran === 100 ? item.miktar * item.birim_fiyat : item.iskonto,
+            iskonto: item.iskonto,
             vergi: item.vergi || ((item.birim_fiyat * item.miktar) - item.iskonto ) * vergiOran,
             odeme_plan_kod: req.body.odemeplan,
             aciklama: item.aciklama,

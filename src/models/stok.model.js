@@ -1,20 +1,20 @@
-const { PrismaClient } = require( '@prisma/client' )
+const {PrismaClient} = require('@prisma/client')
 
 class StokModel {
     constructor() {
         this.db = new PrismaClient()
     }
 
-    list({fields, page, limit, search}){
+    list({fields, page, limit, search}) {
         let query = {
             skip: ((page - 1) * limit),
             take: limit,
             where: {
                 OR: [
-                    { kod: { contains: search } },
-                    { kod: { equals: search } },
-                    { isim: { contains: search } },
-                    { isim: { equals: search } }
+                    {kod: {contains: search}},
+                    {kod: {equals: search}},
+                    {isim: {contains: search}},
+                    {isim: {equals: search}}
                 ]
             },
             select: {
@@ -29,7 +29,7 @@ class StokModel {
                 }
             },
             orderBy: {
-                miktar: { merkez: 'desc'}
+                miktar: {merkez: 'desc'}
             }
         }
 
@@ -39,7 +39,8 @@ class StokModel {
                     select: {
                         merkez: true,
                         balikesir: true,
-                        istanbul: true
+                        istanbul: true,
+                        servis: true
                     }
                 }
             }
@@ -58,7 +59,7 @@ class StokModel {
                         }
                     },
                     where: {
-                        durum: { gt: 0}
+                        durum: {gt: 0}
                     }
                 }
             }
@@ -80,14 +81,14 @@ class StokModel {
         return this.db['stok'].findMany(query)
     }
 
-    listCount(search){
+    listCount(search) {
         return this.db['stok'].count({
             where: {
                 OR: [
-                    { kod: { contains: search } },
-                    { kod: { equals: search } },
-                    { isim: { contains: search } },
-                    { isim: search }
+                    {kod: {contains: search}},
+                    {kod: {equals: search}},
+                    {isim: {contains: search}},
+                    {isim: search}
                 ]
             }
         })
@@ -116,7 +117,8 @@ class StokModel {
                 select: {
                     merkez: true,
                     balikesir: true,
-                    istanbul: true
+                    istanbul: true,
+                    servis: true
                 }
             }
         }
@@ -130,9 +132,18 @@ class StokModel {
             }
         }
 
+        if (fields.includes('maliyet')) {
+            query.select.maliyet = {
+                select: {
+                    maliyet: true,
+                    baslangic_tarihi: true
+                }
+            }
+        }
+
         if (fields && fields.includes('siparis')) {
             const siparisWhere = {
-                onaylayan_kod: { gt: 0}
+                onaylayan_kod: {gt: 0}
             }
 
             if (temsilci) siparisWhere.temsilci_kod = {

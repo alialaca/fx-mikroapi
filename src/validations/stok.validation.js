@@ -1,6 +1,6 @@
 const Joi = require('joi')
 
-const validFields = ['miktar', 'siparis', 'kdv', 'fiyat']
+const validFields = ['miktar', 'siparis', 'kdv', 'fiyat', 'maliyet']
 
 const filter = {
     query: Joi.object().keys({
@@ -13,7 +13,6 @@ const filter = {
         search: Joi.string().allow('').optional().default('')
     })
 }
-
 
 module.exports = {
     filter

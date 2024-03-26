@@ -4,7 +4,6 @@ const logger = require('morgan');
 const {pagination, dbConnectionChecker, timeout, errorHandler} = require('./middlewares')
 
 const routes = require('./routes')
-const Pagination = require('./middlewares/pagination')
 
 const app = express();
 
@@ -34,6 +33,16 @@ app.use('/temsilci', routes.temsilciRoute)
 app.use('/depo', routes.depoRoute)
 app.use('/siparis', routes.siparisRoute)
 app.use('/odeme-plan', routes.odemePlanRoute)
+app.use('/satis', routes.satisRoute)
+app.use('/aykur', routes.aykurRoute)
+app.use('/maliyet', routes.maliyetRoute)
+
+app.use('*', (req, res, next) => {
+    res.status(404).json()
+    // next()
+})
+
+app.use( errorHandler )
 
 // app.use(Pagination.endPaginate)
 

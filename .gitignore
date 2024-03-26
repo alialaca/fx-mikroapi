@@ -6,3 +6,5 @@ test
 migrate
 *.bak
 tests
+src/logs/*
+/*lock.*

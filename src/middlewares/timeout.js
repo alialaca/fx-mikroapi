@@ -1,5 +1,5 @@
 module.exports = (req, res, next) => {
-    const apiTimeout = 10 * 1000;
+    const apiTimeout = 25 * 1000;
     req.setTimeout(apiTimeout, () => {
         let err = new Error('Request Timeout');
         err.status = 408;

@@ -19,6 +19,7 @@ model Cari {
   temsilci     Temsilci?     @relation(fields: [temsilci_kod], references: [kod])
   SiparisOzet  SiparisOzet[]
   Siparis      Siparis[]
+  Satis        Satis[]
 
   @@map("CRM_CARI_HESAPLAR")
 }
@@ -34,6 +35,10 @@ model Stok {
   miktar  StokMiktar   @relation(fields: [kod], references: [stok_kod], onDelete: NoAction, onUpdate: NoAction)
   siparis Siparis[]
   fiyat   FiyatListe[]
+  Satis   Satis[]
+
+  bedenHareket BedenHareket[]
+  maliyet SabitMaliyet[]
 
   @@map("STOKLAR")
 }
@@ -54,6 +59,7 @@ model StokMiktar {
   merkez    Float
   balikesir Float
   istanbul  Float
+  servis    Float
   Stok      Stok[]
 
   @@map("CRM_STOK_DEPO_MIKTARLARI")
@@ -78,6 +84,8 @@ model Temsilci {
   tip         Int           @map("cari_per_tip")
   Cari        Cari[]
   SiparisOzet SiparisOzet[]
+  Satis       Satis[]
+  PrimOzet    PrimOzet[]
 
   @@map("CARI_PERSONEL_TANIMLARI")
 }
@@ -92,7 +100,6 @@ model Depo {
   @@map("DEPOLAR")
 }
 
-//
 model CariHareket {
   id               String    @unique
   tarih            DateTime? @db.DateTime
@@ -117,8 +124,8 @@ model SiparisOzet {
   evrak_sira       Int
   satir_sayisi     Int
   depo_kod         Int
-  cari_kod         String
-  temsilci_kod     String
+  cari_kod         String?
+  temsilci_kod     String?
   odeme_plan_kod   Int?
   proje            String?
   miktar           Float
@@ -131,8 +138,8 @@ model SiparisOzet {
   olusturma_tarihi DateTime @db.DateTime
   fileId           Int      @default(21)
 
-  cari       Cari       @relation(fields: [cari_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
-  temsilci   Temsilci   @relation(fields: [temsilci_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+  cari       Cari?      @relation(fields: [cari_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+  temsilci   Temsilci?  @relation(fields: [temsilci_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
   depo       Depo       @relation(fields: [depo_kod], references: [id], onDelete: NoAction, onUpdate: NoAction)
   odeme_plan OdemePlan? @relation(fields: [odeme_plan_kod], references: [id])
   stoklar    Siparis[]
@@ -294,6 +301,7 @@ model Siparis {
   cari    Cari        @relation(fields: [cari_kod], references: [kod])
   siparis SiparisOzet @relation(fields: [evrak_seri, evrak_sira, tarih], references: [evrak_seri, evrak_sira, tarih])
 
+  @@unique([evrak_seri, evrak_sira, stok_kod])
   @@map("SIPARISLER")
 }
 
@@ -342,4 +350,87 @@ model Aciklama {
 
   @@unique([evrak_seri, evrak_sira, egk_dosyano])
   @@map("EVRAK_ACIKLAMALARI")
+}
+
+model Satis {
+  id            String   @id @unique
+  faturaId      String
+  tarih         DateTime
+  yil           Int
+  ceyrek        Int
+  ay_index      Int
+  ay            String
+  stok_kod      String
+  odeme_kod     String
+  odeme         String?
+  temsilci_kod  String?
+  temsilci_isim String?
+  cari_kod      String
+  bolge         String?
+  anagrup       String?
+  marka         String?
+  miktar        Int
+  tutar         Float?
+  kur           Float?
+  alis_kur      Float?
+  iade          Int
+  satis_tl      Float?
+  satis_euro    Float?
+  alis_tl       Float?
+  alis_euro     Float?
+  kar_tl        Float?
+  kar_euro      Float?
+  kar_oran      Float?
+
+  stok     Stok      @relation(fields: [stok_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+  cari     Cari      @relation(fields: [cari_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+  temsilci Temsilci? @relation(fields: [temsilci_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("CRM_SATISLAR")
+}
+
+model PrimOzet {
+  temsilci_kod String @id
+  alacak_tl    Float?
+  satis_tl     Float?
+  satis_euro   Float?
+  hedef_euro   Float?
+  kar_euro     Float?
+  oran         Float?
+
+  temsilci Temsilci? @relation(fields: [temsilci_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("CRM_ANLIK_PRIM_DURUM")
+}
+
+model BedenHareket {
+  evrak_seri String
+  evrak_sira Int
+  stok_kod   String
+  beden      String
+  renk       String
+  miktar     Float
+
+  stok Stok @relation(fields: [stok_kod], references: [kod])
+
+  @@unique([evrak_seri, evrak_sira, stok_kod, beden, renk])
+  @@map("CRM_BEDEN_HAREKETLERI")
+}
+
+model SabitMaliyet {
+  id               Int      @id @default(autoincrement())
+  stok_kod         String
+  maliyet          Float
+  baslangic_tarihi DateTime @db.DateTime
+  stok             Stok     @relation(fields: [stok_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("_STOK_SABIT_MALIYETLER")
+}
+
+model Aykur {
+  id               Int      @id @default(autoincrement())
+  baslangic_tarihi DateTime @db.DateTime
+  kur              Float
+
+  @@map("_AYKUR")
 }

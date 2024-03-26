@@ -1,5 +1,5 @@
 const statusCodes = require('http-status-codes')
-const { Stok } = require('../services')
+const {Stok} = require('../services')
 const list = async (req, res, next) => {
 
     let fields = req.query.project
@@ -24,16 +24,16 @@ const list = async (req, res, next) => {
 
 const find = async (req, res) => {
     const kod = req.params.kod
-    const temsilci= req.query?.temsilci?.split('-')
+    const temsilci = req.query?.temsilci?.split('-')
 
     let fields = req.query.project
 
     if (typeof fields === 'string') fields = [req.query.project]
 
     Stok.find(kod, {fields, temsilci})
-        .then( stok => {
+        .then(stok => {
             res.status(200).json({
-                data:stok
+                data: stok
             })
         })
         .catch(error => {
@@ -42,6 +42,7 @@ const find = async (req, res) => {
             })
         })
 }
+
 
 module.exports = {
     list,
