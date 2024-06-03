@@ -39,6 +39,7 @@ model Stok {
 
   bedenHareket BedenHareket[]
   maliyet SabitMaliyet[]
+  KampanyaStoklar KampanyaStoklar[]
 
   @@map("STOKLAR")
 }
@@ -86,6 +87,7 @@ model Temsilci {
   SiparisOzet SiparisOzet[]
   Satis       Satis[]
   PrimOzet    PrimOzet[]
+  Kampanya    Kampanya[]
 
   @@map("CARI_PERSONEL_TANIMLARI")
 }
@@ -144,6 +146,7 @@ model SiparisOzet {
   odeme_plan OdemePlan? @relation(fields: [odeme_plan_kod], references: [id])
   stoklar    Siparis[]
   aciklama   Aciklama?
+  KampanyaSiparisler KampanyaSiparisler[]
 
   @@id([evrak_seri, evrak_sira, tarih])
   @@unique([evrak_seri, evrak_sira, tarih])
@@ -433,4 +436,50 @@ model Aykur {
   kur              Float
 
   @@map("_AYKUR")
+}
+
+model Kampanya {
+  id               Int      @id @default(autoincrement())
+  baslangic_tarihi DateTime @db.DateTime
+  bitis_tarihi     DateTime @db.DateTime
+  isim             String
+  aciklama         String?  @default("")
+  olusturan_kod    String
+  olusturma_tarihi DateTime @default(now()) @db.DateTime
+  limit            Int
+  notlar           String?  @default("")
+
+  stoklar    KampanyaStoklar[]
+  siparisler KampanyaSiparisler[]
+  olusturan  Temsilci             @relation(fields: [olusturan_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("CRM_KAMPANYA_TANIMLARI")
+}
+
+model KampanyaStoklar {
+  id          Int    @id @default(autoincrement())
+  kampanya_id Int
+  stok_kod    String
+  miktar      Float
+  fiyat       Float
+  listefiyat  Float
+
+  kampanya Kampanya @relation(fields: [kampanya_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  stok     Stok     @relation(fields: [stok_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([kampanya_id, stok_kod])
+  @@map("CRM_KAMPANYA_STOKLAR")
+}
+
+model KampanyaSiparisler {
+  id          Int
+  kampanya_id Int
+  sip_seri    String
+  sip_sira    Int
+  fileId      Int         @default(21)
+  kampanya    Kampanya    @relation(fields: [kampanya_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  siparis     SiparisOzet @relation(fields: [sip_seri, sip_sira, fileId], references: [evrak_seri, evrak_sira, fileId], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([kampanya_id, sip_seri, sip_sira])
+  @@map("CRM_KAMPANYA_SIPARISLER")
 }
