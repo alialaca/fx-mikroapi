@@ -39,7 +39,7 @@ const create = {
             vergi: Joi.number(),
             aciklama: Joi.string().empty(['', null]).default("")
         }).required(),
-        notlar: Joi.array().max(10).items(Joi.string().max(120))
+        notlar: Joi.array().max(10).items(Joi.string().max(127))
     })
 }
 
