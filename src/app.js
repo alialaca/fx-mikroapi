@@ -37,6 +37,7 @@ app.use('/satis', routes.satisRoute)
 app.use('/aykur', routes.aykurRoute)
 app.use('/maliyet', routes.maliyetRoute)
 app.use('/kampanya', routes.kampanyaRoute)
+app.use('/rapor', routes.raporRoute)
 
 app.use('*', (req, res, next) => {
     res.status(404).json()

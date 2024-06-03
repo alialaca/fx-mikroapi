@@ -37,8 +37,8 @@ model Stok {
   fiyat   FiyatListe[]
   Satis   Satis[]
 
-  bedenHareket BedenHareket[]
-  maliyet SabitMaliyet[]
+  bedenHareket    BedenHareket[]
+  maliyet         SabitMaliyet[]
   KampanyaStoklar KampanyaStoklar[]
 
   @@map("STOKLAR")
@@ -140,12 +140,12 @@ model SiparisOzet {
   olusturma_tarihi DateTime @db.DateTime
   fileId           Int      @default(21)
 
-  cari       Cari?      @relation(fields: [cari_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
-  temsilci   Temsilci?  @relation(fields: [temsilci_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
-  depo       Depo       @relation(fields: [depo_kod], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  odeme_plan OdemePlan? @relation(fields: [odeme_plan_kod], references: [id])
-  stoklar    Siparis[]
-  aciklama   Aciklama?
+  cari               Cari?                @relation(fields: [cari_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+  temsilci           Temsilci?            @relation(fields: [temsilci_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+  depo               Depo                 @relation(fields: [depo_kod], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  odeme_plan         OdemePlan?           @relation(fields: [odeme_plan_kod], references: [id])
+  stoklar            Siparis[]
+  aciklama           Aciklama?
   KampanyaSiparisler KampanyaSiparisler[]
 
   @@id([evrak_seri, evrak_sira, tarih])
