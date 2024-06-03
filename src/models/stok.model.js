@@ -156,10 +156,13 @@ class StokModel {
                     tarih: true,
                     miktar: true,
                     birim_fiyat: true,
+                    iskonto: true,
+                    vergi: true,
                     tutar: true,
                     cari: {
                         select: {
-                            unvan: true
+                            unvan: true,
+                            sektor: true
                         }
                     }
                 },
