@@ -5,7 +5,7 @@ const stokDurum = async (req, res, next) => {
     const tableName = 'CRM_STOK_DURUM_OZET'
     Rapor.list(tableName)
         .then( data => {
-            res.status(200).json({
+            res.status(statusCodes.OK).json({
                 data
             })
         })
