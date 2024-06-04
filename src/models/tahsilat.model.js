@@ -35,7 +35,7 @@ class TahsilatModel {
         }
 
         if (cari) where.cari_kod = {in: cari}
-        if(temsilci) where.temsilci_kod = { in: temsilci}
+        if (temsilci) where.temsilci_kod = {in: temsilci}
 
         const query = {
             skip: (page - 1) * limit,
@@ -59,9 +59,30 @@ class TahsilatModel {
         }
 
         if (cari) where.cari_kod = {in: cari}
-        if(temsilci) where.temsilci_kod = { in: temsilci}
+        if (temsilci) where.temsilci_kod = {in: temsilci}
 
         return this.db['tahsilat'].count({where})
+    }
+
+    lastItem() {
+        return this.db['tahsilat'].findFirst({
+            where: {
+                cha_evrak_tip: 1,
+                cha_evrakno_seri: ''
+            },
+            orderBy: [
+                {
+                    referans_no: 'desc',
+                },
+                {
+                    evrak_sira: 'desc',
+                },
+            ],
+            select: {
+                referans_no: true,
+                evrak_sira: true,
+            },
+        });
     }
 }
 
