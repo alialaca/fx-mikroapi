@@ -20,6 +20,7 @@ model Cari {
   SiparisOzet  SiparisOzet[]
   Siparis      Siparis[]
   Satis        Satis[]
+  Tahsilat     Tahsilat[]
 
   @@map("CRM_CARI_HESAPLAR")
 }
@@ -639,6 +640,8 @@ model Tahsilat {
   cha_eticaret_kanal_kodu               String   @default("")
   cha_hizli_satis_kasa_no               Int      @default(0)
   cha_ebelge_Islemturu                  Int      @default(0)
+
+  cari Cari @relation(fields: [cari_kod], references: [kod])
 
   @@unique([cha_evrak_tip, cha_evrakno_seri, evrak_sira, cha_satir_no])
   @@map("CARI_HESAP_HAREKETLERI")
