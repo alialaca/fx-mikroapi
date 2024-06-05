@@ -25,8 +25,13 @@ const create = async function(data) {
     return Tahsilat.create(data)
 }
 
+const remove = async function(id) {
+    return Tahsilat.remove(id)
+}
+
 module.exports = {
     list,
     create,
-    lastItem
+    lastItem,
+    remove
 }

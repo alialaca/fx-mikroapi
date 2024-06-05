@@ -113,6 +113,14 @@ class TahsilatModel {
             data
         })
     }
+
+    remove(id) {
+        return this.db['tahsilat'].delete({
+            where: {
+                id
+            }
+        })
+    }
 }
 
 module.exports = new TahsilatModel()

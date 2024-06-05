@@ -22,6 +22,12 @@ const create = {
     })
 }
 
+const remove = {
+    params: Joi.object().keys({
+        id: Joi.string().uuid().required()
+    })
+}
+
 module.exports = {
     filter,
     create

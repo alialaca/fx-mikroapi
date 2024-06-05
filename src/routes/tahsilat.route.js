@@ -8,6 +8,6 @@ router
     .get('/', validate(TahsilatValidation.filter), Tahsilat.list)
     .post('/', Tahsilat.create)
     .get('/:id', Tahsilat.find)
-    .delete('/:id', Tahsilat.remove)
+    .delete('/:id', validate(TahsilatValidation.remove), Tahsilat.remove)
 
 module.exports = router;

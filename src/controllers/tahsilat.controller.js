@@ -46,8 +46,6 @@ const create = async (req, res, next) => {
     const tarih = dayjs().utc().startOf('day').toISOString();
     const id = uuid().toUpperCase()
 
-    console.log({id})
-
     const { aciklama, cari_kod, tutar, vade } = req.body
 
     const data = {
@@ -75,7 +73,14 @@ const create = async (req, res, next) => {
         }).catch( error => res.status(500).send(error.message) )
 }
 
-const remove = notImplemented
+const remove = (req, res, next) => {
+    Tahsilat.remove(req.params.id)
+        .then( tahsilat => {
+            res.status(statusCodes.OK).json({
+                data: tahsilat
+            })
+        }).catch( next )
+}
 
 module.exports = {
     list,
