@@ -6,7 +6,7 @@ const router = require('express').Router()
 
 router
     .get('/', validate(TahsilatValidation.filter), Tahsilat.list)
-    .post('/', Tahsilat.create)
+    .post('/', validate(TahsilatValidation.create), Tahsilat.create)
     .get('/:id', Tahsilat.find)
     .delete('/:id', validate(TahsilatValidation.remove), Tahsilat.remove)
 

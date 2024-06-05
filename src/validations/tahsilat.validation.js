@@ -18,7 +18,7 @@ const create = {
         cari_kod: Joi.string().required(),
         aciklama: Joi.string().required(),
         tutar: Joi.number().required(),
-        vade: Joi.string().length(8).required(),
+        vade: Joi.string().length(10).required(),
     })
 }
 
