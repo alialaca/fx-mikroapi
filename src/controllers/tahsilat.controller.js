@@ -1,5 +1,5 @@
 const statusCodes = require('http-status-codes');
-const { Tahsilat } = require('../services');
+const { Tahsilat, Cari} = require('../services');
 const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
 const {uuid} = require("uuidv4");
@@ -48,19 +48,22 @@ const create = async (req, res, next) => {
 
     const { aciklama, cari_kod, tutar, vade } = req.body
 
+    const cari = await Cari.find(cari_kod)
+    if (!cari) return res.status(404).json({message: 'Cari bulunamadı'})
+
     const data = {
         evrak_sira,
         referans_no,
         tarih,
         cha_belge_tarih: tarih,
         aciklama,
-        cari_kod,
+        cari_kod: cari.kod,
         tutar,
         aratoplam: tutar,
         vade: parseInt(vade.replaceAll('-', '')),
-        cha_fis_sirano: evrak_sira,
+        cha_fis_sirano: fis_sira,
         fis_tarihi: tarih,
-        temsilci_kod: '',
+        temsilci_kod: cari.temsilci_kod,
         id,
         doviz_kur: 1
     }
