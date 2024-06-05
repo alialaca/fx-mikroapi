@@ -486,8 +486,7 @@ model KampanyaSiparisler {
 }
 
 model Tahsilat {
-  id String @id @map("cha_Guid")
-
+  id                                    String   @id @map("cha_Guid")
   evrak_sira                            Int      @map("cha_evrakno_sira")
   tarih                                 DateTime @map("cha_tarihi") @db.Date
   aciklama                              String   @map("cha_aciklama")
@@ -508,6 +507,7 @@ model Tahsilat {
   cha_degisti                           Int      @default(0)
   cha_CheckSum                          Int      @default(0)
   cha_create_user                       Int      @default(100) // API kullanıcısı
+  cha_create_date                       DateTime @default(now()) @db.DateTime
   cha_lastup_user                       Int      @default(100)
   cha_lastup_date                       DateTime @default(now()) @db.DateTime
   cha_special1                          String   @default("")
@@ -534,7 +534,7 @@ model Tahsilat {
   cha_grupno                            Int      @default(0)
   cha_srmrkkodu                         String   @default("")
   cha_kasa_hizmet                       Int      @default(0)
-  cha_kasa_hizkod                       String   @default("120.10.001")
+  cha_kasa_hizkod                       String   @default("102.10.001")
   cha_karsidcinsi                       Int      @default(0)
   cha_karsid_kur                        Float    @default(1)
   cha_karsidgrupno                      Float    @default(7)
@@ -644,5 +644,6 @@ model Tahsilat {
   cari Cari @relation(fields: [cari_kod], references: [kod])
 
   @@unique([cha_evrak_tip, cha_evrakno_seri, evrak_sira, cha_satir_no])
+  @@unique([fis_tarihi, cha_fis_sirano])
   @@map("CARI_HESAP_HAREKETLERI")
 }

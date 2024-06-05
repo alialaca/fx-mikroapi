@@ -1,4 +1,7 @@
 const Prisma = require('../services/prisma')
+const dayjs = require("dayjs");
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
 
 class TahsilatModel {
     constructor() {
@@ -64,8 +67,8 @@ class TahsilatModel {
         return this.db['tahsilat'].count({where})
     }
 
-    lastItem() {
-        return this.db['tahsilat'].findFirst({
+    async lastItem() {
+        const {referans_no, evrak_sira} = await this.db['tahsilat'].findFirst({
             where: {
                 cha_evrak_tip: 1,
                 cha_evrakno_seri: ''
@@ -83,6 +86,32 @@ class TahsilatModel {
                 evrak_sira: true,
             },
         });
+
+        const today = dayjs().utc().startOf('day').toISOString();
+
+
+        const record = await this.db['tahsilat'].findFirst({
+            where: {
+                fis_tarihi: today
+            },
+            orderBy: [
+                { cha_fis_sirano: 'desc' },
+            ],
+            select: {
+                cha_fis_sirano: true,
+            }
+        })
+
+        console.log({record})
+
+
+        return Promise.resolve({referans_no, evrak_sira, cha_fis_sirano: record?.cha_fis_sirano || 0})
+    }
+
+    create(data) {
+        return this.db['tahsilat'].create({
+            data
+        })
     }
 }
 

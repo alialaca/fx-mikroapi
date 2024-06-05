@@ -2,6 +2,9 @@ const {Tahsilat} = require('../models');
 const dayjs = require("dayjs");
 
 const list = async function({cari, temsilci, firstDate, lastDate}, {page, limit}) {
+
+    const lastItem = await Tahsilat.lastItem()
+
     const params = {
         cari,
         temsilci,
@@ -14,6 +17,16 @@ const list = async function({cari, temsilci, firstDate, lastDate}, {page, limit}
     return Promise.resolve({data, count})
 }
 
+const lastItem = async function() {
+    return Tahsilat.lastItem()
+}
+
+const create = async function(data) {
+    return Tahsilat.create(data)
+}
+
 module.exports = {
-    list
+    list,
+    create,
+    lastItem
 }
