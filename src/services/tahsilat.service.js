@@ -2,9 +2,6 @@ const {Tahsilat} = require('../models');
 const dayjs = require("dayjs");
 
 const list = async function({cari, temsilci, firstDate, lastDate}, {page, limit}) {
-
-    const lastItem = await Tahsilat.lastItem()
-
     const params = {
         cari,
         temsilci,
