@@ -33,6 +33,7 @@ class SatisModel {
             yil: true,
             ceyrek: true,
             ay: true,
+            faturaId: true,
             stok: {
                 select: {
                     kod: true,
@@ -53,7 +54,8 @@ class SatisModel {
             miktar: true,
             tutar: true,
             kur: true,
-            iade: true
+            iade: true,
+            servis: true
         }
 
         if(kar) {

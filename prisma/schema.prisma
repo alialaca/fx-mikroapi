@@ -377,6 +377,7 @@ model Satis {
   tutar         Float?
   kur           Float?
   alis_kur      Float?
+  servis        String?
   iade          Int
   satis_tl      Float?
   satis_euro    Float?
