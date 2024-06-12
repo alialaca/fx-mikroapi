@@ -164,10 +164,14 @@ class TahsilatModel {
     }
 
     remove(id) {
-        return this.db['tahsilat'].delete({
-            where: {
-                id
-            }
+        return this.db.$transaction(async (db) => {
+            const tahsilat = await db['tahsilat'].deleteMany({where: {id}})
+            await db['muhasebeFis'].deleteMany({
+                where: {
+                    fis_ticari_uid: id
+                }
+            })
+            return Promise.resolve(tahsilat)
         })
     }
 }
