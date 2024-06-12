@@ -42,14 +42,10 @@ const create = async (req, res, next) => {
     const lastItem = await Tahsilat.lastItem() //{ referans_no: 'MK-000-000-2024-00001581', evrak_sira: 3365 }
     const referans_no = `MK-000-000-${dayjs().year()}-${incrementStringNumber(lastItem.referans_no.split('-').pop())}`
     const evrak_sira = lastItem.evrak_sira + 1
-    const fis_sira = lastItem.cha_fis_sirano + 1
     const tarih = dayjs().utc().startOf('day').toISOString();
     const id = uuid().toUpperCase()
 
     const { aciklama, cari_kod, tutar, vade } = req.body
-
-    const cari = await Cari.find(cari_kod)
-    if (!cari) return res.status(404).json({message: 'Cari bulunamadı'})
 
     const data = {
         evrak_sira,
@@ -57,13 +53,11 @@ const create = async (req, res, next) => {
         tarih,
         cha_belge_tarih: tarih,
         aciklama,
-        cari_kod: cari.kod,
+        cari_kod,
         tutar,
         aratoplam: tutar,
         vade: parseInt(vade.replaceAll('-', '')),
-        cha_fis_sirano: fis_sira,
         fis_tarihi: tarih,
-        temsilci_kod: cari.temsilci_kod,
         id,
         doviz_kur: 1
     }
