@@ -651,61 +651,61 @@ model Tahsilat {
 
 model MuhasebeFis {
   id                        String   @id @map("fis_Guid") @db.UniqueIdentifier
-  fis_DBCno                 Int      @default(0)
-  fis_SpecRECno             Int      @default(0)
-  fis_iptal                 Int      @default(0)
-  fis_fileid                Int      @default(2)
-  fis_hidden                Int      @default(0)
-  fis_kilitli               Int      @default(0)
-  fis_degisti               Int      @default(0)
-  fis_checksum              Int      @default(0)
-  fis_create_user           Int      @default(100)
+  fis_DBCno                 Int      @default(0) @db.SmallInt
+  fis_SpecRECno             Int      @default(0) @db.Int
+  fis_iptal                 Int      @default(0) @db.Bit
+  fis_fileid                Int      @default(2) @db.SmallInt
+  fis_hidden                Int      @default(0) @db.Bit
+  fis_kilitli               Int      @default(0) @db.Bit
+  fis_degisti               Int      @default(0) @db.Bit
+  fis_checksum              Int      @default(0) @db.Int
+  fis_create_user           Int      @default(100) @db.SmallInt
   fis_create_date           DateTime @default(now()) @db.DateTime
-  fis_lastup_user           Int      @default(100)
+  fis_lastup_user           Int      @default(100) @db.SmallInt
   fis_lastup_date           DateTime @default(now()) @db.DateTime
-  fis_special1              String   @default("")
-  fis_special2              String   @default("")
-  fis_special3              String   @default("")
-  fis_firmano               Int      @default(0)
-  fis_subeno                Int      @default(0)
-  fis_maliyil               Int
+  fis_special1              String   @default("") @db.NVarChar(4)
+  fis_special2              String   @default("") @db.NVarChar(4)
+  fis_special3              String   @default("") @db.NVarChar(4)
+  fis_firmano               Int      @default(0) @db.Int
+  fis_subeno                Int      @default(0) @db.Int
+  fis_maliyil               Int      @db.Int
   fis_tarih                 DateTime @db.DateTime
-  fis_sira_no               Int
-  fis_tur                   Int      @default(1)
-  fis_hesap_kod             String
-  fis_satir_no              Int
+  fis_sira_no               Int      @db.Int
+  fis_tur                   Int      @default(1) @db.TinyInt
+  fis_hesap_kod             String   @db.NVarChar(25)
+  fis_satir_no              Int      @db.Int
   fis_aciklama1             String   @db.NVarChar(127)
-  fis_meblag0               Float
-  fis_meblag1               Float
-  fis_meblag2               Float
-  fis_meblag3               Float    @default(0)
-  fis_meblag4               Float    @default(0)
-  fis_meblag5               Float    @default(0)
-  fis_meblag6               Float    @default(0)
-  fis_sorumluluk_kodu       String   @default("")
-  fis_ticari_tip            Int      @default(2)
+  fis_meblag0               Float    @db.Float
+  fis_meblag1               Float    @db.Float
+  fis_meblag2               Float    @db.Float
+  fis_meblag3               Float    @default(0) @db.Float
+  fis_meblag4               Float    @default(0) @db.Float
+  fis_meblag5               Float    @default(0) @db.Float
+  fis_meblag6               Float    @default(0) @db.Float
+  fis_sorumluluk_kodu       String   @default("") @db.NVarChar(25)
+  fis_ticari_tip            Int      @default(2) @db.TinyInt
   fis_ticari_uid            String   @db.UniqueIdentifier
-  fis_kurfarkifl            Int      @default(0)
-  fis_ticari_evraktip       Int      @default(1)
+  fis_kurfarkifl            Int      @default(0) @db.Bit
+  fis_ticari_evraktip       Int      @default(1) @db.TinyInt
   fis_tic_evrak_seri        String   @default("")
-  fis_tic_evrak_sira        Int
+  fis_tic_evrak_sira        Int      @db.Int
   fis_tic_belgeno           String   @default("")
   fis_tic_belgetarihi       DateTime @db.DateTime
-  fis_yevmiye_no            Int
-  fis_katagori              Int      @default(0)
-  fis_evrak_DBCno           Int      @default(0)
-  fis_fmahsup_tipi          Int      @default(0)
-  fis_fozelmahkod           String   @default("")
-  fis_grupkodu              String   @default("")
-  fis_aktif_pasif           Int      @default(0)
-  fis_proje_kodu            String   @default("")
-  fis_HareketGrupKodu1      String   @default("")
-  fis_HareketGrupKodu2      String   @default("")
-  fis_HareketGrupKodu3      String   @default("")
-  fis_ticari_hubid          String   @default("")
-  fis_ticari_hubglbid       String   @default("")
-  fis_ticari_disyazilimid   String   @default("")
-  fis_ticari_disyazilim_tip Int      @default(0)
+  fis_yevmiye_no            Int      @db.Int
+  fis_katagori              Int      @default(0) @db.SmallInt
+  fis_evrak_DBCno           Int      @default(0) @db.SmallInt
+  fis_fmahsup_tipi          Int      @default(0) @db.TinyInt
+  fis_fozelmahkod           String   @default("") @db.NVarChar(25)
+  fis_grupkodu              String   @default("") @db.NVarChar(4)
+  fis_aktif_pasif           Int      @default(0) @db.TinyInt
+  fis_proje_kodu            String   @default("") @db.NVarChar(25)
+  fis_HareketGrupKodu1      String   @default("") @db.NVarChar(25)
+  fis_HareketGrupKodu2      String   @default("") @db.NVarChar(25)
+  fis_HareketGrupKodu3      String   @default("") @db.NVarChar(25)
+  fis_ticari_hubid          String   @default("") @db.NVarChar(50)
+  fis_ticari_hubglbid       String   @default("") @db.NVarChar(50)
+  fis_ticari_disyazilimid   String   @default("") @db.NVarChar(50)
+  fis_ticari_disyazilim_tip Int      @default(0) @db.TinyInt
 
   @@unique([fis_firmano, fis_maliyil, fis_yevmiye_no, fis_satir_no])
   @@unique([fis_tarih, fis_sira_no, fis_satir_no])
@@ -713,6 +713,5 @@ model MuhasebeFis {
   @@index([fis_ticari_tip, fis_ticari_uid])
   @@index([fis_sorumluluk_kodu, fis_tarih, fis_sira_no])
   @@index([fis_grupkodu, fis_tarih, fis_sira_no])
-
   @@map("MUHASEBE_FISLERI")
 }
