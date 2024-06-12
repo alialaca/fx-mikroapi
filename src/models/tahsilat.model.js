@@ -1,6 +1,8 @@
 const Prisma = require('../services/prisma')
 const dayjs = require("dayjs");
 const utc = require('dayjs/plugin/utc')
+const {ignore} = require("nodemon/lib/rules");
+const {uuid} = require("uuidv4");
 dayjs.extend(utc)
 
 class TahsilatModel {
@@ -68,7 +70,7 @@ class TahsilatModel {
     }
 
     async lastItem() {
-        const {referans_no, evrak_sira} = await this.db['tahsilat'].findFirst({
+        return this.db['tahsilat'].findFirst({
             where: {
                 cha_evrak_tip: 1,
                 cha_evrakno_seri: ''
@@ -86,32 +88,79 @@ class TahsilatModel {
                 evrak_sira: true,
             },
         });
+    }
 
-        const today = dayjs().utc().startOf('day').toISOString();
+    async create(data) {
+        const cari = await this.db['cari'].findUnique({where: {kod: data.cari_kod}})
 
+        if (!cari.kod) return new Error('Cari kod hatalı, karşılık bulunamadı')
+        data.temsilci_kod = cari.temsilci_kod
 
-        const record = await this.db['tahsilat'].findFirst({
+        const maliyil = dayjs(data.tarih).year()
+        const sonFisKaydi = await this.db['muhasebeFis'].findFirst({
             where: {
-                fis_tarihi: today
+                fis_tic_evrak_seri: '',
+                fis_maliyil: maliyil
             },
             orderBy: [
-                { cha_fis_sirano: 'desc' },
+                {fis_maliyil: 'desc'},
+                {fis_yevmiye_no: 'desc'},
+                {fis_sira_no: 'desc'},
             ],
             select: {
-                cha_fis_sirano: true,
+                fis_sira_no: true,
+                fis_yevmiye_no: true
             }
         })
 
-        console.log({record})
+        if (!sonFisKaydi) throw new Error('Muhasebe fiş verilerine erişilemedi')
 
+        const fis_yevmiye_no = sonFisKaydi?.fis_yevmiye_no + 1
+        const fis_sira_no = sonFisKaydi?.fis_sira_no + 1
 
-        return Promise.resolve({referans_no, evrak_sira, cha_fis_sirano: record?.cha_fis_sirano || 0})
-    }
+        data.cha_fis_sirano = fis_sira_no
 
-    create(data) {
-        return this.db['tahsilat'].create({
-            data
-        })
+        const muhasebe_fis_data = [
+            {
+                id: uuid().toUpperCase(),
+                fis_maliyil: maliyil,
+                fis_tarih: data.tarih,
+                fis_sira_no,
+                fis_hesap_kod: cari.kod,
+                fis_satir_no: 0,
+                fis_aciklama1: `Tah.mak. : ${data.evrak_sira}/${data.tarih}/${data.aciklama}/${data.cari_kod}/${cari.unvan}`.slice(0, 127),
+                fis_meblag0: data.tutar * -1,
+                fis_meblag1: 0,
+                fis_meblag2: data.tutar * -1,
+                fis_ticari_uid: data.id.toUpperCase(),
+                fis_tic_evrak_sira: data.evrak_sira,
+                fis_tic_belgetarihi: data.tarih,
+                fis_yevmiye_no
+            },
+            {
+                id: uuid().toUpperCase(),
+                fis_maliyil: maliyil,
+                fis_tarih: data.tarih,
+                fis_sira_no,
+                fis_hesap_kod: '108.10.001',
+                fis_satir_no: 1,
+                fis_aciklama1: `Tah.mak. : ${data.evrak_sira}/${data.tarih}/${data.aciklama}/102.10.001/T.C. ZİRAAT BANKASI A.Ş./${data.cari_kod}/${cari.unvan}`.slice(0, 127),
+                fis_meblag0: data.tutar,
+                fis_meblag1: 0,
+                fis_meblag2: data.tutar,
+                fis_ticari_uid: data.id.toUpperCase(),
+                fis_tic_evrak_sira: data.evrak_sira,
+                fis_tic_belgetarihi: data.tarih,
+                fis_yevmiye_no
+            }
+        ]
+
+        const [tahsilatRecord, fisRrecord] = await this.db.$transaction([
+            this.db['tahsilat'].create({data}),
+            this.db['muhasebeFis'].createMany({data: muhasebe_fis_data})
+        ])
+
+        return Promise.resolve(tahsilatRecord)
     }
 
     remove(id) {
