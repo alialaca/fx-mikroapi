@@ -715,3 +715,15 @@ model MuhasebeFis {
   @@index([fis_grupkodu, fis_tarih, fis_sira_no])
   @@map("MUHASEBE_FISLERI")
 }
+
+model DovizKur {
+  id           String   @id @map("dov_Guid") @db.UniqueIdentifier
+  no           Int      @map("dov_no") @db.TinyInt
+  tarih        DateTime @map("dov_tarih") @db.DateTime
+  alis         Float    @map("dov_fiyat1") @db.Float
+  satis        Float    @map("dov_fiyat2") @db.Float
+  efektifAlis  Float    @map("dov_fiyat3") @db.Float
+  efektifSatis Float    @map("dov_fiyat4") @db.Float
+
+  @@map("DOVIZ_KURLARI")
+}
