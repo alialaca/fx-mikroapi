@@ -115,10 +115,16 @@ class TahsilatModel {
 
         if (!sonFisKaydi) throw new Error('Muhasebe fiş verilerine erişilemedi')
 
+        const { alis: kur} = await this.db['dovizKur'].findFirst({where: {no: 1}, orderBy: {tarih: 'desc'}})
+
         const fis_yevmiye_no = sonFisKaydi?.fis_yevmiye_no + 1
         const fis_sira_no = sonFisKaydi?.fis_sira_no + 1
 
         data.cha_fis_sirano = fis_sira_no
+        data.doviz_kur = kur
+
+        const meblag = data.tutar
+        const dovizMeblag = parseFloat((data.tutar / kur).toFixed(2));
 
         const muhasebe_fis_data = [
             {
@@ -129,8 +135,8 @@ class TahsilatModel {
                 fis_hesap_kod: cari.kod,
                 fis_satir_no: 0,
                 fis_aciklama1: `Tah.mak. : ${data.evrak_sira}/${data.tarih}/${data.aciklama}/${data.cari_kod}/${cari.unvan}`.slice(0, 127),
-                fis_meblag0: data.tutar * -1,
-                fis_meblag1: 0,
+                fis_meblag0: meblag * -1,
+                fis_meblag1: dovizMeblag * -1,
                 fis_meblag2: data.tutar * -1,
                 fis_ticari_uid: data.id.toUpperCase(),
                 fis_tic_evrak_sira: data.evrak_sira,
@@ -145,8 +151,8 @@ class TahsilatModel {
                 fis_hesap_kod: '108.10.001',
                 fis_satir_no: 1,
                 fis_aciklama1: `Tah.mak. : ${data.evrak_sira}/${data.tarih}/${data.aciklama}/102.10.001/T.C. ZİRAAT BANKASI A.Ş./${data.cari_kod}/${cari.unvan}`.slice(0, 127),
-                fis_meblag0: data.tutar,
-                fis_meblag1: 0,
+                fis_meblag0: meblag,
+                fis_meblag1: dovizMeblag,
                 fis_meblag2: data.tutar,
                 fis_ticari_uid: data.id.toUpperCase(),
                 fis_tic_evrak_sira: data.evrak_sira,
