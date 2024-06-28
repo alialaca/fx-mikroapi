@@ -42,10 +42,10 @@ const create = async (req, res, next) => {
     const lastItem = await Tahsilat.lastItem() //{ referans_no: 'MK-000-000-2024-00001581', evrak_sira: 3365 }
     const referans_no = `MK-000-000-${dayjs().year()}-${incrementStringNumber(lastItem.referans_no.split('-').pop())}`
     const evrak_sira = lastItem.evrak_sira + 1
-    const tarih = dayjs().utc().startOf('day').toISOString();
-    const id = uuid().toUpperCase()
+    const tarih = dayjs(req.body.tarih).utc().startOf('day').toISOString();
+    const vade_tarih = dayjs(req.body.vade).utc().startOf('day').toISOString();
 
-    const { aciklama, cari_kod, tutar, vade } = req.body
+    const { aciklama, cari_kod, tutar } = req.body
 
     const data = {
         evrak_sira,
@@ -56,7 +56,7 @@ const create = async (req, res, next) => {
         cari_kod,
         tutar,
         aratoplam: tutar,
-        vade: parseInt(vade.replaceAll('-', '')),
+        vade: vade_tarih,
         fis_tarihi: tarih,
         id,
         doviz_kur: 1
