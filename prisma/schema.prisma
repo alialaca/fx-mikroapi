@@ -2,13 +2,11 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider = "sqlserver"
   url      = env("DATABASE_URL")
-  schemas  = ["MikroDB_V16", "MikroDB_V16_FIXPRO"]
 }
 
 // kod | isim | plasiyer | bakiye | ciro
@@ -25,7 +23,6 @@ model Cari {
   Tahsilat     Tahsilat[]
 
   @@map("CRM_CARI_HESAPLAR")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model Stok {
@@ -46,7 +43,6 @@ model Stok {
   KampanyaStoklar KampanyaStoklar[]
 
   @@map("STOKLAR")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model FiyatListe {
@@ -58,7 +54,6 @@ model FiyatListe {
 
   @@unique([stok_kod, liste_no, fiyat])
   @@map("STOK_SATIS_FIYAT_LISTELERI")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model StokMiktar {
@@ -70,7 +65,6 @@ model StokMiktar {
   Stok      Stok[]
 
   @@map("CRM_STOK_DEPO_MIKTARLARI")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model Marka {
@@ -79,7 +73,6 @@ model Marka {
   Stok Stok[]
 
   @@map("STOK_MARKALARI")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 // kod | isim | mevcutMiktar | birimFiyat
@@ -98,7 +91,6 @@ model Temsilci {
   Kampanya    Kampanya[]
 
   @@map("CARI_PERSONEL_TANIMLARI")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model Depo {
@@ -109,7 +101,6 @@ model Depo {
   SiparisOzet SiparisOzet[]
 
   @@map("DEPOLAR")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model CariHareket {
@@ -128,7 +119,6 @@ model CariHareket {
   ana_doviz_alacak Float
 
   @@map("CRM_CARI_HESAP_HAREKETLERI")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model SiparisOzet {
@@ -163,7 +153,6 @@ model SiparisOzet {
   @@unique([evrak_seri, evrak_sira, tarih])
   @@unique([evrak_seri, evrak_sira, fileId])
   @@map("CRM_SIPARISLER_OZET")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model OdemePlan {
@@ -175,7 +164,6 @@ model OdemePlan {
   SiparisOzet SiparisOzet[]
 
   @@map("ODEME_PLANLARI")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model Iskonto {
@@ -186,7 +174,6 @@ model Iskonto {
   OdemePlan OdemePlan[]
 
   @@map("CRM_ISKONTO_TANIMLAMALARI")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model Siparis {
@@ -320,7 +307,6 @@ model Siparis {
 
   @@unique([evrak_seri, evrak_sira, stok_kod])
   @@map("SIPARISLER")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model Aciklama {
@@ -368,7 +354,6 @@ model Aciklama {
 
   @@unique([evrak_seri, evrak_sira, egk_dosyano])
   @@map("EVRAK_ACIKLAMALARI")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model Satis {
@@ -407,7 +392,6 @@ model Satis {
   temsilci Temsilci? @relation(fields: [temsilci_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("CRM_SATISLAR")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model PrimOzet {
@@ -422,7 +406,6 @@ model PrimOzet {
   temsilci Temsilci? @relation(fields: [temsilci_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("CRM_ANLIK_PRIM_DURUM")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model BedenHareket {
@@ -437,7 +420,6 @@ model BedenHareket {
 
   @@unique([evrak_seri, evrak_sira, stok_kod, beden, renk])
   @@map("CRM_BEDEN_HAREKETLERI")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model SabitMaliyet {
@@ -448,7 +430,6 @@ model SabitMaliyet {
   stok             Stok     @relation(fields: [stok_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("_STOK_SABIT_MALIYETLER")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model Aykur {
@@ -457,7 +438,6 @@ model Aykur {
   kur              Float
 
   @@map("_AYKUR")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model Kampanya {
@@ -476,7 +456,6 @@ model Kampanya {
   olusturan  Temsilci             @relation(fields: [olusturan_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("CRM_KAMPANYA_TANIMLARI")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model KampanyaStoklar {
@@ -492,7 +471,6 @@ model KampanyaStoklar {
 
   @@unique([kampanya_id, stok_kod])
   @@map("CRM_KAMPANYA_STOKLAR")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model KampanyaSiparisler {
@@ -506,7 +484,6 @@ model KampanyaSiparisler {
 
   @@unique([kampanya_id, sip_seri, sip_sira])
   @@map("CRM_KAMPANYA_SIPARISLER")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model Tahsilat {
@@ -670,7 +647,6 @@ model Tahsilat {
   @@unique([cha_evrak_tip, cha_evrakno_seri, evrak_sira, cha_satir_no])
   @@unique([fis_tarihi, cha_fis_sirano])
   @@map("CARI_HESAP_HAREKETLERI")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model MuhasebeFis {
@@ -738,7 +714,6 @@ model MuhasebeFis {
   @@index([fis_sorumluluk_kodu, fis_tarih, fis_sira_no])
   @@index([fis_grupkodu, fis_tarih, fis_sira_no])
   @@map("MUHASEBE_FISLERI")
-  @@schema("MikroDB_V16_FIXPRO")
 }
 
 model DovizKur {
@@ -751,5 +726,4 @@ model DovizKur {
   efektifSatis Float    @map("dov_fiyat4") @db.Float
 
   @@map("DOVIZ_KURLARI")
-  @@schema("MikroDB_V16_FIXPRO")
 }
