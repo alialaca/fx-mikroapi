@@ -48,6 +48,7 @@ const create = async (req, res, next) => {
     const { aciklama, cari_kod, tutar } = req.body
 
     const data = {
+        id: uuid().toUpperCase(),
         evrak_sira,
         referans_no,
         tarih,
@@ -58,7 +59,6 @@ const create = async (req, res, next) => {
         aratoplam: tutar,
         vade: vade_tarih,
         fis_tarihi: tarih,
-        id,
         doviz_kur: 1
     }
 
