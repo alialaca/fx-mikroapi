@@ -11,16 +11,16 @@ datasource db {
 
 // kod | isim | plasiyer | bakiye | ciro
 model Cari {
-  kod          String        @id
-  unvan        String
-  bakiye       Float
-  sektor       String?
-  temsilci_kod String?
-  temsilci     Temsilci?     @relation(fields: [temsilci_kod], references: [kod])
-  SiparisOzet  SiparisOzet[]
-  Siparis      Siparis[]
-  Satis        Satis[]
-  Tahsilat     Tahsilat[]
+  kod            String        @id
+  unvan          String
+  bakiye         Float
+  sektor         String?
+  temsilci_kod   String?
+  temsilci       Temsilci?     @relation(fields: [temsilci_kod], references: [kod])
+  SiparisOzet    SiparisOzet[]
+  Siparis        Siparis[]
+  Satis          Satis[]
+  Tahsilat       Tahsilat[]
 
   @@map("CRM_CARI_HESAPLAR")
 }
@@ -726,4 +726,83 @@ model DovizKur {
   efektifSatis Float    @map("dov_fiyat4") @db.Float
 
   @@map("DOVIZ_KURLARI")
+}
+
+model OdemeEmir {
+  id                   String   @id @map("sck_Guid")
+  refno                String   @map("sck_refno") @db.NVarChar(25)
+  borclu               String   @map("sck_borclu") @db.NVarChar(50)
+  vdaire_no            String   @map("sck_vdaire_no") @db.NVarChar(40)
+  tutar                Float    @map("sck_tutar") @db.Float
+  vade                 DateTime @map("sck_vade") @db.DateTime
+  cari_kodu            String   @map("sck_sahip_cari_kodu") @db.NVarChar(25)
+  ilk_hareket_tarihi   DateTime @map("sck_ilk_hareket_tarihi") @db.DateTime
+  son_hareket_tarihi   DateTime @map("sck_son_hareket_tarihi") @db.DateTime
+  evrak_seri           String   @default("") @map("sck_ilk_evrak_seri")
+  evrak_sira_no        Int      @map("sck_ilk_evrak_sira_no") @db.Int
+  evrak_satir_no       Int      @default(0) @map("sck_ilk_evrak_satir_no") @db.Int
+  sck_nerede_cari_kodu String   @default("102.10.001") @db.NVarChar(25)
+
+  sck_DBCno                              Int      @default(0) @db.SmallInt
+  sck_SpecRECno                          Int      @default(0) @db.Int
+  sck_iptal                              Int      @default(0) @db.Bit
+  sck_fileid                             Int      @default(54) @db.SmallInt
+  sck_hidden                             Int      @default(0) @db.Bit
+  sck_kilitli                            Int      @default(0) @db.Bit
+  sck_degisti                            Int      @default(0) @db.Bit
+  sck_checksum                           Int      @default(0) @db.Bit
+  sck_create_user                        Int      @default(100) @db.Int // API USER
+  sck_create_date                        DateTime @default(now()) @db.DateTime
+  sck_lastup_user                        Int      @default(100) @db.Int // API USER
+  sck_lastup_date                        DateTime @default(now()) @db.DateTime
+  sck_special1                           String   @default("") @db.NVarChar(4)
+  sck_special2                           String   @default("") @db.NVarChar(4)
+  sck_special3                           String   @default("") @db.NVarChar(4)
+  sck_firmano                            Int      @default(0) @db.Int
+  sck_subeno                             Int      @default(0) @db.Int
+  sck_tip                                Int      @default(6) @db.TinyInt
+  sck_bankano                            String   @default("") @db.NVarChar(25)
+  sck_doviz                              Int      @default(0) @db.TinyInt
+  sck_odenen                             Float    @default(0) @db.Float
+  sck_degerleme_islendi                  Int      @default(0) @db.TinyInt
+  sck_banka_adres1                       String   @default("") @db.NVarChar(50)
+  sck_sube_adres2                        String   @default("") @db.NVarChar(50)
+  sck_borclu_tel                         String   @default("") @db.NVarChar(15)
+  sck_hesapno_sehir                      String   @default("") @db.NVarChar(30)
+  sck_no                                 String   @default("") @db.NVarChar(25)
+  sck_duzen_tarih                        DateTime @default("1899-12-30T00:00:00.00Z") @db.DateTime
+  sck_sahip_cari_cins                    Int      @default(0) @db.TinyInt
+  sck_sahip_cari_grupno                  Int      @default(0) @db.TinyInt
+  sck_nerede_cari_cins                   Int      @default(2) @db.TinyInt
+  sck_nerede_cari_grupno                 Int      @default(7) @db.TinyInt
+  sck_doviz_kur                          Float    @default(1) @db.Float
+  sck_sonpoz                             Int      @default(2) @db.TinyInt
+  sck_imza                               Int      @default(0) @db.TinyInt
+  sck_srmmrk                             String   @default("") @db.NVarChar(25)
+  sck_kesideyeri                         String   @default("") @db.NVarChar(14)
+  Sck_TCMB_Banka_kodu                    String   @default("") @db.NVarChar(4)
+  Sck_TCMB_Sube_kodu                     String   @default("") @db.NVarChar(8)
+  Sck_TCMB_il_kodu                       String   @default("") @db.NVarChar(3)
+  SckTasra_fl                            Int      @default(0) @db.Bit
+  sck_projekodu                          String   @default("") @db.NVarChar(25)
+  sck_masraf1                            Float    @default(0) @db.Float
+  sck_masraf1_isleme                     Int      @default(0) @db.TinyInt
+  sck_masraf2                            Float    @default(0) @db.Float
+  sck_masraf2_isleme                     Int      @default(0) @db.TinyInt
+  sck_odul_katkisi_tutari                Float    @default(0) @db.Float
+  sck_servis_komisyon_tutari             Float    @default(0) @db.Float
+  sck_erken_odeme_faiz_tutari            Float    @default(0) @db.Float
+  sck_odul_katkisi_tutari_islendi_fl     Int      @default(0) @db.Bit
+  sck_servis_komisyon_tutari_islendi_fl  Int      @default(0) @db.Bit
+  sck_erken_odeme_faiz_tutari_islendi_fl Int      @default(0) @db.Bit
+  sck_kredi_karti_tipi                   Int      @default(0) @db.TinyInt
+  sck_taksit_sayisi                      Int      @default(0) @db.SmallInt
+  sck_kacinci_taksit                     Int      @default(0) @db.SmallInt
+  sck_uye_isyeri_no                      String   @default("") @db.NVarChar(25)
+  sck_kredi_karti_no                     String   @default("") @db.NVarChar(16)
+  sck_provizyon_kodu                     String   @default("") @db.NVarChar(10)
+  sck_disyazilimid                       String   @default("") @db.NVarChar(50)
+  sck_disyazilimtip                      Int      @default(0) @db.TinyInt
+
+  @@map("ODEME_EMIRLERI")
 }
