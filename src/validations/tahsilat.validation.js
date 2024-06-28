@@ -18,6 +18,7 @@ const create = {
         cari_kod: Joi.string().required(),
         aciklama: Joi.string().required(),
         tutar: Joi.number().required(),
+        tarih: Joi.date().required(),
         vade: Joi.string().length(10).required(),
     })
 }
