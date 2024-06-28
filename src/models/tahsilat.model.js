@@ -114,7 +114,7 @@ class TahsilatModel {
 
         if (!sonFisKaydi) throw new Error('Muhasebe fiş verilerine erişilemedi')
 
-        const { alis: kur} = await this.db['dovizKur'].findFirst({where: {no: 1}, orderBy: {tarih: 'desc'}})
+        const {alis: kur} = await this.db['dovizKur'].findFirst({where: {no: 1}, orderBy: {tarih: 'desc'}})
 
         const fis_yevmiye_no = sonFisKaydi?.fis_yevmiye_no + 1
         const fis_sira_no = sonFisKaydi?.fis_sira_no + 1
