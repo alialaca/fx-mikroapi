@@ -163,24 +163,36 @@ class TahsilatModel {
             }
         ]
 
+        const odeme_emir_data = {
+            id: uuid().toUpperCase(),
+            refno: data.referans_no,
+            borclu: cari.unvan.slice(50),
+            vdaire_no: cari.vergi_daire_no,
+            tutar: data.tutar,
+            vade: data.vade,
+            cari_kodu: cari.kod,
+            ilk_hareket_tarihi: data.tarih,
+            son_hareket_tarihi: data.tarih,
+            evrak_seri: "",
+            evrak_sira_no: data.evrak_sira
+        }
+
         const [tahsilatRecord, fisRrecord] = await this.db.$transaction([
-            this.db['tahsilat'].create({data}),
-            this.db['muhasebeFis'].createMany({data: muhasebe_fis_data})
+            this.db['tahsilat'].create({data: tahsilat_data}),
+            this.db['muhasebeFis'].createMany({data: muhasebe_fis_data}),
+            this.db['odemeEmir'].create({data: odeme_emir_data})
         ])
 
         return Promise.resolve(tahsilatRecord)
     }
 
-    remove(id) {
-        return this.db.$transaction(async (db) => {
-            const tahsilat = await db['tahsilat'].deleteMany({where: {id}})
-            await db['muhasebeFis'].deleteMany({
-                where: {
-                    fis_ticari_uid: id
-                }
-            })
-            return Promise.resolve(tahsilat)
-        })
+    async remove(id) {
+        const tahsilat = await this.db['tahsilat'].findUnique({where: {id}})
+        return this.db.$transaction([
+            this.db['tahsilat'].deleteMany({where: {id}}),
+            this.db['muhasebeFis'].deleteMany({where: {fis_ticari_uid: id}}),
+            this.db['odemeEmir'].deleteMany({where: {refno: tahsilat.referans_no, evrak_sira_no: tahsilat.evrak_sira}})
+        ])
     }
 }
 
