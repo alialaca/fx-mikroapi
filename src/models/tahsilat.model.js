@@ -77,10 +77,10 @@ class TahsilatModel {
             },
             orderBy: [
                 {
-                    referans_no: 'desc',
+                    evrak_sira: 'desc',
                 },
                 {
-                    evrak_sira: 'desc',
+                    referans_no: 'desc',
                 },
             ],
             select: {
@@ -99,7 +99,6 @@ class TahsilatModel {
         const maliyil = dayjs(data.tarih).year()
         const sonFisKaydi = await this.db['muhasebeFis'].findFirst({
             where: {
-                fis_tic_evrak_seri: '',
                 fis_maliyil: maliyil
             },
             orderBy: [
