@@ -872,3 +872,16 @@ model OdemeEmir {
 
   @@map("ODEME_EMIRLERI")
 }
+
+model CihazHareket {
+  guid        String   @id @db.UniqueIdentifier
+  serino      String
+  stok        String
+  tarih       DateTime
+  cari        String   @db.NVarChar(255)
+  har_tip     String
+  har_cins    String
+  normal_iade String
+
+  @@map("CRM_CIHAZ_HAREKETLERI")
+}
