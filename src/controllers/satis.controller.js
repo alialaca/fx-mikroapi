@@ -40,7 +40,6 @@ const prim = async (req, res, next) => {
     try {
         Prim.ozet(temsilci)
             .then( prim => {
-                console.log(prim)
                 res.status(statusCodes.OK).json({
                     data: prim
                 })
