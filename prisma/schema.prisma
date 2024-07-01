@@ -11,16 +11,19 @@ datasource db {
 
 // kod | isim | plasiyer | bakiye | ciro
 model Cari {
-  kod            String        @id
-  unvan          String
-  bakiye         Float
-  sektor         String?
-  temsilci_kod   String?
-  temsilci       Temsilci?     @relation(fields: [temsilci_kod], references: [kod])
-  SiparisOzet    SiparisOzet[]
-  Siparis        Siparis[]
-  Satis          Satis[]
-  Tahsilat       Tahsilat[]
+  kod             String        @id
+  unvan           String
+  bakiye          Float
+  sektor          String?
+  temsilci_kod    String?
+  vkn             String?
+  vergi_daire_no  String?
+  vergi_daire_adi String?
+  temsilci        Temsilci?     @relation(fields: [temsilci_kod], references: [kod])
+  SiparisOzet     SiparisOzet[]
+  Siparis         Siparis[]
+  Satis           Satis[]
+  Tahsilat        Tahsilat[]
 
   @@map("CRM_CARI_HESAPLAR")
 }
