@@ -91,7 +91,16 @@ class TahsilatModel {
     }
 
     async create(data) {
-        const cari = await this.db['cari'].findUnique({where: {kod: data.cari_kod}})
+        const cari = await this.db['cari'].findUnique({
+            where: {kod: data.cari_kod},
+            select: {
+                kod: true,
+                unvan: true,
+                temsilci_kod: true,
+                vkn: true,
+                vergi_daire_adi: true,
+            }
+        })
 
         if (!cari.kod) return new Error('Cari kod hatalı, karşılık bulunamadı')
         data.temsilci_kod = cari.temsilci_kod
@@ -163,11 +172,23 @@ class TahsilatModel {
             }
         ]
 
+        const muhasebe_fis_detay_data = {
+            evrak_seri: '',
+            evrak_sira: data.evrak_sira,
+            cariunvan: cari.unvan.slice(0, 127),
+            carivergidaireadi: cari.vergi_daire_adi,
+            carivergidaireno: cari.vkn,
+            belgetarihi: data.tarih,
+            carikodu: cari.kod,
+            carimuhkodu: cari.kod,
+            aciklama: data.aciklama
+        }
+
         const odeme_emir_data = {
             id: uuid().toUpperCase(),
             refno: data.referans_no,
             borclu: cari.unvan.slice(50),
-            vdaire_no: cari.vergi_daire_no,
+            vdaire_no: `${cari.vergi_daire_adi.slice(0, 28)} ${cari.vkn}`,
             tutar: data.tutar,
             vade: data.vade,
             cari_kodu: cari.kod,
@@ -180,6 +201,7 @@ class TahsilatModel {
         const [tahsilatRecord, fisRrecord] = await this.db.$transaction([
             this.db['tahsilat'].create({data: tahsilat_data}),
             this.db['muhasebeFis'].createMany({data: muhasebe_fis_data}),
+            this.db['muhasebeFisDetay'].create({data: muhasebe_fis_detay_data}),
             this.db['odemeEmir'].create({data: odeme_emir_data})
         ])
 
@@ -191,6 +213,12 @@ class TahsilatModel {
         return this.db.$transaction([
             this.db['tahsilat'].deleteMany({where: {id}}),
             this.db['muhasebeFis'].deleteMany({where: {fis_ticari_uid: id}}),
+            this.db['muhasebeFisDetay'].deleteMany({
+                where: {
+                    evrak_sira: tahsilat.evrak_sira,
+                    aciklama: tahsilat.aciklama
+                }
+            }),
             this.db['odemeEmir'].deleteMany({where: {refno: tahsilat.referans_no, evrak_sira_no: tahsilat.evrak_sira}})
         ])
     }
