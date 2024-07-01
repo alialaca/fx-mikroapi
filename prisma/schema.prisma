@@ -719,6 +719,69 @@ model MuhasebeFis {
   @@map("MUHASEBE_FISLERI")
 }
 
+model MuhasebeFisDetay {
+  evrak_seri               String   @default("") @map("mfd_evrak_seri")
+  evrak_sira               Int      @map("mfd_evrak_sira") @db.Int
+  cariunvan                String   @map("mfd_cariunvan") @db.NVarChar(127)
+  carivergidaireadi        String   @map("mfd_carivergidaireadi") @db.NVarChar(50)
+  carivergidaireno         String   @map("mfd_carivergidaireno") @db.NVarChar(15)
+  belgetarihi              DateTime @map("mfd_belgetarihi") @db.DateTime
+  carikodu                 String   @map("mfd_carikodu") @db.NVarChar(25)
+  carimuhkodu              String   @map("mfd_carimuhkodu") @db.NVarChar(25)
+  aciklama                 String   @default("") @map("mfd_aciklama") @db.NVarChar(127)
+  mfd_Guid                 String   @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  mfd_DBCno                Int      @default(0) @db.SmallInt
+  mfd_SpecRECno            Int      @default(0) @db.Int
+  mfd_iptal                Int      @default(0) @db.Bit
+  mfd_fileid               Int      @default(243) @db.SmallInt
+  mfd_hidden               Int      @default(0) @db.Bit
+  mfd_kilitli              Int      @default(0) @db.Bit
+  mfd_degisti              Int      @default(0) @db.Bit
+  mfd_checksum             Int      @default(0) @db.Int
+  mfd_create_user          Int      @default(100) @db.SmallInt
+  mfd_create_date          DateTime @default(dbgenerated("getdate()")) @db.DateTime
+  mfd_lastup_user          Int      @default(100) @db.SmallInt
+  mfd_lastup_date          DateTime @default(now()) @db.DateTime
+  mfd_special1             String   @default("") @db.NVarChar(4)
+  mfd_special2             String   @default("") @db.NVarChar(4)
+  mfd_special3             String   @default("") @db.NVarChar(4)
+  mfd_ticari_tip           Int      @default(2) @db.TinyInt
+  mfd_evraktip             Int      @default(1) @db.TinyInt
+  mfd_bsbakonututar        Float    @default(0) @db.Float
+  mfd_bsbatabii            Int      @default(0) @db.TinyInt
+  mfd_cariulkekodno        String   @default("52") @db.NVarChar(4)
+  mfd_tutarnereden         Int      @default(0) @db.TinyInt
+  mfd_caritipi             Int      @default(2) @db.TinyInt
+  mfd_belgeno              String   @default("")
+  mfd_kdvid                Int      @default(0) @db.TinyInt
+  mfd_kdvtutar             Float    @default(0) @db.Float
+  mfd_malhizmetkodu        String   @default("") @db.NVarChar(25)
+  mfd_malhizmetcinsi       String   @default("") @db.NVarChar(120)
+  mfd_malhizmetmiktari     Float    @default(0) @db.Float
+  mfd_malhizmetbirim       String   @default("") @db.NVarChar(10)
+  mfd_ggb_gcb_no           String   @default("") @db.NVarChar(30)
+  mfd_aracivergidaireadi   String   @default("") @db.NVarChar(50)
+  mfd_aracivergidaireno    String   @default("") @db.NVarChar(15)
+  mfd_eximulkekodu         String   @default("") @db.NVarChar(4)
+  mfd_bsbakonuufrstutar    Float    @default(0) @db.Float
+  mfd_caritutar            Float    @default(0) @db.Float
+  mfd_kisaevraktipi        Int      @default(3) @db.TinyInt
+  mfd_satistipi            Int      @default(0) @db.TinyInt
+  mfd_alistipi             Int      @default(0) @db.TinyInt
+  mfd_tahtedtipi           Int      @default(4) @db.TinyInt
+  mfd_digerevrakadi        String   @default("Tahsilat makbuzu") @db.NVarChar(50)
+  mfd_evraktur             Int      @default(0) @db.TinyInt
+  mfd_e_belgemi            Int      @default(0) @db.Int
+  mfd_e_belgemi_nereden    Int      @default(0) @db.TinyInt
+  mfd_evrak_hubid          String   @default("") @db.NVarChar(50)
+  mfd_evrak_hubglbid       String   @default("") @db.NVarChar(50)
+  mfd_evrak_baglantisi     Int      @default(1) @db.TinyInt
+  mfd_evrak_disyazilimid   String   @default("") @db.NVarChar(50)
+  mfd_evrak_disyazilim_tip Int      @default(0) @db.TinyInt
+
+  @@map("MUHASEBE_FIS_DETAYLARI")
+}
+
 model DovizKur {
   id           String   @id @map("dov_Guid") @db.UniqueIdentifier
   no           Int      @map("dov_no") @db.TinyInt
