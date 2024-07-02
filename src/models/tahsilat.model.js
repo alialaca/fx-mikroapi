@@ -106,27 +106,32 @@ class TahsilatModel {
         data.temsilci_kod = cari.temsilci_kod
 
         const maliyil = dayjs(data.tarih).year()
+        const today = dayjs().utc().startOf('day').toISOString();
         const sonFisKaydi = await this.db['muhasebeFis'].findFirst({
             where: {
-                fis_maliyil: maliyil
+                fis_maliyil: maliyil,
+                fis_tarih: {lte: new Date()}
             },
             orderBy: [
-                {fis_maliyil: 'desc'},
+                {fis_tarih: 'desc'},
                 {fis_yevmiye_no: 'desc'},
                 {fis_sira_no: 'desc'},
             ],
             select: {
                 fis_sira_no: true,
-                fis_yevmiye_no: true
+                fis_yevmiye_no: true,
+                fis_tarih: true
             }
         })
 
         if (!sonFisKaydi) throw new Error('Muhasebe fiş verilerine erişilemedi')
 
-        const {alis: kur} = await this.db['dovizKur'].findFirst({where: {no: 1}, orderBy: {tarih: 'desc'}})
-
         const fis_yevmiye_no = sonFisKaydi?.fis_yevmiye_no + 1
-        const fis_sira_no = sonFisKaydi?.fis_sira_no + 1
+        const fis_sira_no = dayjs().isSame(dayjs(sonFisKaydi.fis_tarih), 'day') ? sonFisKaydi?.fis_sira_no + 1 : 1
+
+        console.log({fis_sira_no, fis_yevmiye_no})
+
+        const {alis: kur} = await this.db['dovizKur'].findFirst({where: {no: 1}, orderBy: {tarih: 'desc'}})
 
         const tahsilat_data = {
             ...data,
@@ -141,11 +146,11 @@ class TahsilatModel {
             {
                 id: uuid().toUpperCase(),
                 fis_maliyil: maliyil,
-                fis_tarih: data.tarih,
+                fis_tarih: today,
                 fis_sira_no,
                 fis_hesap_kod: cari.kod,
                 fis_satir_no: 0,
-                fis_aciklama1: `Tah.mak. : ${data.evrak_sira}/${data.tarih}/${data.aciklama}/${data.cari_kod}/${cari.unvan}`.slice(0, 127),
+                fis_aciklama1: `Tah.mak. : ${data.evrak_sira}/${dayjs(data.tarih).format('DD.MM.YYYY')}/${data.aciklama}/${data.cari_kod}/${cari.unvan}`.slice(0, 127),
                 fis_meblag0: data.tutar * -1,
                 fis_meblag1: dovizMeblag * -1,
                 fis_meblag2: data.tutar * -1,
@@ -157,11 +162,11 @@ class TahsilatModel {
             {
                 id: uuid().toUpperCase(),
                 fis_maliyil: maliyil,
-                fis_tarih: data.tarih,
+                fis_tarih: today,
                 fis_sira_no,
                 fis_hesap_kod: '108.10.001',
                 fis_satir_no: 1,
-                fis_aciklama1: `Tah.mak. : ${data.evrak_sira}/${data.tarih}/${data.aciklama}/102.10.001/T.C. ZİRAAT BANKASI A.Ş./${data.cari_kod}/${cari.unvan}`.slice(0, 127),
+                fis_aciklama1: `Tah.mak. : ${data.evrak_sira}/${dayjs(data.tarih).format('DD.MM.YYYY')}/${data.aciklama}/102.10.001/T.C. ZİRAAT BANKASI A.Ş./${data.cari_kod}/${cari.unvan}`.slice(0, 127),
                 fis_meblag0: data.tutar,
                 fis_meblag1: dovizMeblag,
                 fis_meblag2: data.tutar,
