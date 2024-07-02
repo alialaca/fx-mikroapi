@@ -70,24 +70,41 @@ class TahsilatModel {
     }
 
     async lastItem() {
-        return this.db['tahsilat'].findFirst({
+        const evrak_sira_record = await this.db['tahsilat'].findFirst({
             where: {
                 cha_evrak_tip: 1,
-                cha_evrakno_seri: ''
+                cha_evrakno_seri: '',
+                cha_belge_tarih: {gte: dayjs().utc().startOf('year').toISOString()}
             },
             orderBy: [
                 {
                     evrak_sira: 'desc',
-                },
+                }
+            ],
+            select: {
+                evrak_sira: true,
+            }
+        })
+
+        const referans_no_record = await this.db['tahsilat'].findFirst({
+            where: {
+                cha_evrak_tip: 1,
+                cha_evrakno_seri: '',
+                cha_belge_tarih: {gte: dayjs().utc().startOf('year').toISOString()}
+            },
+            orderBy: [
                 {
                     referans_no: 'desc',
                 },
             ],
             select: {
-                referans_no: true,
-                evrak_sira: true,
-            },
-        });
+                referans_no: true
+            }
+        })
+        return Promise.resolve({
+            referans_no: referans_no_record.referans_no,
+            evrak_sira: evrak_sira_record.evrak_sira
+        })
     }
 
     async create(data) {
@@ -128,8 +145,6 @@ class TahsilatModel {
 
         const fis_yevmiye_no = sonFisKaydi?.fis_yevmiye_no + 1
         const fis_sira_no = dayjs().isSame(dayjs(sonFisKaydi.fis_tarih), 'day') ? sonFisKaydi?.fis_sira_no + 1 : 1
-
-        console.log({fis_sira_no, fis_yevmiye_no})
 
         const {alis: kur} = await this.db['dovizKur'].findFirst({where: {no: 1}, orderBy: {tarih: 'desc'}})
 
