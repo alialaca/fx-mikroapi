@@ -1,5 +1,5 @@
 const statusCodes = require('http-status-codes');
-const { Tahsilat, Cari} = require('../services');
+const {Tahsilat, Cari} = require('../services');
 const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
 const {uuid} = require("uuidv4");
@@ -23,7 +23,7 @@ const list = (req, res, next) => {
     const lastDate = req.query?.lastDate
 
     Tahsilat.list({cari, temsilci, firstDate, lastDate}, req.paginationOptions)
-        .then( tahsilat => {
+        .then(tahsilat => {
             res.status(statusCodes.OK).json({
                 meta: {
                     pagination: {
@@ -33,7 +33,7 @@ const list = (req, res, next) => {
                 },
                 data: tahsilat.data
             })
-        }).catch( next )
+        }).catch(next)
 }
 
 const find = notImplemented
@@ -45,7 +45,7 @@ const create = async (req, res, next) => {
     const tarih = dayjs(req.body.tarih).utc().startOf('day').toISOString();
     const vade_tarih = dayjs(req.body.vade).utc().startOf('day').toISOString();
 
-    const { aciklama, cari_kod, tutar } = req.body
+    const {aciklama, cari_kod, tutar} = req.body
 
     const data = {
         id: uuid().toUpperCase(),
@@ -72,11 +72,11 @@ const create = async (req, res, next) => {
 
 const remove = (req, res, next) => {
     Tahsilat.remove(req.params.id)
-        .then( tahsilat => {
+        .then(tahsilat => {
             res.status(statusCodes.OK).json({
                 data: tahsilat
             })
-        }).catch( next )
+        }).catch(next)
 }
 
 module.exports = {
