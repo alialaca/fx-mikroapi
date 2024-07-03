@@ -124,10 +124,23 @@ class TahsilatModel {
 
         const maliyil = dayjs(data.tarih).year()
         const today = dayjs().utc().startOf('day').toISOString();
-        const sonFisKaydi = await this.db['muhasebeFis'].findFirst({
+
+        const yevmiye_no_record = await this.db['muhasebeFis'].findFirst({
+            where: {
+                fis_maliyil: maliyil
+            },
+            orderBy: [
+                {fis_yevmiye_no: 'desc'}
+            ],
+            select: {
+                fis_yevmiye_no: true,
+            }
+        })
+
+        const sira_no_record = await this.db['muhasebeFis'].findFirst({
             where: {
                 fis_maliyil: maliyil,
-                fis_tarih: {lte: new Date()}
+                fis_tarih: {lte: today}
             },
             orderBy: [
                 {fis_tarih: 'desc'},
@@ -141,10 +154,10 @@ class TahsilatModel {
             }
         })
 
-        if (!sonFisKaydi) throw new Error('Muhasebe fiş verilerine erişilemedi')
+        if (!yevmiye_no_record || !sira_no_record) throw new Error('Muhasebe fiş verilerine erişilemedi')
 
-        const fis_yevmiye_no = sonFisKaydi?.fis_yevmiye_no + 1
-        const fis_sira_no = dayjs().isSame(dayjs(sonFisKaydi.fis_tarih), 'day') ? sonFisKaydi?.fis_sira_no + 1 : 1
+        const fis_yevmiye_no = yevmiye_no_record.fis_yevmiye_no + 1
+        const fis_sira_no = dayjs().isSame(dayjs(sira_no_record.fis_tarih), 'day') ? sira_no_record?.fis_sira_no + 1 : 1
 
         const {alis: kur} = await this.db['dovizKur'].findFirst({where: {no: 1}, orderBy: {tarih: 'desc'}})
 
