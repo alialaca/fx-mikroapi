@@ -221,7 +221,7 @@ class TahsilatModel {
             id: uuid().toUpperCase(),
             refno: data.referans_no,
             borclu: cari.unvan.slice(50),
-            vdaire_no: `${cari.vergi_daire_adi.slice(0, 28)} ${cari.vkn}`,
+            vdaire_no: `${cari.vergi_daire_adi.slice(0, 28)} ${cari.vkn}`.slice(0, 40),
             tutar: data.tutar,
             vade: data.vade,
             cari_kodu: cari.kod,
