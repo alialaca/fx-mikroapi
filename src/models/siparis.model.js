@@ -6,7 +6,7 @@ class SiparisModel {
         this.db = Prisma()
     }
 
-    list({search, cari, temsilci, firstDate, lastDate, stok, fields = []}, {page, limit}){
+    list({search, cari, temsilci, durum, firstDate, lastDate, stok, fields = []}, {page, limit}){
 
         const select = {
             tarih: true,
@@ -45,6 +45,7 @@ class SiparisModel {
         if(cari) where.cari_kod = { in: cari}
         if(temsilci) where.temsilci_kod = { in: temsilci}
         if(stok) where.stok_kod = stok
+        if(durum) where.durum = durum
 
         const query = {
             skip: (page - 1) * limit,
@@ -57,7 +58,7 @@ class SiparisModel {
         return this.db['siparisOzet'].findMany(query)
     }
 
-    listCount({cari, temsilci, firstDate, lastDate, stok}) {
+    listCount({cari, temsilci, durum, firstDate, lastDate, stok}) {
         const where = {
             tarih: {
                 gte: firstDate,
@@ -68,6 +69,7 @@ class SiparisModel {
         if(cari) where.cari_kod = { in: cari}
         if(temsilci) where.temsilci_kod = { in: temsilci}
         if(stok) where.stok_kod = stok
+        if(durum) where.durum = durum
 
         const query = {
             where,
