@@ -23,6 +23,8 @@ const list = async (req, res, next) => {
                 meta: {
                     pagination: {
                         ...req.paginationOptions,
+                        durum,
+                        cari,
                         total: siparis.count
                     }
                 },
