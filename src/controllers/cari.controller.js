@@ -41,6 +41,14 @@ const hareketler = async (req, res) => {
     })
 }
 
+const hareket = async (req, res) => {
+    const data = await CariHareket.faturaDetay(req.params.faturaId)
+
+    res.status(statusCodes.OK).json({
+        data
+    })
+}
+
 module.exports = {
     list,
     hareketler,
