@@ -11,19 +11,21 @@ datasource db {
 
 // kod | isim | plasiyer | bakiye | ciro
 model Cari {
-  kod             String        @id
-  unvan           String
-  bakiye          Float
-  sektor          String?
-  temsilci_kod    String?
-  vkn             String?
-  vergi_daire_no  String?
-  vergi_daire_adi String?
-  temsilci        Temsilci?     @relation(fields: [temsilci_kod], references: [kod])
-  SiparisOzet     SiparisOzet[]
-  Siparis         Siparis[]
-  Satis           Satis[]
-  Tahsilat        Tahsilat[]
+  kod               String        @id
+  unvan             String
+  bakiye            Float
+  sektor            String?
+  temsilci_kod      String?
+  eski_temsilci_kod String?
+  vkn               String?
+  vergi_daire_no    String?
+  vergi_daire_adi   String?
+  temsilci          Temsilci?     @relation(name: "temsilci", fields: [temsilci_kod], references: [kod], onUpdate: NoAction, onDelete: NoAction)
+  eski_temsilci     Temsilci?     @relation(name: "cari_temsilci", fields: [eski_temsilci_kod], references: [kod], onUpdate: NoAction, onDelete: NoAction)
+  SiparisOzet       SiparisOzet[]
+  Siparis           Siparis[]
+  Satis             Satis[]
+  Tahsilat          Tahsilat[]
 
   @@map("CRM_CARI_HESAPLAR")
 }
@@ -87,7 +89,8 @@ model Temsilci {
   tel         String?       @map("cari_per_cepno")
   eposta      String?       @map("cari_per_mail")
   tip         Int           @map("cari_per_tip")
-  Cari        Cari[]
+  Cari        Cari[]        @relation("temsilci")
+  EskiCari    Cari[]        @relation("cari_temsilci")
   SiparisOzet SiparisOzet[]
   Satis       Satis[]
   PrimOzet    PrimOzet[]
