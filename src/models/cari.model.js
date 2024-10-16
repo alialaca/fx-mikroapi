@@ -70,7 +70,29 @@ class CariModel {
     }
 
     find(kod) {
-        return this.db['cari'].findFirst({where: {kod}})
+        return this.db['cari'].findFirst({
+            where: {kod},
+            select: {
+                kod: true,
+                unvan: true,
+                bakiye: true,
+                sektor: true,
+                temsilci: {
+                    select: {
+                        kod: true,
+                        ad: true,
+                        soyad: true
+                    }
+                },
+                eski_temsilci: {
+                    select: {
+                        kod: true,
+                        ad: true,
+                        soyad: true
+                    }
+                }
+            }
+        })
     }
 }
 

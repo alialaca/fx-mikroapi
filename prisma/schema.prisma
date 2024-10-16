@@ -11,20 +11,21 @@ datasource db {
 
 // kod | isim | plasiyer | bakiye | ciro
 model Cari {
-  kod             String        @id
-  unvan           String
-  bakiye          Float
-  sektor          String?
-  temsilci_kod    String?
-  vkn             String?
-  vergi_daire_no  String?
-  vergi_daire_adi String?
-  temsilci        Temsilci?     @relation(fields: [temsilci_kod], references: [kod])
-  SiparisOzet     SiparisOzet[]
-  Siparis         Siparis[]
-  Satis           Satis[]
-  Tahsilat        Tahsilat[]
-  hareket         CariHareket[]
+  kod               String        @id
+  unvan             String
+  bakiye            Float
+  sektor            String?
+  temsilci_kod      String?
+  eski_temsilci_kod String?
+  vkn               String?
+  vergi_daire_no    String?
+  vergi_daire_adi   String?
+  temsilci          Temsilci?     @relation(name: "temsilci", fields: [temsilci_kod], references: [kod], onUpdate: NoAction, onDelete: NoAction)
+  eski_temsilci     Temsilci?     @relation(name: "cari_temsilci", fields: [eski_temsilci_kod], references: [kod], onUpdate: NoAction, onDelete: NoAction)
+  SiparisOzet       SiparisOzet[]
+  Siparis           Siparis[]
+  Satis             Satis[]
+  Tahsilat          Tahsilat[]
 
   @@map("CRM_CARI_HESAPLAR")
 }
@@ -45,32 +46,8 @@ model Stok {
   bedenHareket    BedenHareket[]
   maliyet         SabitMaliyet[]
   KampanyaStoklar KampanyaStoklar[]
-  hareket         StokHareket[]
 
   @@map("STOKLAR")
-}
-
-model StokHareket {
-  id               String @id @map("sth_Guid") @db.UniqueIdentifier
-  evrak_seri       String @map("sth_evrakno_seri") @db.NVarChar(20)
-  evrak_sira       Int    @map("sth_evrakno_sira") @db.Int
-  cari_kod         String @map("sth_cari_kodu") @db.NVarChar(25)
-  stok_kod         String @map("sth_stok_kod") @db.NVarChar(25)
-  miktar           Float  @map("sth_miktar") @db.Float()
-  tutar            Float  @map("sth_tutar") @db.Float()
-  vergi            Float  @map("sth_vergi") @db.Float()
-  iskonto1         Float  @map("sth_iskonto1") @db.Float()
-  iskonto2         Float  @map("sth_iskonto2") @db.Float()
-  siparis_kod      String @map("sth_sip_uid") @db.UniqueIdentifier
-  cari_hareket_kod String @map("sth_fat_uid") @db.UniqueIdentifier
-  odeme_plan_kod   Int    @map("sth_odeme_op") @db.Int
-
-  stok        Stok        @relation(fields: [stok_kod], references: [kod], onUpdate: NoAction, onDelete: NoAction)
-  siparis     Siparis?    @relation(fields: [siparis_kod], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  cariHareket CariHareket @relation(fields: [cari_hareket_kod], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  odemePlan   OdemePlan?  @relation(fields: [odeme_plan_kod], references: [id])
-
-  @@map("STOK_HAREKETLERI")
 }
 
 model FiyatListe {
@@ -112,7 +89,8 @@ model Temsilci {
   tel         String?       @map("cari_per_cepno")
   eposta      String?       @map("cari_per_mail")
   tip         Int           @map("cari_per_tip")
-  Cari        Cari[]
+  Cari        Cari[]        @relation("temsilci")
+  EskiCari    Cari[]        @relation("cari_temsilci")
   SiparisOzet SiparisOzet[]
   Satis       Satis[]
   PrimOzet    PrimOzet[]
@@ -145,9 +123,6 @@ model CariHareket {
   borc_alacak      String
   ana_doviz_borc   Float
   ana_doviz_alacak Float
-
-  cari        Cari          @relation(fields: [cari_kod], references: [kod], onUpdate: NoAction, onDelete: NoAction)
-  stokHareket StokHareket[]
 
   @@map("CRM_CARI_HESAP_HAREKETLERI")
 }
@@ -193,7 +168,6 @@ model OdemePlan {
 
   iskonto     Iskonto       @relation(fields: [iskonto_kod], references: [id], onDelete: NoAction, onUpdate: NoAction)
   SiparisOzet SiparisOzet[]
-  StokHareket StokHareket[]
 
   @@map("ODEME_PLANLARI")
 }
@@ -333,10 +307,9 @@ model Siparis {
   sip_satis_fiyat_doviz_kuru   Float    @default(0)
   sip_eticaret_kanal_kodu      String   @default("")
 
-  stok        Stok          @relation(fields: [stok_kod], references: [kod])
-  cari        Cari          @relation(fields: [cari_kod], references: [kod])
-  siparis     SiparisOzet   @relation(fields: [evrak_seri, evrak_sira, tarih], references: [evrak_seri, evrak_sira, tarih])
-  stokHareket StokHareket[]
+  stok    Stok        @relation(fields: [stok_kod], references: [kod])
+  cari    Cari        @relation(fields: [cari_kod], references: [kod])
+  siparis SiparisOzet @relation(fields: [evrak_seri, evrak_sira, tarih], references: [evrak_seri, evrak_sira, tarih])
 
   @@unique([evrak_seri, evrak_sira, stok_kod])
   @@map("SIPARISLER")
