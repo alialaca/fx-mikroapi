@@ -33,7 +33,7 @@ class CariHareketModel {
                 evrak_seri: true,
                 evrak_sira: true,
                 evrak_tip: true,
-                evrak_cins: true,
+                evrak_cinsi: true,
                 normal_iade: true,
                 vade_tarihi: true,
                 borc_alacak: true,
@@ -55,6 +55,12 @@ class CariHareketModel {
                         stok: {
                             select: {
                                 kod: true,
+                                isim: true
+                            }
+                        },
+                        odemePlan: {
+                            select: {
+                                id: true,
                                 isim: true
                             }
                         }
