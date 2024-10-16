@@ -24,6 +24,7 @@ model Cari {
   Siparis         Siparis[]
   Satis           Satis[]
   Tahsilat        Tahsilat[]
+  hareket         CariHareket[]
 
   @@map("CRM_CARI_HESAPLAR")
 }
@@ -329,9 +330,10 @@ model Siparis {
   sip_satis_fiyat_doviz_kuru   Float    @default(0)
   sip_eticaret_kanal_kodu      String   @default("")
 
-  stok    Stok        @relation(fields: [stok_kod], references: [kod])
-  cari    Cari        @relation(fields: [cari_kod], references: [kod])
-  siparis SiparisOzet @relation(fields: [evrak_seri, evrak_sira, tarih], references: [evrak_seri, evrak_sira, tarih])
+  stok        Stok          @relation(fields: [stok_kod], references: [kod])
+  cari        Cari          @relation(fields: [cari_kod], references: [kod])
+  siparis     SiparisOzet   @relation(fields: [evrak_seri, evrak_sira, tarih], references: [evrak_seri, evrak_sira, tarih])
+  stokHareket StokHareket[]
 
   @@unique([evrak_seri, evrak_sira, stok_kod])
   @@map("SIPARISLER")
