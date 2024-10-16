@@ -63,10 +63,12 @@ model StokHareket {
   iskonto2         Float  @map("sth_iskonto2") @db.Float()
   siparis_kod      String @map("sth_sip_uid") @db.UniqueIdentifier
   cari_hareket_kod String @map("sth_fat_uid") @db.UniqueIdentifier
+  odeme_plan_kod   Int    @map("sth_odeme_op") @db.Int
 
   stok        Stok        @relation(fields: [stok_kod], references: [kod], onUpdate: NoAction, onDelete: NoAction)
   siparis     Siparis?    @relation(fields: [siparis_kod], references: [id], onDelete: NoAction, onUpdate: NoAction)
   cariHareket CariHareket @relation(fields: [cari_hareket_kod], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  odemePlan   OdemePlan?  @relation(fields: [odeme_plan_kod], references: [id])
 
   @@map("STOK_HAREKETLERI")
 }
@@ -191,6 +193,7 @@ model OdemePlan {
 
   iskonto     Iskonto       @relation(fields: [iskonto_kod], references: [id], onDelete: NoAction, onUpdate: NoAction)
   SiparisOzet SiparisOzet[]
+  StokHareket StokHareket[]
 
   @@map("ODEME_PLANLARI")
 }
