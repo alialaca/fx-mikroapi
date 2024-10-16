@@ -44,8 +44,30 @@ model Stok {
   bedenHareket    BedenHareket[]
   maliyet         SabitMaliyet[]
   KampanyaStoklar KampanyaStoklar[]
+  hareket         StokHareket[]
 
   @@map("STOKLAR")
+}
+
+model StokHareket {
+  id               String @id @map("sth_Guid") @db.UniqueIdentifier
+  evrak_seri       String @map("sth_evrakno_seri") @db.NVarChar(20)
+  evrak_sira       Int    @map("sth_evrakno_sira") @db.Int
+  cari_kod         String @map("sth_cari_kodu") @db.NVarChar(25)
+  stok_kod         String @map("sth_stok_kod") @db.NVarChar(25)
+  miktar           Float  @map("sth_miktar") @db.Float()
+  tutar            Float  @map("sth_tutar") @db.Float()
+  vergi            Float  @map("sth_vergi") @db.Float()
+  iskonto1         Float  @map("sth_iskonto1") @db.Float()
+  iskonto2         Float  @map("sth_iskonto2") @db.Float()
+  siparis_kod      String @map("sth_sip_uid") @db.UniqueIdentifier
+  cari_hareket_kod String @map("sth_fat_uid") @db.UniqueIdentifier
+
+  stok        Stok        @relation(fields: [stok_kod], references: [kod], onUpdate: NoAction, onDelete: NoAction)
+  siparis     Siparis?    @relation(fields: [siparis_kod], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  cariHareket CariHareket @relation(fields: [cari_hareket_kod], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("STOK_HAREKETLERI")
 }
 
 model FiyatListe {
@@ -120,6 +142,9 @@ model CariHareket {
   borc_alacak      String
   ana_doviz_borc   Float
   ana_doviz_alacak Float
+
+  cari        Cari          @relation(fields: [cari_kod], references: [kod], onUpdate: NoAction, onDelete: NoAction)
+  stokHareket StokHareket[]
 
   @@map("CRM_CARI_HESAP_HAREKETLERI")
 }
