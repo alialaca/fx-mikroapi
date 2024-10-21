@@ -90,7 +90,19 @@ class CariModel {
                         ad: true,
                         soyad: true
                     }
-                }
+                },
+                adres: {
+                    select: {
+                        il: true,
+                        ilce: true,
+                        mahalle: true,
+                        cadde: true,
+                        sokak: true,
+                        semt: true,
+                        aptno: true,
+                        postakod: true
+                    }
+                },
             }
         })
     }
