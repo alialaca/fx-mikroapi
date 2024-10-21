@@ -11,24 +11,42 @@ datasource db {
 
 // kod | isim | plasiyer | bakiye | ciro
 model Cari {
-  kod             String        @id
-  unvan           String
-  bakiye          Float
-  sektor          String?
-  temsilci_kod    String?
+  kod               String        @id
+  unvan             String
+  bakiye            Float
+  sektor            String?
+  temsilci_kod      String?
   eski_temsilci_kod String?
-  vkn             String?
-  vergi_daire_no  String?
-  vergi_daire_adi String?
+  vkn               String?
+  vergi_daire_no    String?
+  vergi_daire_adi   String?
   temsilci          Temsilci?     @relation(name: "temsilci", fields: [temsilci_kod], references: [kod], onUpdate: NoAction, onDelete: NoAction)
   eski_temsilci     Temsilci?     @relation(name: "cari_temsilci", fields: [eski_temsilci_kod], references: [kod], onUpdate: NoAction, onDelete: NoAction)
-  SiparisOzet     SiparisOzet[]
-  Siparis         Siparis[]
-  Satis           Satis[]
-  Tahsilat        Tahsilat[]
-  hareket         CariHareket[]
+  SiparisOzet       SiparisOzet[]
+  Siparis           Siparis[]
+  Satis             Satis[]
+  Tahsilat          Tahsilat[]
+  hareket           CariHareket[]
+  adres             CariAdres[]
 
   @@map("CRM_CARI_HESAPLAR")
+}
+
+model CariAdres {
+  id       String @id @map("adr_Guid") @db.UniqueIdentifier
+  cari_kod String @map("adr_cari_kod") @db.NVarChar(25)
+  il       String @map("adr_il") @db.NVarChar(50)
+  ilce     String @map("adr_ilce") @db.NVarChar(50)
+  mahalle  String @map("adr_mahalle") @db.NVarChar(50)
+  cadde    String @map("adr_cadde") @db.NVarChar(50)
+  sokak    String @map("adr_sokak") @db.NVarChar(50)
+  semt     String @map("adr_Semt") @db.NVarChar(25)
+  aptno    String @map("adr_Apt_No") @db.NVarChar(10)
+  postakod String @map("adr_posta_kodu") @db.NVarChar(8)
+
+  cari Cari @relation(fields: [cari_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("CARI_HESAP_ADRESLERI")
 }
 
 model Stok {
