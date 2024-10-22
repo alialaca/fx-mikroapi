@@ -75,6 +75,7 @@ class CariModel {
             select: {
                 kod: true,
                 unvan: true,
+                tarih: true,
                 bakiye: true,
                 sektor: true,
                 temsilci: {

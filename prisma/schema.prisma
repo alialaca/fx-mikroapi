@@ -13,6 +13,7 @@ datasource db {
 model Cari {
   kod               String        @id
   unvan             String
+  tarih             DateTime
   bakiye            Float
   sektor            String?
   temsilci_kod      String?
