@@ -9,7 +9,7 @@ const liste = async (req, res, next) => {
           res.status(statusCodes.OK).json({
               data: satislar.data
           })
-        })
+        }).catch( next )
 }
 
 
