@@ -9,10 +9,11 @@ class SatisModel {
         })
     }
 
-    ozet({yil, type, temsilci = []}) {
+    ozet({yil, type, temsilci = [], cari_kod = null}) {
         const groups = ['yil', 'ay_index', 'ay']
         const where = {yil}
         if (temsilci?.length > 0) where.temsilci_kod = {in: temsilci}
+        if (cari_kod) where.cari_kod = cari_kod
 
         const types = ['marka', 'bolge', 'anagrup', 'odeme', 'temsilci_isim']
         if (types.includes(type)) groups.push(type)

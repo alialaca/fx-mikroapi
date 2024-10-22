@@ -16,11 +16,11 @@ const liste = async (req, res, next) => {
 
 
 const ozet = async (req, res, next) => {
-    const { yil, type } = req.query
+    const { yil, type, cari_kod } = req.query
     const temsilci = req.query?.temsilci?.split('-')
 
-    Satis.ozet({yil: parseInt(yil), type, temsilci})
-        .then( siparis => {
+    Satis.ozet({yil: parseInt(yil), type, temsilci, cari_kod})
+        .then( satis => {
             res.status(statusCodes.OK).json({
                 meta: {
                     pagination: {

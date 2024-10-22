@@ -15,7 +15,8 @@ const ozet = {
     query: Joi.object().keys({
         yil: Joi.string().length(4).default(dayjs().format('YYYY')),
         type: Joi.string().valid(...validGroups),
-        temsilci: Joi.string()
+        temsilci: Joi.string(),
+        cari_kod: Joi.string().allow(null, '')
     })
 }
 
