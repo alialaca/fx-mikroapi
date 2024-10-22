@@ -1,5 +1,4 @@
-const dayjs = require('dayjs')
-const { Satis, Cari} = require('../models')
+const { Satis} = require('../models')
 class SatisService {
     async ozet({yil, type, temsilci, cari_kod}) {
         const data = await Satis.ozet({yil, type, temsilci, cari_kod})

@@ -1,8 +1,6 @@
 const statusCodes = require('http-status-codes')
 const { Satis, Prim} = require('../services')
 
-const dayjs = require('dayjs')
-
 const liste = async (req, res, next) => {
     const {firstDate, lastDate, kar} = req.query
 
