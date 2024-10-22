@@ -25,10 +25,10 @@ const ozet = async (req, res, next) => {
                 meta: {
                     pagination: {
                         ...req.paginationOptions,
-                        total: siparis.count
+                        total: satis.count
                     }
                 },
-                data: siparis.data
+                data: satis.data
             })
         }).catch( next )
 }
