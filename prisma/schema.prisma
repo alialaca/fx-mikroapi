@@ -17,6 +17,7 @@ model Cari {
   sektor            String?
   temsilci_kod      String?
   eski_temsilci_kod String?
+  bolge_kod         String?
   vkn               String?
   vergi_daire_no    String?
   vergi_daire_adi   String?
@@ -28,6 +29,7 @@ model Cari {
   Tahsilat          Tahsilat[]
   hareket           CariHareket[]
   adres             CariAdres[]
+  bolge             CariBolge?    @relation(fields: [bolge_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("CRM_CARI_HESAPLAR")
 }
@@ -47,6 +49,15 @@ model CariAdres {
   cari Cari @relation(fields: [cari_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("CARI_HESAP_ADRESLERI")
+}
+
+model CariBolge {
+  kod  String @unique @map("bol_kod") @db.NVarChar(25)
+  isim String @map("bol_ismi") @db.NVarChar(90)
+
+  cari Cari[]
+
+  @@map("CARI_HESAP_BOLGELERI")
 }
 
 model Stok {

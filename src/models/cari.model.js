@@ -103,6 +103,7 @@ class CariModel {
                         postakod: true
                     }
                 },
+                bolge: true
             }
         })
     }
