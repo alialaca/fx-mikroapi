@@ -22,6 +22,9 @@ model Cari {
   vkn               String?
   vergi_daire_no    String?
   vergi_daire_adi   String?
+  eposta            String?
+  tel               String?
+  mutabakat_eposta  String?
   temsilci          Temsilci?     @relation(name: "temsilci", fields: [temsilci_kod], references: [kod], onUpdate: NoAction, onDelete: NoAction)
   eski_temsilci     Temsilci?     @relation(name: "cari_temsilci", fields: [eski_temsilci_kod], references: [kod], onUpdate: NoAction, onDelete: NoAction)
   SiparisOzet       SiparisOzet[]

@@ -75,6 +75,8 @@ class CariModel {
             select: {
                 kod: true,
                 unvan: true,
+                vkn: true,
+                vergi_daire_adi: true,
                 tarih: true,
                 bakiye: true,
                 sektor: true,
@@ -82,7 +84,9 @@ class CariModel {
                     select: {
                         kod: true,
                         ad: true,
-                        soyad: true
+                        soyad: true,
+                        tel: true,
+                        eposta: true
                     }
                 },
                 eski_temsilci: {
@@ -104,7 +108,10 @@ class CariModel {
                         postakod: true
                     }
                 },
-                bolge: true
+                bolge: true,
+                eposta: true,
+                tel: true,
+                mutabakat_eposta: true
             }
         })
     }
