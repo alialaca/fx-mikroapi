@@ -108,6 +108,19 @@ class StokModel {
                         kod: true,
                         isim: true
                     }
+                },
+                kategori: {
+                    select: {
+                        kod: true,
+                        isim: true,
+                    }
+                },
+                //TODO: tüm kategoriler için altkategori eklenip kategori kısmı olarak altkategori ve içerisinde ait olduğu ana kategori gösterilecek
+                altKategori: {
+                    select: {
+                        kod: true,
+                        isim: true
+                    }
                 }
             }
         }
@@ -132,7 +145,7 @@ class StokModel {
             }
         }
 
-        if (fields.includes('maliyet')) {
+        if (fields && fields.includes('maliyet')) {
             query.select.maliyet = {
                 select: {
                     maliyet: true,
