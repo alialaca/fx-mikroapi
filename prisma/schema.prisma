@@ -149,6 +149,14 @@ model FiyatListe {
   @@map("STOK_SATIS_FIYAT_LISTELERI")
 }
 
+model ParaBirim {
+  id         Int          @id @map("KUR_NUMARASI")
+  isim       String       @map("KUR_ISMI")
+  sembol     Float        @map("KUR_SEMBOLU")
+
+  @@map("KUR_ISIMLERI_VIEW")
+}
+
 model StokMiktar {
   stok_kod  String @id @map("sto_kod")
   merkez    Float
