@@ -76,7 +76,7 @@ model Stok {
   marka       Marka?           @relation(fields: [marka_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
   miktar      StokMiktar       @relation(fields: [kod], references: [stok_kod], onDelete: NoAction, onUpdate: NoAction)
   siparis     Siparis[]
-  fiyat       FiyatListe[]
+  fiyat       Fiyat[]
   altKategori StokAltKategori? @relation(fields: [alt_kategori_kod, ana_kategori_kod], references: [kod, ana_kategori_kod], onDelete: NoAction, onUpdate: NoAction)
   kategori    StokKategori?    @relation(fields: [ana_kategori_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
 
@@ -139,20 +139,34 @@ model StokHareket {
 }
 
 model FiyatListe {
-  stok_kod String @map("sfiyat_stokkod")
-  liste_no Int    @map("sfiyat_listesirano")
-  fiyat    Float  @map("sfiyat_fiyati")
+  id   Int    @id @map("sfl_sirano")
+  isim String @map("sfl_aciklama") @db.NVarChar(50)
 
-  stok Stok @relation(fields: [stok_kod], references: [kod])
+  fiyatlar Fiyat[]
 
-  @@unique([stok_kod, liste_no, fiyat])
+  @@map("STOK_SATIS_FIYAT_LISTE_TANIMLARI")
+}
+
+model Fiyat {
+  id        String @id @map("sfiyat_Guid") @db.UniqueIdentifier
+  stok_kod  String @map("sfiyat_stokkod") @db.NVarChar(50)
+  liste_kod Int    @map("sfiyat_listesirano")
+  fiyat     Float  @map("sfiyat_fiyati") @db.Float()
+  birim_kod Int    @map("sfiyat_doviz") @db.TinyInt
+
+  fiyatListe FiyatListe @relation(fields: [liste_kod], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  stok       Stok       @relation(fields: [stok_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+  birim      ParaBirim  @relation(fields: [birim_kod], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([stok_kod, liste_kod])
   @@map("STOK_SATIS_FIYAT_LISTELERI")
 }
 
 model ParaBirim {
-  id         Int          @id @map("KUR_NUMARASI")
-  isim       String       @map("KUR_ISMI")
-  sembol     Float        @map("KUR_SEMBOLU")
+  id     Int     @id @map("KUR_NUMARASI")
+  isim   String  @map("KUR_ISMI")
+  sembol String  @map("KUR_SEMBOLU") @db.NVarChar(3)
+  Fiyat  Fiyat[]
 
   @@map("KUR_ISIMLERI_VIEW")
 }
