@@ -65,17 +65,22 @@ model CariBolge {
 }
 
 model Stok {
-  kod       String  @id @map("sto_kod")
-  isim      String  @map("sto_isim")
-  birim     String? @map("sto_birim1_ad")
-  marka_kod String? @map("sto_marka_kodu")
-  kdv       String? @map("sto_muhgrup_kodu")
+  kod              String  @id @map("sto_kod")
+  isim             String  @map("sto_isim")
+  birim            String? @map("sto_birim1_ad")
+  marka_kod        String? @map("sto_marka_kodu")
+  kdv              String? @map("sto_muhgrup_kodu")
+  ana_kategori_kod String? @map("sto_anagrup_kod")
+  alt_kategori_kod String? @map("sto_altgrup_kod")
 
-  marka   Marka?       @relation(fields: [marka_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
-  miktar  StokMiktar   @relation(fields: [kod], references: [stok_kod], onDelete: NoAction, onUpdate: NoAction)
-  siparis Siparis[]
-  fiyat   FiyatListe[]
-  Satis   Satis[]
+  marka       Marka?           @relation(fields: [marka_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+  miktar      StokMiktar       @relation(fields: [kod], references: [stok_kod], onDelete: NoAction, onUpdate: NoAction)
+  siparis     Siparis[]
+  fiyat       FiyatListe[]
+  altKategori StokAltKategori? @relation(fields: [alt_kategori_kod, ana_kategori_kod], references: [kod, ana_kategori_kod], onDelete: NoAction, onUpdate: NoAction)
+  kategori    StokKategori?    @relation(fields: [ana_kategori_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+
+  Satis Satis[]
 
   bedenHareket    BedenHareket[]
   maliyet         SabitMaliyet[]
@@ -83,6 +88,31 @@ model Stok {
   hareket         StokHareket[]
 
   @@map("STOKLAR")
+}
+
+model StokKategori {
+  id   String @id @map("san_Guid") @db.UniqueIdentifier
+  kod  String @unique @map("san_kod") @db.NVarChar(25)
+  isim String @map("san_isim") @db.NVarChar(90)
+
+  Stok        Stok[]
+  altKAtegori StokAltKategori[]
+
+  @@map("STOK_ANA_GRUPLARI")
+}
+
+model StokAltKategori {
+  id               String @id @map("sta_Guid") @db.UniqueIdentifier
+  kod              String @map("sta_kod") @db.NVarChar(25)
+  isim             String @map("sta_isim") @db.NVarChar(90)
+  ana_kategori_kod String @map("sta_ana_grup_kod") @db.NVarChar(25)
+
+  anaKategori StokKategori @relation(fields: [ana_kategori_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
+
+  Stok Stok[]
+
+  @@unique([kod, ana_kategori_kod])
+  @@map("STOK_ALT_GRUPLARI")
 }
 
 model StokHareket {
