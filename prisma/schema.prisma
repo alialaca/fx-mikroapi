@@ -65,13 +65,13 @@ model CariBolge {
 }
 
 model Stok {
-  kod              String  @id @map("sto_kod")
-  isim             String  @map("sto_isim")
-  birim            String? @map("sto_birim1_ad")
-  marka_kod        String? @map("sto_marka_kodu")
-  kdv              String? @map("sto_muhgrup_kodu")
-  ana_kategori_kod String? @map("sto_anagrup_kod")
-  alt_kategori_kod String? @map("sto_altgrup_kod")
+  kod              String  @id @map("sto_kod") @db.NVarChar(25)
+  isim             String  @map("sto_isim") @db.NVarChar(127)
+  birim            String? @map("sto_birim1_ad") @db.NVarChar(10)
+  marka_kod        String? @map("sto_marka_kodu") @db.NVarChar(25)
+  kdv              String? @map("sto_muhgrup_kodu") @db.NVarChar(25)
+  ana_kategori_kod String? @map("sto_anagrup_kod") @db.NVarChar(25)
+  alt_kategori_kod String? @map("sto_altgrup_kod") @db.NVarChar(25)
   gorsel           String? @map("sto_resim_url") @db.NVarChar(127)
 
   marka       Marka?           @relation(fields: [marka_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
