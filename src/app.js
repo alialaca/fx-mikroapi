@@ -42,9 +42,8 @@ app.use('/tahsilat', routes.tahsilatRoute)
 app.use('/cihaz-hareket', routes.cihazHareketRoute)
 app.use('/fiyat-liste', routes.fiyatListeRoute)
 
-app.use('*', (req, res, next) => {
+app.use('*', (req, res) => {
     res.status(404).json()
-    // next()
 })
 
 app.use( errorHandler )
