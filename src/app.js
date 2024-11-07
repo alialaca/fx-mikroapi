@@ -40,6 +40,7 @@ app.use('/kampanya', routes.kampanyaRoute)
 app.use('/rapor', routes.raporRoute)
 app.use('/tahsilat', routes.tahsilatRoute)
 app.use('/cihaz-hareket', routes.cihazHareketRoute)
+app.use('/fiyat-liste', routes.fiyatListeRoute)
 
 app.use('*', (req, res, next) => {
     res.status(404).json()
