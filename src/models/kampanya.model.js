@@ -24,6 +24,7 @@ class KampanyaModel {
                             select: {
                                 isim: true,
                                 kod: true,
+                                gorsel: true,
                                 birim: true,
                                 kdv: true
                             }
@@ -57,7 +58,8 @@ class KampanyaModel {
                                 isim: true,
                                 kod: true,
                                 birim: true,
-                                kdv: true
+                                kdv: true,
+                                gorsel: true
                             }
                         }
                     }

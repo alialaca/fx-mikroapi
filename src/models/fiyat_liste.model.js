@@ -32,6 +32,7 @@ class FiyatListModel {
                                 kod: true,
                                 isim: true,
                                 marka: true,
+                                gorsel: true,
                                 kategori: true,
                                 altKategori: true
                             }

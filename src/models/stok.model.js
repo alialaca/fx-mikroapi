@@ -21,6 +21,7 @@ class StokModel {
                 kod: true,
                 isim: true,
                 birim: true,
+                gorsel: true,
                 marka: {
                     select: {
                         kod: true,
@@ -103,6 +104,7 @@ class StokModel {
                 kod: true,
                 isim: true,
                 birim: true,
+                gorsel: true,
                 marka: {
                     select: {
                         kod: true,

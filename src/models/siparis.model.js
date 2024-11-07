@@ -135,6 +135,7 @@ class SiparisModel {
                                 kod: true,
                                 isim: true,
                                 marka: true,
+                                gorsel: true,
                                 bedenHareket: {
                                     where: {
                                         evrak_seri: serino,
