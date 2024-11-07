@@ -1,4 +1,3 @@
-const { PrismaClient } = require( '@prisma/client' )
 const Prisma = require('../services/prisma')
 
 class SiparisModel {
