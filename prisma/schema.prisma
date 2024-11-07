@@ -72,6 +72,7 @@ model Stok {
   kdv              String? @map("sto_muhgrup_kodu")
   ana_kategori_kod String? @map("sto_anagrup_kod")
   alt_kategori_kod String? @map("sto_altgrup_kod")
+  gorsel           String? @map("sto_resim_url") @db.NVarChar(127)
 
   marka       Marka?           @relation(fields: [marka_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
   miktar      StokMiktar       @relation(fields: [kod], references: [stok_kod], onDelete: NoAction, onUpdate: NoAction)
