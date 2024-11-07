@@ -151,15 +151,15 @@ model FiyatListe {
 model Fiyat {
   id        String @id @map("sfiyat_Guid") @db.UniqueIdentifier
   stok_kod  String @map("sfiyat_stokkod") @db.NVarChar(50)
-  liste_kod Int    @map("sfiyat_listesirano")
+  liste_no  Int    @map("sfiyat_listesirano")
   fiyat     Float  @map("sfiyat_fiyati") @db.Float()
   birim_kod Int    @map("sfiyat_doviz") @db.TinyInt
 
-  fiyatListe FiyatListe @relation(fields: [liste_kod], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  fiyatListe FiyatListe @relation(fields: [liste_no], references: [id], onDelete: NoAction, onUpdate: NoAction)
   stok       Stok       @relation(fields: [stok_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
   birim      ParaBirim  @relation(fields: [birim_kod], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@unique([stok_kod, liste_kod])
+  @@unique([stok_kod, liste_no])
   @@map("STOK_SATIS_FIYAT_LISTELERI")
 }
 
