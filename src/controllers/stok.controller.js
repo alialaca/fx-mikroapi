@@ -43,8 +43,26 @@ const find = async (req, res) => {
         })
 }
 
+const update = async (req, res) => {
+    const kod = req.params.kod
+    const body = req.body
+
+    Stok.update(kod, body)
+        .then(stok => {
+            res.status(200).json({
+                data: stok
+            })
+        })
+        .catch(error => {
+            res.status(500).json({
+                error: error.message
+            })
+        })
+}
+
 
 module.exports = {
     list,
-    find
+    find,
+    update
 }

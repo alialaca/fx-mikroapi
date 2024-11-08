@@ -190,6 +190,15 @@ class StokModel {
 
         return this.db['stok'].findFirst(query)
     }
+
+    update(kod, data) {
+        return this.db['stok'].update({
+            where: {
+                kod
+            },
+            data
+        })
+    }
 }
 
 module.exports = new StokModel()

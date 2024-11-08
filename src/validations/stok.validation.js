@@ -14,6 +14,14 @@ const filter = {
     })
 }
 
+const update = {
+    body: Joi.object().keys({
+        isim: Joi.string().max(127),
+        gorsel: Joi.string().max(127)
+    })
+}
+
 module.exports = {
-    filter
+    filter,
+    update
 }

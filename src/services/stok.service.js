@@ -13,6 +13,10 @@ class StokService {
     async find(kod, {fields, temsilci}) {
         return Stok.find(kod, {fields, temsilci})
     }
+
+    async update(kod, data) {
+        return Stok.update(kod, data)
+    }
 }
 
 module.exports = new StokService()
