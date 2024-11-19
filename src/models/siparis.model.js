@@ -23,7 +23,7 @@ class SiparisModel {
 
         if (fields.includes('depo')) select.depo = { select: { id: true, isim: true } }
         if (fields.includes('cari')) select.cari = { select: { kod: true, unvan: true } }
-        if (fields.includes('temsilci')) select.temsilci = { select: { kod: true, ad: true, soyad: true } }
+        if (fields.includes('temsilci')) select.temsilci = { select: { kod: true, ad: true, soyad: true,  eposta: true} }
         if (fields.includes('odeme_plan')) select.odeme_plan = { select: { id: true, isim: true } }
 
         const where = {

@@ -33,7 +33,8 @@ class CariModel {
                     select: {
                         kod: true,
                         ad: true,
-                        soyad: true
+                        soyad: true,
+                        eposta: true
                     }
                 }
             },
