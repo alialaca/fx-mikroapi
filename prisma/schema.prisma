@@ -173,12 +173,13 @@ model ParaBirim {
 }
 
 model StokMiktar {
-  stok_kod  String @id @map("sto_kod")
-  merkez    Float
-  balikesir Float
-  istanbul  Float
-  servis    Float
-  Stok      Stok[]
+  stok_kod      String @id @map("sto_kod")
+  merkez        Float
+  izmir_kiralik Float
+  balikesir     Float
+  istanbul      Float
+  servis        Float
+  Stok          Stok[]
 
   @@map("CRM_STOK_DEPO_MIKTARLARI")
 }
