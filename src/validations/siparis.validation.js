@@ -40,7 +40,11 @@ const create = {
             vergi: Joi.number(),
             aciklama: Joi.string().empty(['', null]).default("")
         }).required(),
-        notlar: Joi.array().max(10).items(Joi.string().max(127))
+        notlar: Joi.array().max(10).items(Joi.string().max(127)),
+        ortaklar: Joi.array().allow(null).items({
+            temsilci_kod: Joi.string().required(),
+            satis_oran: Joi.number().min(0).max(1).default(0.5)
+        })
     })
 }
 
