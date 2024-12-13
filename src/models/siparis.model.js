@@ -18,7 +18,20 @@ class SiparisModel {
             tutar: true,
             tutar_net: true,
             onay: true,
-            durum: true
+            durum: true,
+            ortaklar: {
+                select: {
+                    temsilci: {
+                        select: {
+                            kod: true,
+                            ad: true,
+                            soyad: true,
+                            tel: true,
+                            eposta: true
+                        }
+                    }
+                }
+            }
         }
 
         if (fields.includes('depo')) select.depo = { select: { id: true, isim: true } }
@@ -162,6 +175,19 @@ class SiparisModel {
                         satir8: true,
                         satir9: true,
                         satir10: true,
+                    }
+                },
+                ortaklar: {
+                    select: {
+                        temsilci: {
+                            select: {
+                                kod: true,
+                                ad: true,
+                                soyad: true,
+                                tel: true,
+                                eposta: true
+                            }
+                        }
                     }
                 }
             }
