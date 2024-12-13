@@ -207,6 +207,8 @@ model Temsilci {
   PrimOzet    PrimOzet[]
   Kampanya    Kampanya[]
 
+  SiparisOrtak SiparisOrtak[]
+
   @@map("CARI_PERSONEL_TANIMLARI")
 }
 
@@ -259,6 +261,7 @@ model SiparisOzet {
   durum            String
   olusturma_tarihi DateTime @db.DateTime
   fileId           Int      @default(21)
+  ortak_kod        String?  @unique @db.UniqueIdentifier
 
   cari               Cari?                @relation(fields: [cari_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
   temsilci           Temsilci?            @relation(fields: [temsilci_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
@@ -266,6 +269,7 @@ model SiparisOzet {
   odeme_plan         OdemePlan?           @relation(fields: [odeme_plan_kod], references: [id])
   stoklar            Siparis[]
   aciklama           Aciklama?
+  ortaklar           SiparisOrtak[]
   KampanyaSiparisler KampanyaSiparisler[]
 
   @@id([evrak_seri, evrak_sira, tarih])
@@ -421,23 +425,23 @@ model Siparis {
   sip_satis_fiyat_doviz_kuru   Float    @default(0)
   sip_eticaret_kanal_kodu      String   @default("")
 
-  stok        Stok           @relation(fields: [stok_kod], references: [kod])
-  cari        Cari           @relation(fields: [cari_kod], references: [kod])
-  siparis     SiparisOzet    @relation(fields: [evrak_seri, evrak_sira, tarih], references: [evrak_seri, evrak_sira, tarih])
+  stok        Stok          @relation(fields: [stok_kod], references: [kod])
+  cari        Cari          @relation(fields: [cari_kod], references: [kod])
+  siparis     SiparisOzet   @relation(fields: [evrak_seri, evrak_sira, tarih], references: [evrak_seri, evrak_sira, tarih])
   stokHareket StokHareket[]
-  ortak       SiparisOrtak[]
 
   @@unique([evrak_seri, evrak_sira, stok_kod])
   @@map("SIPARISLER")
 }
 
 model SiparisOrtak {
-  id           String @id @db.UniqueIdentifier
+  id           Int    @id @default(autoincrement())
   siparisId    String @db.UniqueIdentifier
   temsilci_kod String @db.NVarChar(25)
   satis_oran   Float  @default(0.5) @db.Float()
 
-  siparis Siparis @relation(fields: [siparisId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  siparis  SiparisOzet @relation(fields: [siparisId], references: [ortak_kod], onDelete: Cascade, onUpdate: NoAction)
+  temsilci Temsilci    @relation(fields: [temsilci_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("CRM_SIPARIS_ORTAKLARI")
 }
