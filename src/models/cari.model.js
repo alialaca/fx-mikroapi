@@ -8,6 +8,7 @@ class CariModel {
     list(temsilci, {page, limit, search}){
         const where = {
             kod: {startsWith: '120.'},
+            aktarim: true,
             OR: [
                 { kod: {contains: search} },
                 { kod: {equals: search} },
@@ -49,6 +50,7 @@ class CariModel {
             AND: [
                 {
                     kod: {startsWith: '120.'},
+                    aktarim: true
                 },
                 {
                     OR: [
@@ -72,7 +74,7 @@ class CariModel {
 
     find(kod) {
         return this.db['cari'].findFirst({
-            where: {kod},
+            where: {kod, aktarim: true},
             select: {
                 kod: true,
                 unvan: true,
