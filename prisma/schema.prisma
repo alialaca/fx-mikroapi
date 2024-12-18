@@ -25,6 +25,8 @@ model Cari {
   eposta            String?
   tel               String?
   mutabakat_eposta  String?
+  aktarim           Boolean           @default(false) @db.Bit
+  kilitli           Boolean           @default(false) @db.Bit
   temsilci          Temsilci?     @relation(name: "temsilci", fields: [temsilci_kod], references: [kod], onUpdate: NoAction, onDelete: NoAction)
   eski_temsilci     Temsilci?     @relation(name: "cari_temsilci", fields: [eski_temsilci_kod], references: [kod], onUpdate: NoAction, onDelete: NoAction)
   SiparisOzet       SiparisOzet[]
