@@ -30,6 +30,7 @@ class CariModel {
                 unvan: true,
                 bakiye: true,
                 sektor: true,
+                kilitli: true,
                 temsilci: {
                     select: {
                         kod: true,
@@ -114,7 +115,8 @@ class CariModel {
                 bolge: true,
                 eposta: true,
                 tel: true,
-                mutabakat_eposta: true
+                mutabakat_eposta: true,
+                kilitli: true
             }
         })
     }
