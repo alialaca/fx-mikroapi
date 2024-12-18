@@ -1,6 +1,6 @@
 const statusCodes = require('http-status-codes')
 const {uuid} = require('uuidv4')
-const { Siparis, Aciklama} = require('../services')
+const { Siparis, Aciklama, SiparisOrtak} = require('../services')
 
 const dayjs = require('dayjs')
 // const timezone = require('dayjs/plugin/timezone')
@@ -113,6 +113,18 @@ const create = async (req, res) => {
         req.body.notlar.forEach((not, index) => noteData[`satir${index + 1}`] = not)
 
         await Aciklama.create(noteData)
+    }
+
+    if (req.body.ortaklar && req.body.ortaklar.length > 0) {
+        const ortakData = req.body.ortaklar.map(ortak => {
+            return data.map(hareket => ({
+                siparisId: hareket.id,
+                temsilci_kod: ortak.temsilci_kod,
+                satis_oran: ortak.satis_oran
+            }))
+        }).flat()
+
+        await SiparisOrtak.create(ortakData)
     }
 
     const result = await Siparis.find({
