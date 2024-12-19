@@ -675,7 +675,7 @@ model Tahsilat {
   cha_grupno                            Int      @default(0)
   cha_srmrkkodu                         String   @default("")
   cha_kasa_hizmet                       Int      @default(0)
-  cha_kasa_hizkod                       String   @default("102.10.001")
+  cha_kasa_hizkod                       String   @default("102.10.008")
   cha_karsidcinsi                       Int      @default(0)
   cha_karsid_kur                        Float    @default(1)
   cha_karsidgrupno                      Float    @default(7)
@@ -944,7 +944,7 @@ model OdemeEmir {
   evrak_seri           String   @default("") @map("sck_ilk_evrak_seri")
   evrak_sira_no        Int      @map("sck_ilk_evrak_sira_no") @db.Int
   evrak_satir_no       Int      @default(0) @map("sck_ilk_evrak_satir_no") @db.Int
-  sck_nerede_cari_kodu String   @default("102.10.001") @db.NVarChar(25)
+  sck_nerede_cari_kodu String   @default("102.10.008") @db.NVarChar(25)
 
   sck_DBCno                              Int      @default(0) @db.SmallInt
   sck_SpecRECno                          Int      @default(0) @db.Int

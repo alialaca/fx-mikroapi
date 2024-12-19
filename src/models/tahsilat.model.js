@@ -194,7 +194,7 @@ class TahsilatModel {
                 fis_sira_no,
                 fis_hesap_kod: '108.10.001',
                 fis_satir_no: 1,
-                fis_aciklama1: `Tah.mak. : ${data.evrak_sira}/${dayjs(data.tarih).format('DD.MM.YYYY')}/${data.aciklama}/102.10.001/T.C. ZİRAAT BANKASI A.Ş./${data.cari_kod}/${cari.unvan}`.slice(0, 127),
+                fis_aciklama1: `Tah.mak. : ${data.evrak_sira}/${dayjs(data.tarih).format('DD.MM.YYYY')}/${data.aciklama}/102.10.008/T.C. ZİRAAT BANKASI A.Ş./${data.cari_kod}/${cari.unvan}`.slice(0, 127),
                 fis_meblag0: data.tutar,
                 fis_meblag1: dovizMeblag,
                 fis_meblag2: data.tutar,
