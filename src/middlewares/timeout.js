@@ -1,15 +1,12 @@
+const ApiError = require("../utils/ApiError");
+const httpStatus = require('http-status');
 module.exports = (req, res, next) => {
     const apiTimeout = 25 * 1000;
     req.setTimeout(apiTimeout, () => {
-        let err = new Error('Request Timeout');
-        err.status = 408;
-        next(err);
+        next(new ApiError(httpStatus.REQUEST_TIMEOUT, 'İstek zaman aşımına uğradı'));
     });
-    // Set the server response timeout for all HTTP requests
     res.setTimeout(apiTimeout, () => {
-        let err = new Error('Service Unavailable');
-        err.status = 503;
-        next(err);
+        next(new ApiError(httpStatus.SERVICE_UNAVAILABLE, 'Servis yanıt vermedi'));
     });
     next();
 }
