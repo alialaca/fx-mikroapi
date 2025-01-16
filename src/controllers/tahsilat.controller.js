@@ -43,7 +43,7 @@ const create = async (req, res, next) => {
     const referans_no = `MK-000-000-${dayjs().year()}-${incrementStringNumber(lastItem.referans_no.split('-').pop())}`
     const evrak_sira = lastItem.evrak_sira + 1
     const tarih = dayjs(req.body.tarih).utc().startOf('day').toISOString();
-    const vade_tarih = dayjs(req.body.vade).utc().startOf('day').toISOString();
+    const vade_tarih = dayjs(req.body.vade).utc().toISOString();
 
     const {aciklama, cari_kod, tutar} = req.body
 
