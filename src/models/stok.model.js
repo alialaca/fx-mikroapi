@@ -10,6 +10,7 @@ class StokModel {
             skip: ((page - 1) * limit),
             take: limit,
             where: {
+                aktarim: true,
                 OR: [
                     {kod: {contains: search}},
                     {kod: {equals: search}},
@@ -86,6 +87,7 @@ class StokModel {
     listCount(search) {
         return this.db['stok'].count({
             where: {
+                aktarim: true,
                 OR: [
                     {kod: {contains: search}},
                     {kod: {equals: search}},
@@ -99,6 +101,7 @@ class StokModel {
     find(kod, {fields, temsilci}) {
         let query = {
             where: {
+                aktarim: true,
                 kod
             },
             select: {
@@ -196,6 +199,7 @@ class StokModel {
     update(kod, data) {
         return this.db['stok'].update({
             where: {
+                aktarim: true,
                 kod
             },
             data

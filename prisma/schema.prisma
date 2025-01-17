@@ -25,8 +25,8 @@ model Cari {
   eposta            String?
   tel               String?
   mutabakat_eposta  String?
-  aktarim           Boolean           @default(false) @db.Bit
-  kilitli           Boolean           @default(false) @db.Bit
+  aktarim           Boolean       @default(false) @db.Bit
+  kilitli           Boolean       @default(false) @db.Bit
   temsilci          Temsilci?     @relation(name: "temsilci", fields: [temsilci_kod], references: [kod], onUpdate: NoAction, onDelete: NoAction)
   eski_temsilci     Temsilci?     @relation(name: "cari_temsilci", fields: [eski_temsilci_kod], references: [kod], onUpdate: NoAction, onDelete: NoAction)
   SiparisOzet       SiparisOzet[]
@@ -75,6 +75,7 @@ model Stok {
   ana_kategori_kod String? @map("sto_anagrup_kod") @db.NVarChar(25)
   alt_kategori_kod String? @map("sto_altgrup_kod") @db.NVarChar(25)
   gorsel           String? @map("sto_resim_url") @db.NVarChar(127)
+  aktarim          Boolean @default(false) @map("sto_CRM_sistemine_aktar_fl") @db.Bit
 
   marka       Marka?           @relation(fields: [marka_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
   miktar      StokMiktar       @relation(fields: [kod], references: [stok_kod], onDelete: NoAction, onUpdate: NoAction)
