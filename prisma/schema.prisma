@@ -536,13 +536,15 @@ model Satis {
 }
 
 model PrimOzet {
-  temsilci_kod String @id
-  alacak_tl    Float?
-  satis_tl     Float?
-  satis_euro   Float?
-  hedef_euro   Float?
-  kar_euro     Float?
-  oran         Float?
+  temsilci_kod    String @id
+  alacak_tl       Float?
+  satis_tl        Float?
+  satis_euro      Float?
+  spit_satis_euro Float?
+  hedef_euro      Float?
+  spit_hedef_euro Float?
+  kar_euro        Float?
+  oran            Float?
 
   temsilci Temsilci? @relation(fields: [temsilci_kod], references: [kod], onDelete: NoAction, onUpdate: NoAction)
 

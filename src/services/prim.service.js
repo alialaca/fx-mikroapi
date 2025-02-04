@@ -19,7 +19,9 @@ class PrimService {
                 alacak_tl: true,
                 satis_tl: true,
                 satis_euro: true,
+                spit_satis_euro: true,
                 hedef_euro: true,
+                spit_hedef_euro: true,
                 kar_euro: true,
                 oran: true
             }
