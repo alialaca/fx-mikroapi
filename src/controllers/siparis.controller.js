@@ -13,11 +13,12 @@ const dayjs = require('dayjs')
 const list = async (req, res, next) => {
     const temsilci = req.query?.temsilci?.split('-')
     const cari = req.query?.cari?.split('-')
+    const stok = req.query?.stok
     const durum = req.query?.durum
     const firstDate = req.query?.firstDate
     const lastDate = req.query?.lastDate
 
-    Siparis.list({cari, temsilci, durum, firstDate, lastDate}, req.paginationOptions)
+    Siparis.list({cari, stok, temsilci, durum, firstDate, lastDate}, req.paginationOptions)
         .then( siparis => {
             res.status(statusCodes.OK).json({
                 meta: {

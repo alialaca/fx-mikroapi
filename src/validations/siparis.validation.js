@@ -5,6 +5,7 @@ const filter = {
     query: Joi.object().keys({
         temsilci: Joi.string(),
         cari: Joi.string(),
+        stok: Joi.string(),
         firstDate: Joi.date().default('2020-01-01'),
         lastDate: Joi.date().default(dayjs('2099-01-01').format('YYYY-MM-DD')),
         page: Joi.number().default(1),

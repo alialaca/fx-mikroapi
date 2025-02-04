@@ -56,7 +56,7 @@ class SiparisModel {
 
         if(cari) where.cari_kod = { in: cari}
         if(temsilci) where.temsilci_kod = { in: temsilci}
-        if(stok) where.stok_kod = stok
+        if(stok) where.stoklar = { some: { stok_kod: stok }}
         if(durum) where.durum = durum
 
         const query = {
@@ -70,7 +70,7 @@ class SiparisModel {
         return this.db['siparisOzet'].findMany(query)
     }
 
-    listCount({cari, temsilci, durum, firstDate, lastDate, stok}) {
+    async listCount({cari, temsilci, durum, firstDate, lastDate, stok}) {
         const where = {
             tarih: {
                 gte: firstDate,
@@ -80,14 +80,15 @@ class SiparisModel {
 
         if(cari) where.cari_kod = { in: cari}
         if(temsilci) where.temsilci_kod = { in: temsilci}
-        if(stok) where.stok_kod = stok
+        if(stok) where.stoklar = { some: { stok_kod: stok }}
         if(durum) where.durum = durum
 
         const query = {
-            where,
+            where
         }
 
-        return this.db['siparisOzet'].count(query)
+        const records = await this.db['siparisOzet'].findMany(query)
+        return records.length
     }
 
     find({serino, sirano, temsilci}) {

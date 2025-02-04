@@ -5,11 +5,12 @@ class SiparisService {
 
     }
 
-    async list({cari, temsilci, durum, firstDate, lastDate}, {page, limit, search}){
+    async list({cari, stok, temsilci, durum, firstDate, lastDate}, {page, limit, search}){
 
         const params = {
             search,
             cari,
+            stok,
             temsilci,
             durum,
             firstDate: dayjs(firstDate).add(3, 'hour').toISOString(),
