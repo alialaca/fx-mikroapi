@@ -169,6 +169,7 @@ class TahsilatModel {
             cha_fis_sirano: fis_sira_no,
             doviz_kur: kur,
             vade: parseInt(dayjs(data.vade).format('YYYYMMDD')),
+            cha_kasa_hizmet: this.BANKA_HESAP_KOD
         }
 
         const dovizMeblag = parseFloat((data.tutar / kur).toFixed(2));
