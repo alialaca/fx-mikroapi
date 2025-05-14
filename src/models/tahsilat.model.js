@@ -8,6 +8,9 @@ dayjs.extend(utc)
 class TahsilatModel {
     constructor() {
         this.db = Prisma()
+        this.KREDI_KARTI_HESAP_KOD = '108.10.005'
+        this.BANKA_HESAP_KOD = '102.10.005'
+        this.BANKA_HESAP_ISIM = 'QNB BANK A.Ş.'
     }
 
     list({cari, temsilci, firstDate, lastDate}, {page, limit}) {
@@ -192,9 +195,9 @@ class TahsilatModel {
                 fis_maliyil: maliyil,
                 fis_tarih: today,
                 fis_sira_no,
-                fis_hesap_kod: '108.10.001',
+                fis_hesap_kod: this.KREDI_KARTI_HESAP_KOD,
                 fis_satir_no: 1,
-                fis_aciklama1: `Tah.mak. : ${data.evrak_sira}/${dayjs(data.tarih).format('DD.MM.YYYY')}/${data.aciklama}/102.10.008/T.C. ZİRAAT BANKASI A.Ş./${data.cari_kod}/${cari.unvan}`.slice(0, 127),
+                fis_aciklama1: `Tah.mak. : ${data.evrak_sira}/${dayjs(data.tarih).format('DD.MM.YYYY')}/${data.aciklama}/${this.BANKA_HESAP_KOD}/${this.BANKA_HESAP_ISIM}/${data.cari_kod}/${cari.unvan}`.slice(0, 127),
                 fis_meblag0: data.tutar,
                 fis_meblag1: dovizMeblag,
                 fis_meblag2: data.tutar,
