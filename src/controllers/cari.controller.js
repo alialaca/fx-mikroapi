@@ -22,6 +22,16 @@ const list = async (req, res, next) => {
     })
 }
 
+const create = async (req, res, next) => {
+    console.log({payload: req.body})
+    Cari.create(req.body)
+        .then(cari => {
+            res.status(statusCodes.OK).json({
+                data: cari
+            })
+        }).catch(next)
+}
+
 const find = async (req, res, next) => {
     const {kod} = req.params
 
@@ -51,6 +61,7 @@ const hareket = async (req, res) => {
 
 module.exports = {
     list,
+    create,
     hareketler,
     hareket,
     find

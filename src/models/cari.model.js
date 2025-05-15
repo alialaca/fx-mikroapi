@@ -120,6 +120,15 @@ class CariModel {
             }
         })
     }
+
+    create(data) {
+        return this.db['cari'].create({
+            data: {
+                ...data,
+                aktarim: true
+            }
+        })
+    }
 }
 
 module.exports = new CariModel()

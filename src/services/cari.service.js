@@ -12,6 +12,10 @@ class CariService {
         return Promise.resolve({data, count})
     }
 
+    async create(data) {
+        return Cari.create(data)
+    }
+
     async find(kod) {
         return Cari.find(kod)
     }
