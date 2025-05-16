@@ -18,6 +18,7 @@ model CariHesap {
   tel                                    String   @default("") @map("cari_CepTel") @db.NVarChar(20)
   temsilci_kodu                          String   @map("cari_temsilci_kodu") @db.NVarChar(25)
   grup_kodu                              String   @default("") @map("cari_grup_kodu") @db.NVarChar(25)
+  aktarim                                Boolean  @default(false) @map("cari_CRM_sistemine_aktar_fl") @db.Bit
   cari_SpecRECno                         Int      @default(0) @map("cari_SpecRECno") @db.Int
   cari_iptal                             Int      @default(0) @map("cari_iptal") @db.Int
   cari_fileid                            Int      @default(31) @map("cari_fileid") @db.SmallInt
@@ -87,7 +88,6 @@ model CariHesap {
   cari_gonderionayi_email                Boolean  @default(false) @db.Bit
   cari_eirsaliye_fl                      Boolean  @default(false) @db.Bit
   cari_eirsaliye_baslangic_tarihi        DateTime @default("1899-12-30T00:00:00.00Z") @db.DateTime
-  cari_CRM_sistemine_aktar_fl            Boolean  @default(false) @db.Bit
   cari_kisi_kimlik_bilgisi_aciklama_turu Int      @default(0) @db.TinyInt
   cari_kamu_kurumu_fl                    Boolean  @default(false) @db.Bit
   cari_Perakende_fl                      Boolean  @default(false) @db.Bit
