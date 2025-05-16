@@ -13,11 +13,11 @@ model CariHesap {
   kod                                    String   @id @map("cari_kod") @db.NVarChar(25)
   muh_kod                                String   @map("cari_muh_kod") @db.NVarChar(40)
   unvan1                                 String   @map("cari_unvan1") @db.NVarChar(127)
-  unvan2                                 String   @map("cari_unvan2") @db.NVarChar(127)
-  eposta                                 String   @map("cari_EMail") @db.NVarChar(127)
-  tel                                    String   @map("cari_CepTel") @db.NVarChar(20)
-  grup_kodu                              String   @map("cari_grup_kodu") @db.NVarChar(25)
+  unvan2                                 String   @default("") @map("cari_unvan2") @db.NVarChar(127)
+  eposta                                 String   @default("") @map("cari_EMail") @db.NVarChar(127)
+  tel                                    String   @default("") @map("cari_CepTel") @db.NVarChar(20)
   temsilci_kodu                          String   @map("cari_temsilci_kodu") @db.NVarChar(25)
+  grup_kodu                              String   @default("") @map("cari_grup_kodu") @db.NVarChar(25)
   cari_SpecRECno                         Int      @default(0) @map("cari_SpecRECno") @db.Int
   cari_iptal                             Int      @default(0) @map("cari_iptal") @db.Int
   cari_fileid                            Int      @default(31) @map("cari_fileid") @db.SmallInt
