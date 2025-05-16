@@ -11,7 +11,6 @@ datasource db {
 
 model CariHesap {
   kod                                    String   @id @map("cari_kod") @db.NVarChar(25)
-  muh_kod                                String   @map("cari_muh_kod") @db.NVarChar(40)
   vkn                                    String   @map("cari_vdaire_no") @db.NVarChar(25)
   unvan1                                 String   @map("cari_unvan1") @db.NVarChar(127)
   unvan2                                 String   @default("") @map("cari_unvan2") @db.NVarChar(127)
