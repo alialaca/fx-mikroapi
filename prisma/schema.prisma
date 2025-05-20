@@ -9,6 +9,98 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model CariHesap {
+  kod                                    String   @id @map("cari_kod") @db.NVarChar(25)
+  vkn                                    String   @map("cari_vdaire_no") @db.NVarChar(25)
+  unvan1                                 String   @map("cari_unvan1") @db.NVarChar(127)
+  unvan2                                 String   @default("") @map("cari_unvan2") @db.NVarChar(127)
+  eposta                                 String   @default("") @map("cari_EMail") @db.NVarChar(127)
+  tel                                    String   @default("") @map("cari_CepTel") @db.NVarChar(20)
+  temsilci_kod                           String   @map("cari_temsilci_kodu") @db.NVarChar(25)
+  grup_kod                               String   @default("") @map("cari_grup_kodu") @db.NVarChar(25)
+  aktarim                                Boolean  @default(false) @map("cari_CRM_sistemine_aktar_fl") @db.Bit
+  cari_SpecRECno                         Int      @default(0) @db.Int
+  cari_iptal                             Int      @default(0) @db.Int
+  cari_fileid                            Int      @default(31) @db.SmallInt
+  cari_hidden                            Int      @default(0) @db.Bit
+  cari_kilitli                           Int      @default(0) @db.Bit
+  cari_degisti                           Int      @default(0) @db.Bit
+  cari_checksum                          Int      @default(0) @db.Int
+  cari_create_user                       Int      @default(100) @db.SmallInt
+  cari_create_date                       DateTime @default(now()) @db.DateTime
+  cari_lastup_user                       Int      @default(100) @db.SmallInt
+  cari_lastup_date                       DateTime @default(now()) @db.DateTime
+  cari_hareket_tipi                      Int      @default(1) @db.TinyInt
+  cari_baglanti_tipi                     Int      @default(0) @db.TinyInt
+  cari_stok_alim_cinsi                   Int      @default(0) @db.TinyInt
+  cari_stok_satim_cinsi                  Int      @default(0) @db.TinyInt
+  cari_doviz_cinsi                       Int      @default(0) @db.TinyInt
+  cari_doviz_cinsi1                      Int      @default(255) @db.TinyInt
+  cari_doviz_cinsi2                      Int      @default(255) @db.TinyInt
+  cari_vade_fark_yuz                     Float    @default(25) @db.Float()
+  cari_vade_fark_yuz1                    Float    @default(0) @db.Float()
+  cari_vade_fark_yuz2                    Float    @default(0) @db.Float()
+  cari_KurHesapSekli                     Int      @default(1) @db.TinyInt
+  cari_satis_fk                          Int      @default(1) @db.Int
+  cari_odeme_cinsi                       Int      @default(0) @db.TinyInt
+  cari_odeme_gunu                        Int      @default(0) @db.TinyInt
+  cari_odemeplan_no                      Int      @default(0) @db.Int
+  cari_opsiyon_gun                       Int      @default(0) @db.Int
+  cari_cariodemetercihi                  Int      @default(0) @db.TinyInt
+  cari_fatura_adres_no                   Int      @default(1) @db.Int
+  cari_sevk_adres_no                     Int      @default(1) @db.Int
+  cari_EftHesapNum                       Int      @default(1) @db.TinyInt
+  sektor_kodu                            String   @default("") @map("cari_sektor_kodu") @db.NVarChar(25)
+  cari_firma_acik_kapal                  Boolean  @default(false) @db.Bit
+  cari_BUV_tabi_fl                       Boolean  @default(false) @db.Bit
+  cari_cari_kilitli_flg                  Boolean  @default(false) @db.Bit
+  cari_etiket_bas_fl                     Boolean  @default(false) @db.Bit
+  cari_Detay_incele_flg                  Boolean  @default(false) @db.Bit
+  cari_efatura_fl                        Boolean  @default(false) @db.Bit
+  cari_POS_ongpesyuzde                   Float    @default(0) @db.Float()
+  cari_POS_ongtaksayi                    Float    @default(0) @db.Float()
+  cari_POS_ongIskOran                    Float    @default(0) @db.Float()
+  cari_kaydagiristarihi                  DateTime @default(now()) @db.DateTime
+  cari_KabEdFCekTutar                    Float    @default(0) @db.Float()
+  cari_hal_caritip                       Int      @default(0) @db.TinyInt
+  cari_HalKomYuzdesi                     Float    @default(0) @db.Float()
+  cari_TeslimSuresi                      Int      @default(0) @db.SmallInt
+  cari_VarsayilanGirisDepo               Int      @default(0) @db.Int
+  cari_VarsayilanCikisDepo               Int      @default(0) @db.Int
+  cari_Portal_Enabled                    Int      @default(0) @db.Bit
+  cari_BagliOrtaklisa_Firma              Int      @default(0) @db.Int
+  cari_b_bakiye_degerlendirilmesin_fl    Int      @default(0) @db.Int
+  cari_a_bakiye_degerlendirilmesin_fl    Int      @default(0) @db.Int
+  cari_b_irsbakiye_degerlendirilmesin_fl Int      @default(0) @db.Int
+  cari_a_irsbakiye_degerlendirilmesin_fl Int      @default(0) @db.Int
+  cari_b_sipbakiye_degerlendirilmesin_fl Int      @default(0) @db.Int
+  cari_a_sipbakiye_degerlendirilmesin_fl Int      @default(0) @db.Int
+  cari_KrediRiskTakibiVar_flg            Int      @default(0) @db.Int
+  cari_odeme_sekli                       Int      @default(0) @db.TinyInt
+  cari_TeminatMekAlacakMuhKodu           String   @default("910") @db.NVarChar(40)
+  cari_TeminatMekBorcMuhKodu             String   @default("920") @db.NVarChar(40)
+  cari_VerilenDepozitoTeminatMuhKodu     String   @default("226") @db.NVarChar(40)
+  cari_AlinanDepozitoTeminatMuhKodu      String   @default("326") @db.NVarChar(40)
+  cari_def_efatura_cinsi                 Int      @default(0) @db.TinyInt
+  cari_otv_tevkifatina_tabii_fl          Boolean  @default(false) @db.Bit
+  cari_efatura_baslangic_tarihi          DateTime @default("1899-12-30T00:00:00.00Z") @db.DateTime
+  cari_gonderionayi_sms                  Boolean  @default(false) @db.Bit
+  cari_gonderionayi_email                Boolean  @default(false) @db.Bit
+  cari_eirsaliye_fl                      Boolean  @default(false) @db.Bit
+  cari_eirsaliye_baslangic_tarihi        DateTime @default("1899-12-30T00:00:00.00Z") @db.DateTime
+  cari_kisi_kimlik_bilgisi_aciklama_turu Int      @default(0) @db.TinyInt
+  cari_kamu_kurumu_fl                    Boolean  @default(false) @db.Bit
+  cari_Perakende_fl                      Boolean  @default(false) @db.Bit
+  cari_yeni_dogan_mi                     Boolean  @default(false) @db.Bit
+  cari_def_eirsaliye_cinsi               Int      @default(0) @db.TinyInt
+  cari_nakakincelenmesi                  Boolean  @default(false) @db.Bit
+  cari_vergimukellefidegil_mi            Boolean  @default(false) @db.Bit
+  cari_sirket_turu                       Int      @default(1) @db.TinyInt
+  cari_faal_terk                         Int      @default(0) @db.TinyInt
+
+  @@map("CARI_HESAPLAR")
+}
+
 // kod | isim | plasiyer | bakiye | ciro
 model Cari {
   kod               String        @id
