@@ -16,43 +16,43 @@ model CariHesap {
   unvan2                                 String   @default("") @map("cari_unvan2") @db.NVarChar(127)
   eposta                                 String   @default("") @map("cari_EMail") @db.NVarChar(127)
   tel                                    String   @default("") @map("cari_CepTel") @db.NVarChar(20)
-  temsilci_kod                          String   @map("cari_temsilci_kodu") @db.NVarChar(25)
-  grup_kod                              String   @default("") @map("cari_grup_kodu") @db.NVarChar(25)
+  temsilci_kod                           String   @map("cari_temsilci_kodu") @db.NVarChar(25)
+  grup_kod                               String   @default("") @map("cari_grup_kodu") @db.NVarChar(25)
   aktarim                                Boolean  @default(false) @map("cari_CRM_sistemine_aktar_fl") @db.Bit
-  cari_SpecRECno                         Int      @default(0) @map("cari_SpecRECno") @db.Int
-  cari_iptal                             Int      @default(0) @map("cari_iptal") @db.Int
-  cari_fileid                            Int      @default(31) @map("cari_fileid") @db.SmallInt
-  cari_hidden                            Int      @default(0) @map("cari_hidden") @db.Bit
-  cari_kilitli                           Int      @default(0) @map("cari_kilitli") @db.Bit
-  cari_degisti                           Int      @default(0) @map("cari_degisti") @db.Bit
-  cari_checksum                          Int      @default(0) @map("cari_checksum") @db.Int
-  cari_create_user                       Int      @default(100) @map("cari_create_user") @db.SmallInt
-  cari_create_date                       DateTime @default(now()) @map("cari_create_date") @db.DateTime
-  cari_lastup_user                       Int      @default(100) @map("cari_lastup_user") @db.SmallInt
-  cari_lastup_date                       DateTime @default(now()) @map("cari_lastup_date") @db.DateTime
-  cari_hareket_tipi                      Int      @default(1) @map("cari_hareket_tipi") @db.TinyInt
-  cari_baglanti_tipi                     Int      @default(0) @map("cari_baglanti_tipi") @db.TinyInt
-  cari_stok_alim_cinsi                   Int      @default(0) @map("cari_stok_alim_cinsi") @db.TinyInt
-  cari_stok_satim_cinsi                  Int      @default(0) @map("cari_stok_satim_cinsi") @db.TinyInt
-  cari_doviz_cinsi                       Int      @default(0) @map("cari_doviz_cinsi") @db.TinyInt
-  cari_doviz_cinsi1                      Int      @default(255) @map("cari_doviz_cinsi1") @db.TinyInt
-  cari_doviz_cinsi2                      Int      @default(255) @map("cari_doviz_cinsi2") @db.TinyInt
-  cari_vade_fark_yuz                     Float    @default(25) @map("cari_vade_fark_yuz") @db.Float()
-  cari_vade_fark_yuz1                    Float    @default(0) @map("cari_vade_fark_yuz1") @db.Float()
-  cari_vade_fark_yuz2                    Float    @default(0) @map("cari_vade_fark_yuz2") @db.Float()
-  cari_KurHesapSekli                     Int      @default(1) @map("cari_KurHesap") @db.TinyInt
-  cari_satis_fk                          Int      @default(1) @map("cari_satis_fk") @db.Int
-  cari_odeme_cinsi                       Int      @default(0) @map("cari_odeme_cinsi") @db.TinyInt
-  cari_odeme_gunu                        Int      @default(0) @map("cari_odeme_gunu") @db.TinyInt
-  cari_odemeplan_no                      Int      @default(0) @map("cari_odemeplan_no") @db.Int
-  cari_opsiyon_gun                       Int      @default(0) @map("cari_opsiyon_gun") @db.Int
-  cari_cariodemetercihi                  Int      @default(0) @map("cari_cariodemetercihi") @db.TinyInt
-  cari_fatura_adres_no                   Int      @default(1) @map("cari_fatura_adres_no") @db.Int
-  cari_sevk_adres_no                     Int      @default(1) @map("cari_sevk_adres_no") @db.Int
-  cari_EftHesapNum                       Int      @default(1) @map("cari_efthesapnum") @db.TinyInt
+  cari_SpecRECno                         Int      @default(0) @db.Int
+  cari_iptal                             Int      @default(0) @db.Int
+  cari_fileid                            Int      @default(31) @db.SmallInt
+  cari_hidden                            Int      @default(0) @db.Bit
+  cari_kilitli                           Int      @default(0) @db.Bit
+  cari_degisti                           Int      @default(0) @db.Bit
+  cari_checksum                          Int      @default(0) @db.Int
+  cari_create_user                       Int      @default(100) @db.SmallInt
+  cari_create_date                       DateTime @default(now()) @db.DateTime
+  cari_lastup_user                       Int      @default(100) @db.SmallInt
+  cari_lastup_date                       DateTime @default(now()) @db.DateTime
+  cari_hareket_tipi                      Int      @default(1) @db.TinyInt
+  cari_baglanti_tipi                     Int      @default(0) @db.TinyInt
+  cari_stok_alim_cinsi                   Int      @default(0) @db.TinyInt
+  cari_stok_satim_cinsi                  Int      @default(0) @db.TinyInt
+  cari_doviz_cinsi                       Int      @default(0) @db.TinyInt
+  cari_doviz_cinsi1                      Int      @default(255) @db.TinyInt
+  cari_doviz_cinsi2                      Int      @default(255) @db.TinyInt
+  cari_vade_fark_yuz                     Float    @default(25) @db.Float()
+  cari_vade_fark_yuz1                    Float    @default(0) @db.Float()
+  cari_vade_fark_yuz2                    Float    @default(0) @db.Float()
+  cari_KurHesapSekli                     Int      @default(1) @db.TinyInt
+  cari_satis_fk                          Int      @default(1) @db.Int
+  cari_odeme_cinsi                       Int      @default(0) @db.TinyInt
+  cari_odeme_gunu                        Int      @default(0) @db.TinyInt
+  cari_odemeplan_no                      Int      @default(0) @db.Int
+  cari_opsiyon_gun                       Int      @default(0) @db.Int
+  cari_cariodemetercihi                  Int      @default(0) @db.TinyInt
+  cari_fatura_adres_no                   Int      @default(1) @db.Int
+  cari_sevk_adres_no                     Int      @default(1) @db.Int
+  cari_EftHesapNum                       Int      @default(1) @db.TinyInt
   sektor_kodu                            String   @default("") @map("cari_sektor_kodu") @db.NVarChar(25)
-  cari_firma_acik_kapal                  Boolean  @default(false) @map("cari_firma_acik_kapal") @db.Bit
-  cari_BUV_tabi_fl                       Boolean  @default(false) @map("cari_BUV_tabi_fl") @db.Bit
+  cari_firma_acik_kapal                  Boolean  @default(false) @db.Bit
+  cari_BUV_tabi_fl                       Boolean  @default(false) @db.Bit
   cari_cari_kilitli_flg                  Boolean  @default(false) @db.Bit
   cari_etiket_bas_fl                     Boolean  @default(false) @db.Bit
   cari_Detay_incele_flg                  Boolean  @default(false) @db.Bit
@@ -98,7 +98,7 @@ model CariHesap {
   cari_sirket_turu                       Int      @default(1) @db.TinyInt
   cari_faal_terk                         Int      @default(0) @db.TinyInt
 
-  @@map("CARI_HESAPLARI")
+  @@map("CARI_HESAPLAR")
 }
 
 // kod | isim | plasiyer | bakiye | ciro
