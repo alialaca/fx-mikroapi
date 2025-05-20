@@ -23,7 +23,6 @@ const list = async (req, res, next) => {
 }
 
 const create = async (req, res, next) => {
-    console.log({payload: req.body})
     Cari.create(req.body)
         .then(cari => {
             res.status(statusCodes.OK).json({

@@ -124,24 +124,55 @@ class CariModel {
     /**
     * Yeni Cari Hesap Oluştur
     * @param {object} data
-    * @param {string} data.kod - Cari Hesap Kodu
     * @param {string} data.unvan - Cari Hesap Unvanı
     * @param {string} data.vkn - Cari Hesap VKN
     * @param {string} data.tel - Cari Hesap Telefonu
     * @param {string} data.eposta - Cari Hesap E-Postası
     * @param {string} data.temsilci_kod - Cari Hesap Temsilci Kodu
      */
-    create({kod, vkn, unvan, tel, eposta, temsilci_kod}) {
+    async create({vkn, unvan, tel, eposta, temsilci_kod}) {
+        const lastRecord = await this.db['cariHesap'].findFirst({
+            where: {
+                kod: {startsWith: '120.1'},
+            },
+            orderBy: {
+                kod: 'desc'
+            },
+            select: {
+                kod: true
+            }
+        })
+
+        if (!lastRecord) {
+            return new Error('Son kayıt bulunamadı')
+        }
+
+        let lastRecordKod = lastRecord.kod //'120.19.999'
+        lastRecordKod = lastRecordKod.replaceAll('.','') //'12019999'
+        lastRecordKod = parseInt(lastRecordKod) // 12019999
+        let nextKod = lastRecordKod + 1 // 12020000
+        nextKod = nextKod.toString() // '12020000'
+        nextKod = nextKod.replace(/(\d{3})(\d{2})(\d{3})/, '$1.$2.$3') // '120.20.0000'
+
         return this.db['cariHesap'].create({
             data: {
                 vkn,
-                kod,
+                kod: nextKod,
                 unvan1: unvan,
                 eposta,
                 tel,
                 temsilci_kod,
                 grup_kod: 'SRV',
                 aktarim: false
+            },
+            select: {
+                kod: true,
+                unvan1: true,
+                vkn: true,
+                eposta: true,
+                tel: true,
+                temsilci_kod: true,
+                grup_kod: true
             }
         })
     }
