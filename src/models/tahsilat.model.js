@@ -232,7 +232,8 @@ class TahsilatModel {
             ilk_hareket_tarihi: data.tarih,
             son_hareket_tarihi: data.tarih,
             evrak_seri: "",
-            evrak_sira_no: data.evrak_sira
+            evrak_sira_no: data.evrak_sira,
+            sck_nerede_cari_kodu: this.BANKA_HESAP_KOD
         }
 
         const [tahsilatRecord, fisRrecord] = await this.db.$transaction([
