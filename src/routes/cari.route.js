@@ -6,10 +6,7 @@ const router = require('express').Router()
 
 router
     .get('/', Cari.list)
-    .post('/', validate(cariValidation.create), (req, res) => {
-        console.log({ payload: req.body })
-        return res.status(200).json({data: { kod: '120.19.999', unvan: req.bodu.unvan}})
-    })
+    .post('/', validate(cariValidation.create), Cari.create)
     .get('/:kod', Cari.find)
     .get('/:kod/hareketler', Cari.hareketler)
     .get('/:kod/hareketler/:faturaId', Cari.hareket)
