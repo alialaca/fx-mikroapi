@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "set NODE_ENV=development && nodemon ./bin/www",
-    "prod": "set NODE_ENV=production && pm2 start ./bin/www --name mikroapi --watch --ignore-watch=\"node_modules, logs\"",
+    "prod": "set NODE_ENV=production && npx prisma generate && pm2 start ./bin/www --name mikroapi --watch --ignore-watch=\"node_modules, logs\"",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
     "prisma:format": "npx prisma format",
     "prisma:generate": "npx prisma generate"
