@@ -121,11 +121,27 @@ class CariModel {
         })
     }
 
-    create(data) {
-        return this.db['cari'].create({
+    /**
+    * Yeni Cari Hesap Oluştur
+    * @param {object} data
+    * @param {string} data.kod - Cari Hesap Kodu
+    * @param {string} data.unvan - Cari Hesap Unvanı
+    * @param {string} data.vkn - Cari Hesap VKN
+    * @param {string} data.tel - Cari Hesap Telefonu
+    * @param {string} data.eposta - Cari Hesap E-Postası
+    * @param {string} data.temsilci_kod - Cari Hesap Temsilci Kodu
+     */
+    create({kod, vkn, unvan, tel, eposta, temsilci_kod}) {
+        return this.db['cariHesap'].create({
             data: {
-                ...data,
-                aktarim: true
+                vkn,
+                kod,
+                unvan1: unvan,
+                eposta,
+                tel,
+                temsilci_kod,
+                grup_kod: 'SRV',
+                aktarim: false
             }
         })
     }
