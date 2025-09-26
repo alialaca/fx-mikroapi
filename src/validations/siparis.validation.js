@@ -28,7 +28,7 @@ const create = {
         evrak_seri: Joi.string().empty(['', null]).default(''),
         olusturan: Joi.number().required(),
         temsilci: Joi.string().required(),
-        cari: Joi.string().required(),
+        cari: Joi.string().length(10).required(),
         odemeplan: Joi.number().required(),
         depo: Joi.number().required().default(1),
         doviz_cinsi: Joi.number().default(0),
