@@ -46,7 +46,8 @@ class SatisModel {
             cari: {
                 select: {
                     kod: true,
-                    unvan: true
+                    unvan: true,
+                    sektor: true
                 }
             },
             bolge: true,
