@@ -199,7 +199,6 @@ class StokModel {
     update(kod, data) {
         return this.db['stok'].update({
             where: {
-                aktarim: true,
                 kod
             },
             data
