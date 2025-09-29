@@ -9,8 +9,12 @@ class TahsilatModel {
     constructor() {
         this.db = Prisma()
         this.KREDI_KARTI_HESAP_KOD = '108.10.005'
-        this.BANKA_HESAP_KOD = '102.10.005'
-        this.BANKA_HESAP_ISIM = 'QNB BANK A.Ş.'
+        this.bankalar = {
+            qnbfinans: { kod: '102.10.005', isim: 'QNB BANK A.Ş.' },
+            akbank: { kod: '102.10.004', isim: 'AKBANK A.Ş' },
+            vakifbank: { kod: '102.10.008', isim: 'TÜRKİYE VAKIFLAR BANKASI T.A.O.' },
+            ziraat: { kod: '102.10.001', isim: 'T.C ZİRAAT BANKASI' },
+        }
     }
 
     list({cari, temsilci, firstDate, lastDate}, {page, limit}) {
@@ -111,6 +115,9 @@ class TahsilatModel {
     }
 
     async create(data) {
+        const banka = this.bankalar[data.banka]
+        if (!banka) return new Error('Banka bilgisi hatalı veya eksik')
+
         const cari = await this.db['cari'].findUnique({
             where: {kod: data.cari_kod},
             select: {
@@ -169,7 +176,7 @@ class TahsilatModel {
             cha_fis_sirano: fis_sira_no,
             doviz_kur: kur,
             vade: parseInt(dayjs(data.vade).format('YYYYMMDD')),
-            cha_kasa_hizkod: this.BANKA_HESAP_KOD
+            cha_kasa_hizkod: banka.kod
         }
 
         const dovizMeblag = parseFloat((data.tutar / kur).toFixed(2));
@@ -198,7 +205,7 @@ class TahsilatModel {
                 fis_sira_no,
                 fis_hesap_kod: this.KREDI_KARTI_HESAP_KOD,
                 fis_satir_no: 1,
-                fis_aciklama1: `Tah.mak. : ${data.evrak_sira}/${dayjs(data.tarih).format('DD.MM.YYYY')}/${data.aciklama}/${this.BANKA_HESAP_KOD}/${this.BANKA_HESAP_ISIM}/${data.cari_kod}/${cari.unvan}`.slice(0, 127),
+                fis_aciklama1: `Tah.mak. : ${data.evrak_sira}/${dayjs(data.tarih).format('DD.MM.YYYY')}/${data.aciklama}/${banka.kod}/${banka.isim}/${data.cari_kod}/${cari.unvan}`.slice(0, 127),
                 fis_meblag0: data.tutar,
                 fis_meblag1: dovizMeblag,
                 fis_meblag2: data.tutar,
@@ -233,7 +240,7 @@ class TahsilatModel {
             son_hareket_tarihi: data.tarih,
             evrak_seri: "",
             evrak_sira_no: data.evrak_sira,
-            sck_nerede_cari_kodu: this.BANKA_HESAP_KOD
+            sck_nerede_cari_kodu: banka.kod
         }
 
         const [tahsilatRecord, fisRrecord] = await this.db.$transaction([
