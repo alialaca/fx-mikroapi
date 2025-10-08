@@ -10,7 +10,7 @@ class TahsilatModel {
         this.db = Prisma()
         this.KREDI_KARTI_HESAP_KOD = '108.10.005'
         this.bankalar = {
-            qnbfinans: { kod: '102.10.005', isim: 'QNB BANK A.Ş.' },
+            qnbpay: { kod: '102.10.005', isim: 'QNB BANK A.Ş.' },
             akbank: { kod: '102.10.004', isim: 'AKBANK A.Ş' },
             vakifbank: { kod: '102.10.008', isim: 'TÜRKİYE VAKIFLAR BANKASI T.A.O.' },
             ziraat: { kod: '102.10.001', isim: 'T.C ZİRAAT BANKASI' },
