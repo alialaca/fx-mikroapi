@@ -131,7 +131,7 @@ class TahsilatModel {
             }
         })
 
-        if (!cari.kod) return new Error('Cari kod hatalı, karşılık bulunamadı')
+        if (!cari.kod) throw new Error('Cari kod hatalı, karşılık bulunamadı')
         data.temsilci_kod = cari.temsilci_kod
 
         const maliyil = dayjs(data.tarih).year()
