@@ -45,7 +45,7 @@ const create = async (req, res, next) => {
     const tarih = dayjs(req.body.tarih).utc().startOf('day').toISOString();
     const vade_tarih = dayjs(req.body.vade).utc().toISOString();
 
-    const {aciklama, cari_kod, tutar} = req.body
+    const {aciklama, cari_kod, tutar, banka} = req.body
 
     const data = {
         id: uuid().toUpperCase(),
@@ -59,7 +59,8 @@ const create = async (req, res, next) => {
         aratoplam: tutar,
         vade: vade_tarih,
         fis_tarihi: tarih,
-        doviz_kur: 1
+        doviz_kur: 1,
+        banka
     }
 
     Tahsilat.create(data)

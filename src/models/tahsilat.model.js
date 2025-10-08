@@ -118,6 +118,8 @@ class TahsilatModel {
         const banka = this.bankalar[data.banka]
         if (!banka) return new Error('Banka bilgisi hatalı veya eksik')
 
+        delete data.banka
+
         const cari = await this.db['cari'].findUnique({
             where: {kod: data.cari_kod},
             select: {
