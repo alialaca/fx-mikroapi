@@ -40,7 +40,7 @@ class StokModel {
                 query.select.miktar = {
                     select: {
                         merkez: true,
-                        izmir_kiralik: true,
+                        uretim: true,
                         balikesir: true,
                         istanbul: true,
                         servis: true
@@ -135,7 +135,7 @@ class StokModel {
             query.select.miktar = {
                 select: {
                     merkez: true,
-                    izmir_kiralik: true,
+                    uretim: true,
                     balikesir: true,
                     istanbul: true,
                     servis: true
