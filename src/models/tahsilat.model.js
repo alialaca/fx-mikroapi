@@ -10,12 +10,9 @@ class TahsilatModel {
         this.db = Prisma()
         this.KREDI_KARTI_HESAP_KOD = '108.10.005'
         this.bankalar = {
-            qnbpay: { kod: '102.10.005', isim: 'QNB BANK A.Ş.' },
-            akbank: { kod: '102.10.004', isim: 'AKBANK A.Ş' },
-            vakifbank: { kod: '102.10.008', isim: 'TÜRKİYE VAKIFLAR BANKASI T.A.O.' },
-            ziraat: { kod: '102.10.001', isim: 'T.C ZİRAAT BANKASI' },
             qnbpay: { kod: '102.10.005', isim: 'QNB BANK A.Ş.', krediKart: '108.10.005' },
             akbank: { kod: '102.10.004', isim: 'AKBANK A.Ş', krediKart: '108.10.004' },
+            vakifbank: { kod: '102.10.008', isim: 'TÜRKİYE VAKIFLAR BANKASI T.A.O.', krediKart: '108.10.008' },
             ziraat: { kod: '102.10.001', isim: 'T.C ZİRAAT BANKASI', krediKart: '108.10.001' },
         }
     }
@@ -208,7 +205,7 @@ class TahsilatModel {
                 fis_maliyil: maliyil,
                 fis_tarih: today,
                 fis_sira_no,
-                fis_hesap_kod: this.KREDI_KARTI_HESAP_KOD,
+                fis_hesap_kod: banka.krediKart,
                 fis_satir_no: 1,
                 fis_aciklama1: `Tah.mak. : ${data.evrak_sira}/${dayjs(data.tarih).format('DD.MM.YYYY')}/${data.aciklama}/${banka.kod}/${banka.isim}/${data.cari_kod}/${cari.unvan}`.slice(0, 127),
                 fis_meblag0: data.tutar,
