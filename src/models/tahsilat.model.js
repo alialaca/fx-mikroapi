@@ -14,6 +14,9 @@ class TahsilatModel {
             akbank: { kod: '102.10.004', isim: 'AKBANK A.Ş' },
             vakifbank: { kod: '102.10.008', isim: 'TÜRKİYE VAKIFLAR BANKASI T.A.O.' },
             ziraat: { kod: '102.10.001', isim: 'T.C ZİRAAT BANKASI' },
+            qnbpay: { kod: '102.10.005', isim: 'QNB BANK A.Ş.', krediKart: '108.10.005' },
+            akbank: { kod: '102.10.004', isim: 'AKBANK A.Ş', krediKart: '108.10.004' },
+            ziraat: { kod: '102.10.001', isim: 'T.C ZİRAAT BANKASI', krediKart: '108.10.001' },
         }
     }
 
