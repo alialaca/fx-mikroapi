@@ -23,6 +23,13 @@ const list = async (req, res, next) => {
 }
 
 const create = async (req, res, next) => {
+    const cariRecord = await Cari.findByVKN(req.body.vkn)
+    if (cariRecord) {
+        return res.status(statusCodes.CONFLICT).json({
+            message: 'Bu Vergi Kimlik Numarasına (VKN) sahip başka bir cari hesap zaten mevcut.'
+        })
+    }
+
     Cari.create(req.body)
         .then(cari => {
             res.status(statusCodes.OK).json({

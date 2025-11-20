@@ -17,7 +17,11 @@ class CariService {
     }
 
     async find(kod) {
-        return Cari.find(kod)
+        return Cari.find({kod})
+    }
+
+    async findByVKN(vkn) {
+        return Cari.find({vkn})
     }
 }
 

@@ -73,9 +73,12 @@ class CariModel {
         })
     }
 
-    find(kod) {
+    find({kod, vkn}) {
+        let where
+        if (kod) where = { kod, aktarim: true }
+        if (vkn) where = { vkn }
         return this.db['cari'].findFirst({
-            where: {kod, aktarim: true},
+            where,
             select: {
                 kod: true,
                 unvan: true,
