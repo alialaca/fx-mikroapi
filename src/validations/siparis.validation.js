@@ -36,7 +36,7 @@ const create = {
         stoklar: Joi.array().min(1).items({
             stok: Joi.string().required(),
             miktar: Joi.number().required().min(0),
-            birim_fiyat: Joi.number().precision(3),
+            birim_fiyat: Joi.number().greater(0).precision(3),
             iskonto: Joi.number().min(0).default(0),
             vergi: Joi.number(),
             aciklama: Joi.string().empty(['', null]).default("")
