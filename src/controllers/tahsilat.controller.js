@@ -42,8 +42,8 @@ const create = async (req, res, next) => {
     const lastItem = await Tahsilat.lastItem() //{ referans_no: 'MK-000-000-2024-00001581', evrak_sira: 3365 }
     const referans_no = `MK-000-000-${dayjs().year()}-${incrementStringNumber(lastItem.referans_no.split('-').pop())}`
     const evrak_sira = lastItem.evrak_sira + 1
-    const tarih = dayjs(req.body.tarih).utc().startOf('day').toISOString();
-    const vade_tarih = dayjs(req.body.vade).utc().toISOString();
+    const tarih = dayjs.utc(req.body.tarih).startOf('day').toISOString();
+    const vade_tarih = dayjs.utc(req.body.vade).toISOString();
 
     const {aciklama, cari_kod, tutar, banka} = req.body
 
