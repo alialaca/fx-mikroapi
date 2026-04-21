@@ -3,7 +3,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const {pagination, dbConnectionChecker, timeout, errorHandler} = require('./middlewares')
 
-const routes = require('./routes')
+const registerModuleRoutes = require('./loaders/routes.loader')
 
 const app = express();
 
@@ -27,20 +27,7 @@ app.use(timeout)
 // app.use(dbConnectionChecker)
 app.use(pagination.initPaginate)
 
-app.use('/cari', routes.cariRoute);
-app.use('/stok', routes.stokRoute);
-app.use('/temsilci', routes.temsilciRoute)
-app.use('/depo', routes.depoRoute)
-app.use('/siparis', routes.siparisRoute)
-app.use('/odeme-plan', routes.odemePlanRoute)
-app.use('/satis', routes.satisRoute)
-app.use('/aykur', routes.aykurRoute)
-app.use('/maliyet', routes.maliyetRoute)
-app.use('/kampanya', routes.kampanyaRoute)
-app.use('/rapor', routes.raporRoute)
-app.use('/tahsilat', routes.tahsilatRoute)
-app.use('/cihaz-hareket', routes.cihazHareketRoute)
-app.use('/fiyat-liste', routes.fiyatListeRoute)
+registerModuleRoutes(app)
 
 app.use('*', (req, res) => {
     res.status(404).json()
