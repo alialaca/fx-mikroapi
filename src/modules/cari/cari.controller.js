@@ -1,0 +1,75 @@
+const statusCodes = require('http-status-codes')
+const Cari = require('./cari.service')
+const CariHareket = require('./cari_hareket.service')
+const list = async (req, res, next) => {
+    const temsilci = req.query?.temsilci?.split('-')
+    req.paginationOptions.search = req.query.search || ''
+
+    Cari.list(temsilci, req.paginationOptions)
+        .then(cari => {
+            res.status(statusCodes.OK).json({
+                meta: {
+                    pagination: {
+                        ...req.paginationOptions,
+                        total: cari.count
+                    }
+                },
+                data: cari.data
+            })
+        }).catch(error => {
+        console.log('Hata')
+        console.log(error)
+        next(error)
+    })
+}
+
+const create = async (req, res, next) => {
+    const cariRecord = await Cari.findByVKN(req.body.vkn)
+    if (cariRecord) {
+        return res.status(statusCodes.CONFLICT).json({
+            message: 'Bu Vergi Kimlik Numarasına (VKN) sahip başka bir cari hesap zaten mevcut.'
+        })
+    }
+
+    Cari.create(req.body)
+        .then(cari => {
+            res.status(statusCodes.OK).json({
+                data: cari
+            })
+        }).catch(next)
+}
+
+const find = async (req, res, next) => {
+    const {kod} = req.params
+
+    Cari.find(kod)
+        .then(cari => {
+            res.status(statusCodes.OK).json({
+                data: cari
+            })
+        }).catch(next)
+}
+
+const hareketler = async (req, res) => {
+    const records = await CariHareket.find(req.params.kod)
+
+    res.status(statusCodes.OK).json({
+        data: records
+    })
+}
+
+const hareket = async (req, res) => {
+    const data = await CariHareket.faturaDetay(req.params.faturaId)
+
+    res.status(statusCodes.OK).json({
+        data
+    })
+}
+
+module.exports = {
+    list,
+    create,
+    hareketler,
+    hareket,
+    find
+}
