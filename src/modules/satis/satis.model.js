@@ -1,10 +1,8 @@
-const {PrismaClient: Prisma} = require('@prisma/client')
+const prisma = require('../../services/prisma')
 
 class SatisModel {
     constructor() {
-        this.db = new Prisma({
-            log: ['error']
-        })
+        this.db = prisma
     }
 
     ozet({yil, type, temsilci = [], cari_kod = null}) {

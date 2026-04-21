@@ -1,8 +1,8 @@
-const { PrismaClient } = require('@prisma/client');
+const prisma = require('../../services/prisma');
 
 class Model {
     constructor() {
-        this.prisma = new PrismaClient();
+        this.prisma = prisma;
     }
 
     async list(tableName) {

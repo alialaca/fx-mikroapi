@@ -1,8 +1,8 @@
-const Prisma = require('../../services/prisma')
+const prisma = require('../../services/prisma')
 
 class AciklamaModel {
     constructor() {
-        this.db = Prisma()
+        this.db = prisma
     }
     async create(data){
         const result = await this.db.aciklama.create({

@@ -1,8 +1,8 @@
-const { PrismaClient } = require( '@prisma/client' )
+const prisma = require('../../services/prisma')
 
 class CariHareketModel {
     constructor() {
-        this.db = new PrismaClient()
+        this.db = prisma
     }
 
     find(carikod) {

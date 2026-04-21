@@ -1,8 +1,8 @@
-const Prisma = require('../../services/prisma')
+const prisma = require('../../services/prisma')
 
 class FiyatListModel {
     constructor() {
-        this.db = Prisma()
+        this.db = prisma
     }
 
     list(){

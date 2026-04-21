@@ -1,8 +1,8 @@
-const { PrismaClient } = require( '@prisma/client' )
+const prisma = require('../../services/prisma')
 
 class TemsilciModel {
     constructor() {
-        this.db = new PrismaClient()
+        this.db = prisma
     }
 
     list(){

@@ -1,8 +1,8 @@
-const Prisma = require('../../services/prisma')
+const prisma = require('../../services/prisma')
 
 class SiparisModel {
     constructor() {
-        this.db = Prisma()
+        this.db = prisma
     }
 
     list({search, cari, temsilci, durum, firstDate, lastDate, stok, fields = []}, {page, limit}){

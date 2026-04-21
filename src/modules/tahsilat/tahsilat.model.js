@@ -1,4 +1,4 @@
-const Prisma = require('../../services/prisma')
+const prisma = require('../../services/prisma')
 const dayjs = require("dayjs");
 const utc = require('dayjs/plugin/utc')
 const {ignore} = require("nodemon/lib/rules");
@@ -7,7 +7,7 @@ dayjs.extend(utc)
 
 class TahsilatModel {
     constructor() {
-        this.db = Prisma()
+        this.db = prisma
         this.KREDI_KARTI_HESAP_KOD = '108.10.005'
         this.bankalar = {
             qnbpay: { kod: '102.10.005', isim: 'QNB BANK A.Ş.', krediKart: '108.10.005' },
