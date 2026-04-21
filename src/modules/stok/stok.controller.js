@@ -1,5 +1,5 @@
 const statusCodes = require('http-status-codes')
-const {Stok} = require('./stok.service')
+const Stok = require('./stok.service')
 const list = async (req, res, next) => {
 
     let fields = req.query.project

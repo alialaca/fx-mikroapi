@@ -1,6 +1,6 @@
 const statusCodes = require('http-status-codes')
 const Siparis = require('./siparis.service')
-const Aciklama = require('src/modules/aciklama/aciklama.service')
+const Aciklama = require('../aciklama/aciklama.service')
 const SiparisOrtak = require('../siparis_ortak/siparis_ortak.service')
 const {uuid} = require('uuidv4')
 

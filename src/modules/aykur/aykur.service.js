@@ -1,4 +1,4 @@
-const {Aykur} = require('../../models')
+const Aykur= require('./aykur.model')
 
 class AykurService {
     constructor() {

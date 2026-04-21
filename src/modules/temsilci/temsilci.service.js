@@ -1,4 +1,4 @@
-const { Temsilci } = require('../../models')
+const Temsilci = require('./temsilci.model')
 class TemsilciService {
     list(){
         return Temsilci.list()

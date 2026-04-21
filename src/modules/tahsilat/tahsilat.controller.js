@@ -1,5 +1,5 @@
 const statusCodes = require('http-status-codes');
-const Tahsilat = require('tahsilat.service');
+const Tahsilat = require('./tahsilat.service');
 const dayjs = require('dayjs');
 const utc = require('dayjs/plugin/utc');
 const {uuid} = require("uuidv4");
