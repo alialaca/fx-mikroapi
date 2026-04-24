@@ -30,4 +30,7 @@ const listele = ({
     Index
 })
 
-module.exports = { kaydet, guncelle, listele }
+const eMukellefSorgula = (VKN_TCKN) =>
+    callApi('EMukellefSorgulamaV2', { Mikro: { EMukellef: { VKN_TCKN } } })
+
+module.exports = { kaydet, guncelle, listele, eMukellefSorgula }

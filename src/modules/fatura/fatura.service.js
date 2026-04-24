@@ -79,13 +79,24 @@ const resolveCariKisiligi = ({ fatura_tip, fatura }) => {
     }
 }
 
-const buildCariPayload = ({ cariKod, unvan1, unvan2, vknTckn, vergiDairesi, iletisim }) => {
+const sorgulaMukellefFlags = async (vknTckn) => {
+    const res = await mikroErp.cari.eMukellefSorgula(vknTckn)
+    const data = res?.result?.[0]?.Data || {}
+    return {
+        cari_efatura_fl: data.EFatura === true ? 1 : 0,
+        cari_eirsaliye_fl: data.EIrsaliye === true ? 1 : 0,
+        cari_kamu_kurumu_fl: data.EKamuKurumu === true ? 1 : 0
+    }
+}
+
+const buildCariPayload = ({ cariKod, unvan1, unvan2, vknTckn, vergiDairesi, iletisim, mukellefFlags }) => {
     const { isim, soyisim } = splitAdSoyad(iletisim.ad_soyad)
     return {
         cari_kod: cariKod,
         cari_unvan1: unvan1,
         cari_unvan2: unvan2,
         cari_vdaire_no: vknTckn,
+        ...mukellefFlags,
         cari_vdaire_adi: vergiDairesi,
         cari_doviz_cinsi1: 0,
         cari_doviz_cinsi2: 255,
@@ -112,8 +123,11 @@ const findOrCreateCari = async ({ fatura_tip, fatura, iletisim }) => {
     let row = await findCariByVknTckn(vknTckn)
 
     if (!row) {
-        const cariKod = await nextCariKod()
-        const payload = buildCariPayload({ cariKod, unvan1, unvan2, vknTckn, vergiDairesi, iletisim })
+        const [cariKod, mukellefFlags] = await Promise.all([
+            nextCariKod(),
+            sorgulaMukellefFlags(vknTckn)
+        ])
+        const payload = buildCariPayload({ cariKod, unvan1, unvan2, vknTckn, vergiDairesi, iletisim, mukellefFlags })
         await mikroErp.callApi('CariKaydetV2', {
             Mikro: { KullaniciKodu: KULLANICI_KODU, cariler: [payload] }
         })

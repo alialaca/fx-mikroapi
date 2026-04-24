@@ -19,6 +19,7 @@ Plan yeniden koşulabilir (regression amaçlı): her yeni koşuda **yeni bir tem
 ## Servis Davranışı (test beklentileri için)
 
 - **e-Fatura mükellefi kontrolü:** `cari.cari_efatura_fl` (bit / boolean). `true` veya `1` → mükellef. `false/0/null` → değil.
+- **Yeni cari oluştururken mükellef durumu:** `EMukellefSorgulamaV2` çağrılır (VKN/TCKN ile). Response `Data.EFatura/EIrsaliye/EKamuKurumu` → yeni cari payload'ında `cari_efatura_fl / cari_eirsaliye_fl / cari_kamu_kurumu_fl` olarak 1/0 yazılır. Böylece aynı istekte oluşturulan faturanın serisi doğru seçilir (EFatura=true ise FXF{YY}).
 - **cha evrak serisi:** mükellefse `FXF{YY}`, değilse `FXR{YY}`. `YY` = içinde bulunulan yılın son 2 hanesi.
 - **sth evrak serisi:** sabit `AS44`. Sıra alanları (`sth_evrakno_sira`, `cha_evrakno_sira`) payload'a eklenmez, Mikro atar.
 - **İskonto:** body'de birim bazlı; servis `sth_iskonto1 = miktar × iskonto` olarak toplam gönderir.
@@ -87,8 +88,8 @@ Her koşu için **Temizlik Tablosu** doldurulur. Kaynaklar: HTTP response `{cari
 
 Beklenen çağrı sırası (log):
 1. `CariListesiV3` (VKN/TCKN ile — boş)
-2. `CariListesiV3` × N — `nextCariKod` için binary search (120.10.001–120.19.999)
-3. `CariKaydetV2` (yeni cari)
+2. `CariListesiV3` × N (nextCariKod binary search) ve `EMukellefSorgulamaV2` paralel
+3. `CariKaydetV2` (yeni cari — mükellef bayrakları ile)
 4. `CariListesiV3` (VKN/TCKN ile — bulmalı)
 5. `FaturaKaydetV3`
 
@@ -96,6 +97,7 @@ Beklenen çağrı sırası (log):
 |---|---|---|
 | C1 | `fatura_tip='firma'` | `cari_unvan1=fatura.unvan`, `cari_unvan2=fatura.unvan`, `cari_vdaire_no=VKN`, `cari_vdaire_adi=vergi_dairesi`; yetkili mye_isim/soyisim `iletisim.ad_soyad`'tan split; `evrakSeri=FXR26` |
 | C2 | `fatura_tip='sahis'`, `fatura.ad_soyad='Ali Veli'` | **`cari_unvan1='Ali'`, `cari_unvan2='Veli'`** (AD/SOYAD split); `cari_vdaire_no=TCKN`; `cari_vdaire_adi=''`; `evrakSeri=FXR26` |
+| C3 | `fatura_tip='firma'` — EFatura mükellefi bilinen bir VKN | `EMukellefSorgulamaV2.Data.EFatura=true`; yeni cari `cari_efatura_fl=1`; **`evrakSeri=FXF26`** (aynı çağrıda serinin doğru seçildiğini teyit) |
 
 ### D. Hata yolları
 
