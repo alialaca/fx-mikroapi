@@ -33,16 +33,24 @@ const buildEnvelope = (payload = {}) => {
 
 const callApi = async (methodName, payload = {}) => {
     const url = `${config.methodBasePath}/${methodName}`
+    let res
     try {
-        const res = await http.post(url, buildEnvelope(payload))
-        logger.info({ scope: 'mikroErp.call', method: methodName, status: res.status })
-        return res.data
+        res = await http.post(url, buildEnvelope(payload))
     } catch (err) {
         const status = err.response?.status || 502
         const detail = err.response?.data?.message || err.response?.data || err.message
         logger.error({ scope: 'mikroErp.call', method: methodName, status, detail })
         throw new ApiError(status, `Mikro ERP ${methodName} başarısız: ${typeof detail === 'string' ? detail : JSON.stringify(detail)}`)
     }
+
+    logger.info({ scope: 'mikroErp.call', method: methodName, status: res.status })
+    const first = res.data?.result?.[0]
+    if (first && (first.IsError === true || (typeof first.StatusCode === 'number' && first.StatusCode >= 400))) {
+        const msg = first.ErrorMessage || 'Bilinmeyen Mikro iş hatası'
+        logger.error({ scope: 'mikroErp.call', method: methodName, status: first.StatusCode, detail: msg })
+        throw new ApiError(first.StatusCode >= 400 && first.StatusCode < 600 ? first.StatusCode : 502, `Mikro ERP ${methodName}: ${msg}`)
+    }
+    return res.data
 }
 
 module.exports = { callApi }

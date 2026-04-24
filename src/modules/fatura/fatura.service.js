@@ -2,55 +2,48 @@ const dayjs = require('dayjs')
 const mikroErp = require('../../services/mikroErp')
 const ApiError = require('../../utils/ApiError')
 
-const CARI_KOD_PREFIX = '120.1'
-const CARI_KOD_MIN = '120.10.001'
-const CARI_KOD_MAX = '120.19.999'
-const EMPTY_DATE_SENTINEL = '1899-12-30'
+const CARI_KOD_NUM_MIN = 12010001
+const CARI_KOD_NUM_MAX = 12019999
+const toCariKod = (n) => String(n).replace(/(\d{3})(\d{2})(\d{3})/, '$1.$2.$3')
+const ISTISNA_KODU_BEDELSIZ = 351
 const KULLANICI_KODU = 'SRV'
 const STH_EVRAKNO_SERI = 'AS44'
 
 const extractRows = (res) => {
     if (!res) return []
     if (Array.isArray(res)) return res
+    const nested = res.result?.[0]?.Data
+    if (nested) {
+        return nested.CariListesi || nested.cariler || nested.Data || []
+    }
     return res.data || res.rows || res.Data || res.cariler || []
 }
 
-const isValidEfaturaDate = (value) => {
-    if (!value) return false
-    const str = String(value).trim()
-    if (!str) return false
-    if (str.startsWith(EMPTY_DATE_SENTINEL)) return false
-    return dayjs(str).isValid()
-}
-
-const incrementCariKod = (lastKod) => {
-    const numeric = parseInt(String(lastKod).replaceAll('.', ''), 10)
-    if (!Number.isFinite(numeric)) {
-        throw new ApiError(500, `Geçersiz cari_kod formatı: ${lastKod}`)
-    }
-    const nextStr = String(numeric + 1)
-    if (nextStr.length !== 8) {
-        throw new ApiError(409, `Cari kod aralığı aşıldı (${CARI_KOD_MAX}).`)
-    }
-    const formatted = nextStr.replace(/(\d{3})(\d{2})(\d{3})/, '$1.$2.$3')
-    if (formatted > CARI_KOD_MAX || formatted < CARI_KOD_MIN) {
-        throw new ApiError(409, `Cari kod aralığı aşıldı (${CARI_KOD_MAX}).`)
-    }
-    return formatted
+const cariKodExists = async (kod) => {
+    const res = await mikroErp.cari.listele({ CariKod: kod, Size: 1 })
+    return extractRows(res).length > 0
 }
 
 const nextCariKod = async () => {
-    const res = await mikroErp.cari.listele({
-        CariKod: CARI_KOD_PREFIX,
-        Sort: '-cari_kod',
-        Size: 1,
-        Index: 0
-    })
-    const rows = extractRows(res)
-    if (!rows.length) return CARI_KOD_MIN
-    const lastKod = rows[0].cari_kod || rows[0].CariKod || rows[0].kod
-    if (!lastKod) return CARI_KOD_MIN
-    return incrementCariKod(lastKod)
+    // CariListesiV3 CariKod filtresi exact-match; prefix sorgusu yok.
+    // 120.10.001–120.19.999 aralığında monotonik doluluğu varsayarak max kodu binary search ile bul.
+    let lo = CARI_KOD_NUM_MIN
+    let hi = CARI_KOD_NUM_MAX
+    let lastFound = lo - 1
+    while (lo <= hi) {
+        const mid = Math.floor((lo + hi) / 2)
+        if (await cariKodExists(toCariKod(mid))) {
+            lastFound = mid
+            lo = mid + 1
+        } else {
+            hi = mid - 1
+        }
+    }
+    const next = lastFound + 1
+    if (next > CARI_KOD_NUM_MAX) {
+        throw new ApiError(409, `Cari kod aralığı aşıldı (${toCariKod(CARI_KOD_NUM_MAX)}).`)
+    }
+    return toCariKod(next)
 }
 
 const findCariByVknTckn = async (vknOrTckn) => {
@@ -58,6 +51,8 @@ const findCariByVknTckn = async (vknOrTckn) => {
     const rows = extractRows(res)
     return rows[0] || null
 }
+
+const normalizeTel = (tel) => String(tel || '').replace(/^0+/, '')
 
 const splitAdSoyad = (full) => {
     const parts = String(full || '').trim().split(/\s+/)
@@ -70,29 +65,33 @@ const resolveCariKisiligi = ({ fatura_tip, fatura }) => {
     if (fatura_tip === 'firma') {
         return {
             vknTckn: fatura.vkn,
-            unvan: fatura.unvan,
+            unvan1: fatura.unvan,
+            unvan2: fatura.unvan,
             vergiDairesi: fatura.vergi_dairesi || ''
         }
     }
+    const { isim, soyisim } = splitAdSoyad(fatura.ad_soyad)
     return {
         vknTckn: fatura.tckn,
-        unvan: fatura.ad_soyad,
+        unvan1: isim,
+        unvan2: soyisim,
         vergiDairesi: ''
     }
 }
 
-const buildCariPayload = ({ cariKod, unvan, vknTckn, vergiDairesi, iletisim }) => {
+const buildCariPayload = ({ cariKod, unvan1, unvan2, vknTckn, vergiDairesi, iletisim }) => {
     const { isim, soyisim } = splitAdSoyad(iletisim.ad_soyad)
     return {
         cari_kod: cariKod,
-        cari_unvan1: unvan,
+        cari_unvan1: unvan1,
+        cari_unvan2: unvan2,
         cari_vdaire_no: vknTckn,
         cari_vdaire_adi: vergiDairesi,
         cari_doviz_cinsi1: 0,
         cari_doviz_cinsi2: 255,
         cari_doviz_cinsi3: 255,
         cari_EMail: iletisim.eposta || '',
-        cari_CepTel: iletisim.telefon || '',
+        cari_CepTel: normalizeTel(iletisim.telefon),
         adres: [{
             adr_cadde: '',
             adr_il: '',
@@ -100,7 +99,7 @@ const buildCariPayload = ({ cariKod, unvan, vknTckn, vergiDairesi, iletisim }) =
             yetkili: [{
                 mye_isim: isim,
                 mye_soyisim: soyisim,
-                mye_cep_telno: iletisim.telefon || '',
+                mye_cep_telno: normalizeTel(iletisim.telefon),
                 mye_email_adres: iletisim.eposta || ''
             }]
         }]
@@ -108,13 +107,13 @@ const buildCariPayload = ({ cariKod, unvan, vknTckn, vergiDairesi, iletisim }) =
 }
 
 const findOrCreateCari = async ({ fatura_tip, fatura, iletisim }) => {
-    const { vknTckn, unvan, vergiDairesi } = resolveCariKisiligi({ fatura_tip, fatura })
+    const { vknTckn, unvan1, unvan2, vergiDairesi } = resolveCariKisiligi({ fatura_tip, fatura })
 
     let row = await findCariByVknTckn(vknTckn)
 
     if (!row) {
         const cariKod = await nextCariKod()
-        const payload = buildCariPayload({ cariKod, unvan, vknTckn, vergiDairesi, iletisim })
+        const payload = buildCariPayload({ cariKod, unvan1, unvan2, vknTckn, vergiDairesi, iletisim })
         await mikroErp.callApi('CariKaydetV2', {
             Mikro: { KullaniciKodu: KULLANICI_KODU, cariler: [payload] }
         })
@@ -125,8 +124,7 @@ const findOrCreateCari = async ({ fatura_tip, fatura, iletisim }) => {
     }
 
     const cariKod = row.cari_kod || row.CariKod || row.kod
-    const efaturaTarihi = row.cari_efatura_baslangic_tarihi ?? row.CariEfaturaBaslangicTarihi
-    const efaturaMukellefi = isValidEfaturaDate(efaturaTarihi)
+    const efaturaMukellefi = row.cari_efatura_fl === true || row.cari_efatura_fl === 1
 
     return { cariKod, efaturaMukellefi }
 }
@@ -171,6 +169,12 @@ const kaydet = async (body) => {
 
     const firstNot = (notlar && notlar[0]) || ''
 
+    const totalNet = stoklar.reduce(
+        (sum, it) => sum + ((it.birim_fiyat || 0) - (it.iskonto || 0)) * (it.miktar || 0),
+        0
+    )
+    const isBedelsiz = Math.abs(totalNet) < 0.001
+
     const evrak = {
         cha_tip: 0,
         cha_cinsi: 6,
@@ -189,6 +193,10 @@ const kaydet = async (body) => {
         cha_satici_kodu: temsilci,
         detay,
         evrak_aciklamalari: (notlar || []).map(aciklama => ({ aciklama }))
+    }
+
+    if (isBedelsiz) {
+        evrak.kdv_istisna_kodu = ISTISNA_KODU_BEDELSIZ
     }
 
     const result = await mikroErp.callApi('FaturaKaydetV3', {
