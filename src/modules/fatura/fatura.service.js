@@ -8,6 +8,7 @@ const toCariKod = (n) => String(n).replace(/(\d{3})(\d{2})(\d{3})/, '$1.$2.$3')
 const ISTISNA_KODU_BEDELSIZ = 351
 const KULLANICI_KODU = 'SRV'
 const STH_EVRAKNO_SERI = 'AS44'
+const SERVIS_PROJE_KODU = '1'
 
 const extractRows = (res) => {
     if (!res) return []
@@ -200,7 +201,7 @@ const kaydet = async (body) => {
         cha_tarihi: tarih,
         cha_evrakno_seri: chaSeri,
         cha_kod: cariKod,
-        cha_projekodu: '',
+        cha_projekodu: SERVIS_PROJE_KODU,
         cha_srmrkkodu: '',
         cha_subeno: 0,
         cha_aciklama: firstNot,
