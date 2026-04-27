@@ -175,59 +175,76 @@ const buildChaSeri = (efaturaMukellefi) => {
     return (efaturaMukellefi ? 'FXF' : 'FXR') + yilSon2
 }
 
+const logFaturaError = ({ vkn, cariKod, err }) => {
+    const ts = new Date().toISOString()
+    const status = err?.statusCode || err?.response?.status || 500
+    const message = err?.message || 'Bilinmeyen hata'
+    console.error(`[${ts}] [fatura.kaydet] vkn=${vkn || '-'} cariKod=${cariKod || '-'} status=${status} message=${message}`)
+    if (err?.stack) console.error(err.stack)
+}
+
 const kaydet = async (body) => {
     const { fatura_tip, fatura, iletisim, stoklar, temsilci, notlar } = body
+    const vkn = fatura?.vkn || fatura?.tckn
+    let cariKod
 
-    const { cariKod, efaturaMukellefi, odemePlanNo } = await findOrCreateCari({ fatura_tip, fatura, iletisim })
+    try {
+        const cari = await findOrCreateCari({ fatura_tip, fatura, iletisim })
+        cariKod = cari.cariKod
+        const { efaturaMukellefi, odemePlanNo } = cari
 
-    const tarih = dayjs().format('DD.MM.YYYY')
-    const chaSeri = buildChaSeri(efaturaMukellefi)
+        const tarih = dayjs().format('DD.MM.YYYY')
+        const chaSeri = buildChaSeri(efaturaMukellefi)
 
-    const detay = stoklar.map(item => buildSthRow({ item, cariKod, tarih, odemePlanNo }))
+        const detay = stoklar.map(item => buildSthRow({ item, cariKod, tarih, odemePlanNo }))
 
-    const firstNot = (notlar && notlar[0]) || ''
+        const firstNot = (notlar && notlar[0]) || ''
 
-    const totalNet = stoklar.reduce(
-        (sum, it) => sum + ((it.birim_fiyat || 0) - (it.iskonto || 0)) * (it.miktar || 0),
-        0
-    )
-    const isBedelsiz = Math.abs(totalNet) < 0.001
+        const totalNet = stoklar.reduce(
+            (sum, it) => sum + ((it.birim_fiyat || 0) - (it.iskonto || 0)) * (it.miktar || 0),
+            0
+        )
+        const isBedelsiz = Math.abs(totalNet) < 0.001
 
-    const evrak = {
-        cha_tip: 0,
-        cha_cinsi: 6,
-        cha_normal_Iade: 0,
-        cha_evrak_tip: 63,
-        cha_cari_cins: 0,
-        cha_d_cins: 0,
-        cha_d_kur: 1,
-        cha_tarihi: tarih,
-        cha_vade: odemePlanNo,
-        cha_evrakno_seri: chaSeri,
-        cha_kod: cariKod,
-        cha_projekodu: SERVIS_PROJE_KODU,
-        cha_srmrkkodu: '',
-        cha_subeno: 0,
-        cha_aciklama: firstNot,
-        cha_satici_kodu: temsilci,
-        detay,
-        evrak_aciklamalari: (notlar || []).map(aciklama => ({ aciklama }))
-    }
+        const evrak = {
+            cha_tip: 0,
+            cha_cinsi: 6,
+            cha_normal_Iade: 0,
+            cha_evrak_tip: 63,
+            cha_cari_cins: 0,
+            cha_d_cins: 0,
+            cha_d_kur: 1,
+            cha_tarihi: tarih,
+            cha_vade: odemePlanNo,
+            cha_evrakno_seri: chaSeri,
+            cha_kod: cariKod,
+            cha_projekodu: SERVIS_PROJE_KODU,
+            cha_srmrkkodu: '',
+            cha_subeno: 0,
+            cha_aciklama: firstNot,
+            cha_satici_kodu: temsilci,
+            detay,
+            evrak_aciklamalari: (notlar || []).map(aciklama => ({ aciklama }))
+        }
 
-    if (isBedelsiz) {
-        evrak.kdv_istisna_kodu = ISTISNA_KODU_BEDELSIZ
-    }
+        if (isBedelsiz) {
+            evrak.kdv_istisna_kodu = ISTISNA_KODU_BEDELSIZ
+        }
 
-    const result = await mikroErp.callApi('FaturaKaydetV3', {
-        Mikro: { KullaniciKodu: KULLANICI_KODU, evraklar: [evrak] }
-    })
+        const result = await mikroErp.callApi('FaturaKaydetV3', {
+            Mikro: { KullaniciKodu: KULLANICI_KODU, evraklar: [evrak] }
+        })
 
-    const kayit = result?.result?.[0]?.Data?.list?.[0] || {}
-    return {
-        evrak_seri: kayit.evrakno_seri || chaSeri,
-        evrak_sira: Number(kayit.evrakno_sira),
-        evrak_uuid: kayit.cariHarGuid,
-        cariKod
+        const kayit = result?.result?.[0]?.Data?.list?.[0] || {}
+        return {
+            evrak_seri: kayit.evrakno_seri || chaSeri,
+            evrak_sira: Number(kayit.evrakno_sira),
+            evrak_uuid: kayit.cariHarGuid,
+            cariKod
+        }
+    } catch (err) {
+        logFaturaError({ vkn, cariKod, err })
+        throw err
     }
 }
 
