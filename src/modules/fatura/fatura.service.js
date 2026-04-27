@@ -222,7 +222,13 @@ const kaydet = async (body) => {
         Mikro: { KullaniciKodu: KULLANICI_KODU, evraklar: [evrak] }
     })
 
-    return { cariKod, evrakSeri: chaSeri, result }
+    const kayit = result?.result?.[0]?.Data?.list?.[0] || {}
+    return {
+        evrak_seri: kayit.evrakno_seri || chaSeri,
+        evrak_sira: Number(kayit.evrakno_sira),
+        evrak_uuid: kayit.cariHarGuid,
+        cariKod
+    }
 }
 
 module.exports = { kaydet }
