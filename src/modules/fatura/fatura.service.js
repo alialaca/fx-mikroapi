@@ -140,11 +140,13 @@ const findOrCreateCari = async ({ fatura_tip, fatura, iletisim }) => {
 
     const cariKod = row.cari_kod || row.CariKod || row.kod
     const efaturaMukellefi = row.cari_efatura_fl === true || row.cari_efatura_fl === 1
+    const odemePlanNoRaw = Number(row.cari_odemeplan_no ?? 0)
+    const odemePlanNo = odemePlanNoRaw > 0 ? odemePlanNoRaw : 1
 
-    return { cariKod, efaturaMukellefi }
+    return { cariKod, efaturaMukellefi, odemePlanNo }
 }
 
-const buildSthRow = ({ item, cariKod, tarih }) => ({
+const buildSthRow = ({ item, cariKod, tarih, odemePlanNo }) => ({
     sth_tarih: tarih,
     sth_tip: 1,
     sth_cins: 0,
@@ -164,7 +166,8 @@ const buildSthRow = ({ item, cariKod, tarih }) => ({
     sth_iskonto1: (item.iskonto || 0) * item.miktar,
     sth_isk_mas1: 0,
     sth_giris_depo_no: 2,
-    sth_cikis_depo_no: 2
+    sth_cikis_depo_no: 2,
+    sth_odeme_op: odemePlanNo
 })
 
 const buildChaSeri = (efaturaMukellefi) => {
@@ -175,12 +178,12 @@ const buildChaSeri = (efaturaMukellefi) => {
 const kaydet = async (body) => {
     const { fatura_tip, fatura, iletisim, stoklar, temsilci, notlar } = body
 
-    const { cariKod, efaturaMukellefi } = await findOrCreateCari({ fatura_tip, fatura, iletisim })
+    const { cariKod, efaturaMukellefi, odemePlanNo } = await findOrCreateCari({ fatura_tip, fatura, iletisim })
 
     const tarih = dayjs().format('DD.MM.YYYY')
     const chaSeri = buildChaSeri(efaturaMukellefi)
 
-    const detay = stoklar.map(item => buildSthRow({ item, cariKod, tarih }))
+    const detay = stoklar.map(item => buildSthRow({ item, cariKod, tarih, odemePlanNo }))
 
     const firstNot = (notlar && notlar[0]) || ''
 
@@ -199,6 +202,7 @@ const kaydet = async (body) => {
         cha_d_cins: 0,
         cha_d_kur: 1,
         cha_tarihi: tarih,
+        cha_vade: odemePlanNo,
         cha_evrakno_seri: chaSeri,
         cha_kod: cariKod,
         cha_projekodu: SERVIS_PROJE_KODU,
