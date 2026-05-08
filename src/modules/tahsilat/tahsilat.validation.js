@@ -20,7 +20,7 @@ const create = {
         tutar: Joi.number().required(),
         tarih: Joi.date().required(),
         vade: Joi.string().length(10).required(),
-        banka: Joi.string().case("lower").valid('akbank', 'qnbpay', 'vakifbank')
+        banka: Joi.string().case("lower").valid('akbank', 'qnbpay', 'vakifbank', 'ziraatpay')
     })
 }
 
