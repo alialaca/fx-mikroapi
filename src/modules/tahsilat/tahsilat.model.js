@@ -14,7 +14,8 @@ class TahsilatModel {
             akbank: { kod: '102.10.004', isim: 'AKBANK A.Ş', krediKart: '108.10.004' },
             vakifbank: { kod: '102.10.008', isim: 'TÜRKİYE VAKIFLAR BANKASI T.A.O.', krediKart: '108.10.008' },
             ziraat: { kod: '102.10.001', isim: 'T.C ZİRAAT BANKASI', krediKart: '108.10.001' },
-            ziraatpay: { kod: '102.10.001', isim: 'T.C ZİRAAT BANKASI', krediKart: '108.10.001' }
+            ziraatpay: { kod: '102.10.001', isim: 'T.C ZİRAAT BANKASI', krediKart: '108.10.001' },
+            halkode: { kod: '102.10.012', isim: 'TÜRKİYE HALK BANKASI A.Ş.', krediKart: '108.10.012' }
         }
     }
 
