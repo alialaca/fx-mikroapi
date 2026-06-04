@@ -3,6 +3,8 @@ const Satis = require('./satis.service')
 const Prim = require('../prim/prim.service')
 
 const liste = async (req, res, next) => {
+    req.setTimeout(90 * 1000);
+    res.setTimeout(90 * 1000);
     const {firstDate, lastDate, kar} = req.query
 
     Satis.list({firstDate, lastDate, kar})
