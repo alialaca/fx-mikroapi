@@ -18,6 +18,7 @@ const sahisSchema = Joi.object().keys({
 
 const kaydet = {
     body: Joi.object().keys({
+        evrak_tarihi: Joi.any().strip(),
         temsilci: Joi.string().required(),
         olusturan: Joi.string().allow('', null),
         depo: Joi.number().integer().required(),
