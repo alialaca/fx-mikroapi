@@ -27,6 +27,7 @@ class CariModel {
             where,
             select: {
                 kod: true,
+                vkn: true,
                 unvan: true,
                 bakiye: true,
                 sektor: true,
