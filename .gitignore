@@ -8,3 +8,4 @@ migrate
 tests
 src/logs/*
 /*lock.*
+.DS_Store
