@@ -3,7 +3,6 @@ const mikroErp = require('../../services/mikroErp')
 const idempotency = require('../../services/idempotency')
 const ApiError = require('../../utils/ApiError')
 const { findByServisNo } = require('./fatura.model')
-const { SERVIS_NO_PATTERN } = require('./fatura.validation')
 
 const CARI_KOD_NUM_MIN = 12010001
 const CARI_KOD_NUM_MAX = 12019999
@@ -201,7 +200,7 @@ const faturaOlustur = async (body) => {
 
         const detay = stoklar.map(item => buildSthRow({ item, cariKod, tarih, odemePlanNo }))
 
-        const firstNot = (notlar && notlar[0]) || ''
+        const firstNot = notlar[0]
 
         const totalNet = stoklar.reduce(
             (sum, it) => sum + ((it.birim_fiyat || 0) - (it.iskonto || 0)) * (it.miktar || 0),
@@ -227,7 +226,7 @@ const faturaOlustur = async (body) => {
             cha_aciklama: firstNot,
             cha_satici_kodu: temsilci,
             detay,
-            evrak_aciklamalari: (notlar || []).map(aciklama => ({ aciklama }))
+            evrak_aciklamalari: notlar.map(aciklama => ({ aciklama }))
         }
 
         if (isBedelsiz) {
@@ -254,7 +253,7 @@ const faturaOlustur = async (body) => {
 // Bir servis numarasına ömrü boyunca tek fatura kesiliyor; tekrar eden istek yeni evrak açmadan
 // ilk çağrının cevabını geri alıyor.
 const kaydet = async (body) => {
-    const servisNo = SERVIS_NO_PATTERN.exec(body.notlar[0])[1]
+    const servisNo = body.servis_no
 
     return idempotency.calistir(
         { kapsam: 'fatura', anahtar: servisNo, mutabakat: () => findByServisNo(servisNo) },

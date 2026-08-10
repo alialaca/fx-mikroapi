@@ -9,6 +9,8 @@ const DOSYA_CARI_HAREKET = 51
 // yakalanmasını engelliyor.
 // LIKE deseninin sonundaki boşluk şart: '#10997%' deseni '#109970' ile de eşleşirdi.
 // Aynı servise (hatalı biçimde) birden fazla fatura kesilmişse en eskisi dönüyor.
+// Her iki tablonun da Prisma modeli var (Aciklama, Tahsilat) ama join'i modellerle kurmak iki
+// ayrı sorgu gerektirir ve fatura satırını `prisma.tahsilat` üzerinden okumak yanıltıcı olur.
 const findByServisNo = async (servisNo) => {
     const rows = await prisma.$queryRaw`
         SELECT TOP 1

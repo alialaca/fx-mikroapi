@@ -1125,7 +1125,7 @@ model Idempotency {
   sonuc      String?  @db.NVarChar(Max)
   hata       String?  @db.NVarChar(512)
   olusturma  DateTime @default(now()) @db.DateTime
-  guncelleme DateTime @default(now()) @db.DateTime
+  guncelleme DateTime @updatedAt @db.DateTime
 
   @@id([kapsam, anahtar])
   @@map("CRM_API_IDEMPOTENCY")
