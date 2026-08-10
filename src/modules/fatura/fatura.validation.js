@@ -1,5 +1,10 @@
 const Joi = require('joi')
 
+// Servis notu her zaman notlar[0]'da ve şu formatta gelir:
+// "#10997 numaralı servis işlemi faturası. SN:1250365390"
+// Yakalanan servis numarası, faturanın idempotency anahtarı olarak kullanılıyor.
+const SERVIS_NO_PATTERN = /^#(\d+)\s/
+
 const firmaSchema = Joi.object().keys({
     vkn: Joi.string().length(10).pattern(/^\d+$/).required(),
     unvan: Joi.string().required(),
@@ -42,8 +47,15 @@ const kaydet = {
                 aciklama: Joi.string().allow('', null).default('')
             })
         ).required(),
-        notlar: Joi.array().items(Joi.string().allow('')).default([])
+        notlar: Joi.array()
+            .ordered(
+                Joi.string().pattern(SERVIS_NO_PATTERN).required().messages({
+                    'string.pattern.base': 'notlar[0] "#<servis_no> ..." formatında olmalıdır.'
+                })
+            )
+            .items(Joi.string().allow(''))
+            .required()
     })
 }
 
-module.exports = { kaydet }
+module.exports = { kaydet, SERVIS_NO_PATTERN }

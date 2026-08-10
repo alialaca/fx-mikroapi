@@ -1117,3 +1117,16 @@ model CihazHareket {
 
   @@map("CRM_CIHAZ_HAREKETLERI")
 }
+
+model Idempotency {
+  kapsam     String   @db.NVarChar(32)
+  anahtar    String   @db.NVarChar(64)
+  durum      String   @db.NVarChar(16)
+  sonuc      String?  @db.NVarChar(Max)
+  hata       String?  @db.NVarChar(512)
+  olusturma  DateTime @default(now()) @db.DateTime
+  guncelleme DateTime @default(now()) @db.DateTime
+
+  @@id([kapsam, anahtar])
+  @@map("CRM_API_IDEMPOTENCY")
+}

@@ -1,6 +1,9 @@
 const dayjs = require('dayjs')
 const mikroErp = require('../../services/mikroErp')
+const idempotency = require('../../services/idempotency')
 const ApiError = require('../../utils/ApiError')
+const { findByServisNo } = require('./fatura.model')
+const { SERVIS_NO_PATTERN } = require('./fatura.validation')
 
 const CARI_KOD_NUM_MIN = 12010001
 const CARI_KOD_NUM_MAX = 12019999
@@ -183,7 +186,7 @@ const logFaturaError = ({ vkn, cariKod, err }) => {
     if (err?.stack) console.error(err.stack)
 }
 
-const kaydet = async (body) => {
+const faturaOlustur = async (body) => {
     const { fatura_tip, fatura, iletisim, stoklar, temsilci, notlar } = body
     const vkn = fatura?.vkn || fatura?.tckn
     let cariKod
@@ -246,6 +249,17 @@ const kaydet = async (body) => {
         logFaturaError({ vkn, cariKod, err })
         throw err
     }
+}
+
+// Bir servis numarasına ömrü boyunca tek fatura kesiliyor; tekrar eden istek yeni evrak açmadan
+// ilk çağrının cevabını geri alıyor.
+const kaydet = async (body) => {
+    const servisNo = SERVIS_NO_PATTERN.exec(body.notlar[0])[1]
+
+    return idempotency.calistir(
+        { kapsam: 'fatura', anahtar: servisNo, mutabakat: () => findByServisNo(servisNo) },
+        () => faturaOlustur(body)
+    )
 }
 
 module.exports = { kaydet }
